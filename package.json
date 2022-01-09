@@ -4,5 +4,27 @@
   "main": "index.js",
   "repository": "git@github.com:spaceninja/interactive-fiction.git",
   "author": "Scott Vandehey",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
+    "lint": "run-s lint:js lint:prettier",
+    "lint:check": "run-s lint:*:check",
+    "lint:js": "eslint . --fix",
+    "lint:js:check": "eslint .",
+    "lint:prettier": "prettier . --write",
+    "lint:prettier:check": "prettier . --check"
+  },
+  "dependencies": {
+    "vite": "^2.7.10"
+  },
+  "devDependencies": {
+    "eslint": "^8.2.0",
+    "eslint-config-airbnb-base": "15.0.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.25.2",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.5.1"
+  }
 }
