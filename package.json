@@ -1,0 +1,8 @@
+{
+  "name": "interactive-fiction",
+  "version": "0.1.0",
+  "main": "index.js",
+  "repository": "git@github.com:spaceninja/interactive-fiction.git",
+  "author": "Scott Vandehey",
+  "license": "MIT"
+}
