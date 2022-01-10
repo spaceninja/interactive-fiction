@@ -133,6 +133,8 @@ export const rug = new Object({
         }
         break;
       default:
+        // TODO: My sneaking suspicion is we'll need to return a single value
+        // from the action function, and return false in the default state.
         break;
     }
   },
