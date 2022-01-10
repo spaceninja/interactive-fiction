@@ -1,3 +1,5 @@
+import { tell } from './globals';
+
 export class Object {
   /**
    * @param {object} props
@@ -58,15 +60,80 @@ export class Object {
   }
 }
 
-export const lantern = new Object({
-  name: 'brass lantern',
-  location: 'livingRoom',
-  synonym: ['lamp', 'lantern', 'light'],
-  adjective: ['brass'],
-  description: 'There is a brass lantern (battery-powered) here.',
-  initialDescription: 'A battery-powered brass lantern is on the trophy case.',
-  flags: ['takeBit', 'lightBit'],
+// Just adding this so the conditions in rug will work
+export const trapDoor = new Object({
+  name: 'trap door',
+  location: 'living room',
+  synonym: ['door', 'trapdoor', 'trap-door', 'cover'],
+  adjective: ['trap', 'dusty'],
+  flags: { isDoor: true, doNotDescribe: true, isInvisible: true },
   action: () => {
-    console.log('LANTERN!');
+    console.log('TRAP DOOR!');
+  },
+});
+
+export const rug = new Object({
+  name: 'carpet',
+  location: 'livingRoom',
+  synonym: ['rug', 'carpet'],
+  adjective: ['large', 'oriental'],
+  flags: { doNotDescribe: true, tryTakeBit: true, isMoved: false },
+  action: (verb) => {
+    switch (verb) {
+      case 'raise':
+        console.log('RAISE');
+        tell(
+          `The rug is too heavy to lift${
+            rug.flags.isMoved
+              ? '.'
+              : ', but in trying to take it you have noticed an irregularity beneath it.'
+          }`
+        );
+        break;
+      case 'move':
+      case 'push':
+        console.log('MOVE OR PUSH');
+        if (rug.flags.isMoved) {
+          tell(
+            'Having moved the carpet previously, you find it impossible to move it again.'
+          );
+        } else {
+          tell(
+            'With a great effort, the rug is moved to one side of the room, revealing the dusty cover of a closed trap door.'
+          );
+          rug.flags.isMoved = true;
+          trapDoor.flags.isInvisible = false;
+          // this-is-it trap-door
+        }
+        break;
+      case 'take':
+        console.log('TAKE');
+        tell('The rug is extremely heavy and cannot be carried.');
+        break;
+      case 'look under':
+        console.log('LOOK UNDER');
+        if (!rug.flags.isMoved && !trapDoor.flags.isOpen) {
+          tell(
+            'Underneath the rug is a closed trap door. As you drop the corner of the rug, the trap door is once again concealed from view.'
+          );
+        } else {
+          tell(
+            'Having moved the carpet previously, there is nothing to see under it.'
+          );
+        }
+        break;
+      case 'climb on':
+        console.log('CLIMB ON');
+        if (!rug.flags.isMoved && !trapDoor.flags.isOpen) {
+          tell(
+            'As you sit, you notice an irregularity underneath it. Rather than be uncomfortable, you stand up again.'
+          );
+        } else {
+          tell("I suppose you think it's a magic carpet?");
+        }
+        break;
+      default:
+        break;
+    }
   },
 });

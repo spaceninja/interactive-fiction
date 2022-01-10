@@ -1,4 +1,5 @@
-import { Object } from './objects';
+import { tell } from './globals';
+import { Object, rug, trapDoor } from './objects';
 
 export class Room extends Object {
   /**
@@ -73,18 +74,40 @@ export class Room extends Object {
   }
 }
 
-const magicFlag = true;
+const magicFlag = false;
 const trapDoorExit = () => true;
 
 export const livingRoom = new Room({
   name: 'Living Room',
-  action: () => {
-    console.log('LIVING ROOM!');
-  },
   east: 'kitchen',
   west: magicFlag ? 'strangePassage' : 'The door is nailed shut.',
   down: trapDoorExit(),
-  flags: ['rLandBit', 'onBit', 'sacredBit'],
+  flags: { isOnLand: true, isOn: true, isSacred: true },
   global: ['stairs'],
   pseudo: [{ name: 'nails' }, { name: 'nail' }],
+  action: (verb) => {
+    switch (verb) {
+      case 'look': {
+        let message =
+          'You are in the living room. There is a doorway to the east';
+        message += magicFlag
+          ? '. To the west is a cyclops-shaped opening in an old wooden door, above which is some strange gothic lettering, '
+          : ', a wooden door with strange gothic lettering to the west, which appears to be nailed shut, ';
+        message += 'a trophy case, ';
+        const trapDoorMessage = trapDoor.flags.isOpen
+          ? 'and a rug lying beside an open trap door.'
+          : 'and an open trap door at your feet.';
+        message += rug.flags.isMoved
+          ? trapDoorMessage
+          : 'and a large oriental rug in the center of the room.';
+        tell(message);
+        break;
+      }
+      case 'end':
+        // some sort of complex logic involving the trophy case and the score
+        break;
+      default:
+        break;
+    }
+  },
 });
