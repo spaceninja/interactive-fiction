@@ -1,4 +1,4 @@
-import { tell } from './globals';
+import { here, tell, openClose, pickOne, dummyMessages } from './globals';
 
 export class Object {
   /**
@@ -67,8 +67,47 @@ export const trapDoor = new Object({
   synonym: ['door', 'trapdoor', 'trap-door', 'cover'],
   adjective: ['trap', 'dusty'],
   flags: { isDoor: true, doNotDescribe: true, isInvisible: true },
-  action: () => {
-    console.log('TRAP DOOR!');
+  action: (verb) => {
+    switch (verb) {
+      case 'raise':
+      case 'unlock':
+        trapDoor.action('open');
+        break;
+      case 'open':
+      case 'close':
+        console.log('OPEN OR CLOSE TRAP DOOR');
+        if (here === 'livingRoom') {
+          openClose(
+            trapDoor,
+            verb,
+            'The door reluctantly opens to reveal a rickety staircase descending into darkness.',
+            'The door swings shut and closes.'
+          );
+        } else if (here === 'cellar') {
+          if (!trapDoor.flags.isOpen) {
+            if (verb === 'open') {
+              tell('The door is locked from above.');
+            } else {
+              trapDoor.flags.isTouched = false;
+              trapDoor.flags.isOpen = false;
+              tell('The door closes and locks.');
+            }
+            tell(pickOne(dummyMessages));
+          }
+        }
+        break;
+      case 'look under':
+        console.log('LOOK UNDER TRAP DOOR');
+        if (here !== 'livingRoom') return;
+        if (trapDoor.flags.isOpen) {
+          tell('You see a rickety staircase descending into darkness.');
+        } else {
+          tell("It's closed.");
+        }
+        break;
+      default:
+        break;
+    }
   },
 });
 
@@ -81,7 +120,7 @@ export const rug = new Object({
   action: (verb) => {
     switch (verb) {
       case 'raise':
-        console.log('RAISE');
+        console.log('RAISE RUG');
         tell(
           `The rug is too heavy to lift${
             rug.flags.isMoved
@@ -92,7 +131,7 @@ export const rug = new Object({
         break;
       case 'move':
       case 'push':
-        console.log('MOVE OR PUSH');
+        console.log('MOVE OR PUSH RUG');
         if (rug.flags.isMoved) {
           tell(
             'Having moved the carpet previously, you find it impossible to move it again.'
@@ -107,11 +146,11 @@ export const rug = new Object({
         }
         break;
       case 'take':
-        console.log('TAKE');
+        console.log('TAKE RUG');
         tell('The rug is extremely heavy and cannot be carried.');
         break;
       case 'look under':
-        console.log('LOOK UNDER');
+        console.log('LOOK UNDER RUG');
         if (!rug.flags.isMoved && !trapDoor.flags.isOpen) {
           tell(
             'Underneath the rug is a closed trap door. As you drop the corner of the rug, the trap door is once again concealed from view.'
@@ -123,7 +162,7 @@ export const rug = new Object({
         }
         break;
       case 'climb on':
-        console.log('CLIMB ON');
+        console.log('CLIMB ON RUG');
         if (!rug.flags.isMoved && !trapDoor.flags.isOpen) {
           tell(
             'As you sit, you notice an irregularity underneath it. Rather than be uncomfortable, you stand up again.'

@@ -22,3 +22,8 @@ o.rug.action('climb on');
 o.rug.action('raise');
 o.rug.action('look under');
 o.rug.action('move');
+
+o.trapDoor.action('look under');
+o.trapDoor.action('raise');
+o.trapDoor.action('look under');
+o.trapDoor.action('close');
