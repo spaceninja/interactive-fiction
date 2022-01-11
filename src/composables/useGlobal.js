@@ -1,4 +1,10 @@
-export const here = `livingRoom`;
+import { ref } from 'vue';
+
+export const here = ref('livingRoom');
+
+export const magicFlag = ref(false);
+
+export const trapDoorExit = () => true;
 
 export const tell = (string) => {
   console.log(string);
@@ -28,21 +34,20 @@ export const pickOne = (array) =>
  */
 export const openClose = (object, verb, openMessage, closeMessage) => {
   if (verb === 'open') {
-    if (object.flags.isOpen) {
+    if (object.value.flags.isOpen) {
       tell(pickOne(dummyMessages));
       return;
     }
-    // TODO: running into trouble here. I think I could use Vue3 reactive refs
     // eslint-disable-next-line no-param-reassign
-    object.flags.isOpen = true;
+    object.value.flags.isOpen = true;
     tell(openMessage);
   } else {
-    if (!object.flags.isOpen) {
+    if (!object.value.flags.isOpen) {
       tell(pickOne(dummyMessages));
       return;
     }
     // eslint-disable-next-line no-param-reassign
-    object.flags.isOpen = false;
+    object.value.flags.isOpen = false;
     tell(closeMessage);
   }
 };

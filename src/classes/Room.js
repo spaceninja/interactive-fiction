@@ -1,7 +1,6 @@
-import { tell } from './globals';
-import { Object, rug, trapDoor } from './objects';
+import Item from './Item';
 
-export class Room extends Object {
+export default class Room extends Item {
   /**
    * @param {object} props
    * @param {string} props.name The name of the room.
@@ -73,41 +72,3 @@ export class Room extends Object {
     this.global = global;
   }
 }
-
-const magicFlag = false;
-const trapDoorExit = () => true;
-
-export const livingRoom = new Room({
-  name: 'Living Room',
-  east: 'kitchen',
-  west: magicFlag ? 'strangePassage' : 'The door is nailed shut.',
-  down: trapDoorExit(),
-  flags: { isOnLand: true, isOn: true, isSacred: true },
-  global: ['stairs'],
-  pseudo: [{ name: 'nails' }, { name: 'nail' }],
-  action: (verb) => {
-    switch (verb) {
-      case 'look': {
-        let message =
-          'You are in the living room. There is a doorway to the east';
-        message += magicFlag
-          ? '. To the west is a cyclops-shaped opening in an old wooden door, above which is some strange gothic lettering, '
-          : ', a wooden door with strange gothic lettering to the west, which appears to be nailed shut, ';
-        message += 'a trophy case, ';
-        const trapDoorMessage = trapDoor.flags.isOpen
-          ? 'and a rug lying beside an open trap door.'
-          : 'and an open trap door at your feet.';
-        message += rug.flags.isMoved
-          ? trapDoorMessage
-          : 'and a large oriental rug in the center of the room.';
-        tell(message);
-        break;
-      }
-      case 'end':
-        // some sort of complex logic involving the trophy case and the score
-        break;
-      default:
-        break;
-    }
-  },
-});
