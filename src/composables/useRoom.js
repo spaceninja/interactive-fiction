@@ -6,9 +6,11 @@ import { items } from './useItem';
 export const livingRoom = ref(
   new Room({
     name: 'Living Room',
-    east: 'kitchen',
-    west: magicFlag.value ? 'strangePassage' : 'The door is nailed shut.',
-    down: trapDoorExit(),
+    exits: {
+      east: 'kitchen',
+      west: magicFlag.value ? 'strangePassage' : 'The door is nailed shut.',
+      down: trapDoorExit(),
+    },
     flags: { isOnLand: true, isOn: true, isSacred: true },
     global: ['stairs'],
     pseudo: [{ name: 'nails' }, { name: 'nail' }],

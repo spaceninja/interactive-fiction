@@ -25,7 +25,7 @@ export default class Item {
    *    for interacting with the item for the first time.
    * @param {string} props.text A string used when the player tries to
    *    read the item.
-   * @param {array} props.flags List of all flags set in the item.
+   * @param {object} props.flags List of all flags set in the item.
    */
   constructor({
     name,

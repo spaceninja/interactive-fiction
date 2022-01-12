@@ -11,19 +11,20 @@ export default class Room extends Item {
    *    contains this object.
    * @param {number} props.value The number of points the player gets
    *    for interacting with the object for the first time.
-   * @param {array} props.flags List of all flags set in the object.
-   * @param {string} props.north
-   * @param {string} props.south
-   * @param {string} props.east
-   * @param {string} props.west
-   * @param {string} props.ne
-   * @param {string} props.se
-   * @param {string} props.nw
-   * @param {string} props.sw
-   * @param {string} props.up
-   * @param {string} props.down
-   * @param {string} props.inward
-   * @param {string} props.out Only meaningful for rooms with one exit.
+   * @param {object} props.flags List of all flags set in the object.
+   * @param {object} props.exits List of exits from this room.
+   * @param {string} props.exits.north
+   * @param {string} props.exits.south
+   * @param {string} props.exits.east
+   * @param {string} props.exits.west
+   * @param {string} props.exits.ne
+   * @param {string} props.exits.se
+   * @param {string} props.exits.nw
+   * @param {string} props.exits.sw
+   * @param {string} props.exits.up
+   * @param {string} props.exits.down
+   * @param {string} props.exits.inward
+   * @param {string} props.exits.out Only meaningful for rooms with one exit.
    * @param {array} props.pseudo List of pseudo objects in the room.
    * @param {array} props.global List of local-global objects in the room.
    */
@@ -33,18 +34,7 @@ export default class Room extends Item {
     description,
     value,
     flags,
-    north,
-    south,
-    east,
-    west,
-    ne,
-    se,
-    nw,
-    sw,
-    up,
-    down,
-    inward,
-    out,
+    exits,
     pseudo,
     global,
   }) {
@@ -56,18 +46,7 @@ export default class Room extends Item {
       value,
       flags,
     });
-    this.north = north;
-    this.south = south;
-    this.east = east;
-    this.west = west;
-    this.ne = ne;
-    this.se = se;
-    this.nw = nw;
-    this.sw = sw;
-    this.up = up;
-    this.down = down;
-    this.inward = inward;
-    this.out = out;
+    this.exits = exits;
     this.pseudo = pseudo;
     this.global = global;
   }
