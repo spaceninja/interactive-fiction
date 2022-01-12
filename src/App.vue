@@ -1,8 +1,15 @@
 <template>
-  <h1>Interactive Fiction</h1>
-  <TheGame />
+  <AppHeader />
+  <main class="app-main">
+    <AppOutput />
+    <AppInput />
+  </main>
+  <AppFooter />
 </template>
 
 <script setup>
-import TheGame from './components/TheGame/TheGame.vue';
+import AppHeader from './components/AppHeader.vue';
+import AppOutput from './components/AppOutput.vue';
+import AppInput from './components/AppInput.vue';
+import AppFooter from './components/AppFooter.vue';
 </script>

@@ -1,19 +1,17 @@
-<template>(View Console)</template>
+<template>
+  <form class="app-input" @submit.prevent="onSubmit">
+    <input v-model="userInput" />
+    <button type="submit">Submit</button>
+  </form>
+</template>
 
 <script setup>
-import { onMounted } from 'vue';
-import * as g from '../../composables/useGlobal';
-import * as i from '../../composables/useItem';
-import * as r from '../../composables/useRoom';
+import { ref } from 'vue';
+import * as g from '../composables/useGlobal';
+import * as i from '../composables/useItem';
+import * as r from '../composables/useRoom';
 
-onMounted(() => {
-  console.log('WHAT UP DORKS???');
-  console.log('main.js', r.livingRoom.value);
-
-  r.livingRoom.value.action();
-
-  console.log('main.js', i.rug.value);
-
+const onSubmit = () => {
   r.livingRoom.value.action('look');
 
   i.rug.value.action('take');
@@ -37,5 +35,7 @@ onMounted(() => {
   g.magicFlag.value = true;
 
   r.livingRoom.value.action('look');
-});
+};
+
+const userInput = ref('');
 </script>
