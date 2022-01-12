@@ -1,6 +1,9 @@
 import { ref } from 'vue';
+import { items } from './useItem';
 
 export const here = ref('livingRoom');
+export const theVerb = ref('');
+export const theObject = ref('');
 
 export const magicFlag = ref(false);
 
@@ -15,6 +18,10 @@ export const dummyMessages = [
   'Too late for that.',
   'Have your eyes checked.',
 ];
+
+export const evaluate = () => {
+  items[theObject.value].value.action(theVerb.value);
+};
 
 /**
  * Pick One Item from an Array

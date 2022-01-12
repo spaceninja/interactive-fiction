@@ -123,3 +123,5 @@ export const rug = ref(
     },
   })
 );
+
+export const items = { trapDoor, rug };
