@@ -8,20 +8,13 @@
 
 <script setup>
 import { ref } from 'vue';
-import {
-  magicFlag,
-  theVerb,
-  theObject,
-  evaluate,
-} from '../composables/useGlobal';
+import { magicFlag, evaluate } from '../composables/useGlobal';
 import { items } from '../composables/useItem';
 import { rooms } from '../composables/useRoom';
+import { parser } from '../composables/useParser';
 
 const onSubmit = () => {
-  const userInputTokens = userInput.value.toLowerCase().split(' ');
-  console.log(userInputTokens);
-  theVerb.value = userInputTokens[0];
-  theObject.value = userInputTokens[1];
+  parser(userInput);
   evaluate();
 };
 

@@ -19,6 +19,7 @@
     "lint:prettier:check": "prettier . --check"
   },
   "dependencies": {
+    "chevrotain": "^9.1.0",
     "vue": "^3.2.26"
   },
   "devDependencies": {
