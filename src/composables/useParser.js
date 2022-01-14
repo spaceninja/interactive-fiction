@@ -47,25 +47,25 @@ const objects = createToken({ name: 'Objects', pattern: Lexer.NA });
 // See: https://github.com/chevrotain/chevrotain/blob/master/examples/lexer/keywords_vs_identifiers/keywords_vs_identifiers.js
 const attack = createToken({
   name: 'Attack',
-  pattern: /attack/,
+  pattern: /attack|stab/,
   longer_alt: StringLiteral,
   categories: [actions],
 });
 const kiss = createToken({
   name: 'Kiss',
-  pattern: /kiss/,
+  pattern: /kiss|smooch/,
   longer_alt: StringLiteral,
   categories: [actions],
 });
 const troll = createToken({
   name: 'Troll',
-  pattern: /troll/,
+  pattern: /troll|ogre/,
   longer_alt: StringLiteral,
   categories: [objects],
 });
 const elf = createToken({
   name: 'Elf',
-  pattern: /elf/,
+  pattern: /elf|drow/,
   longer_alt: StringLiteral,
   categories: [objects],
 });
@@ -144,6 +144,7 @@ export class magicParser extends CstParser {
   }
 }
 
+// A new parser instance with CST output (enabled by default).
 // We only ever need one as the parser internal state is reset for each new input.
 export const parserInstance = new magicParser();
 
@@ -162,4 +163,71 @@ export const parse = (inputText) => {
         parserInstance.errors[0].message
     );
   }
+};
+
+// The base visitor class can be accessed via the a parser instance.
+const BaseMagicVisitor = parserInstance.getBaseCstVisitorConstructor();
+
+class MagicToAstVisitor extends BaseMagicVisitor {
+  constructor() {
+    super();
+    this.validateVisitor();
+  }
+
+  magic(ctx) {
+    const verb = this.visit(ctx.verb);
+    const noun = this.visit(ctx.noun);
+
+    return {
+      type: 'MAGIC',
+      verb,
+      noun,
+    };
+  }
+
+  verb(ctx) {
+    const verbName = ctx.Actions[0].image;
+    const verbType = ctx.Actions[0].tokenType.name;
+
+    return {
+      verbName,
+      verbType,
+      ctx,
+    };
+  }
+
+  noun(ctx) {
+    const nounName = ctx.Objects[0].image;
+    const nounType = ctx.Objects[0].tokenType.name;
+
+    return {
+      nounName,
+      nounType,
+      ctx,
+    };
+  }
+}
+
+// Our visitor has no state, so a single instance is sufficient.
+const toAstVisitorInstance = new MagicToAstVisitor();
+
+export const toAst = (inputText) => {
+  const lexResult = lex(inputText);
+
+  // ".input" is a setter which will reset the parser's internal's state.
+  parserInstance.input = lexResult.tokens;
+
+  // Automatic CST created when parsing
+  const cst = parserInstance.magic();
+
+  if (parserInstance.errors.length > 0) {
+    throw Error(
+      'Sad sad panda, parsing errors detected!\n' +
+        parserInstance.errors[0].message
+    );
+  }
+
+  const ast = toAstVisitorInstance.visit(cst);
+
+  return ast;
 };

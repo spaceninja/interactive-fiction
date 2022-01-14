@@ -6,7 +6,7 @@ import {
   tokenVocabulary,
   parser,
   lex,
-  parse,
+  toAst,
 } from './composables/useParser';
 
 createApp(App).mount('#app');
@@ -47,10 +47,10 @@ parser('agonize about uncle otto');
 console.log('ALL TOKENS', allTokens);
 console.log('TOKEN VOCAB', tokenVocabulary);
 
-console.log(lex('attack the troll'));
+console.log(lex('stab the ogre'));
 console.log(lex('kiss the elf'));
 console.log(lex('attack the milf'));
 
-console.log(parse('attack the troll'));
-console.log(parse('kiss the elf'));
-console.log(parse('attack the milf'));
+console.log(toAst('stab the ogre'));
+console.log(toAst('kiss the elf'));
+console.log(toAst('attack the milf'));
