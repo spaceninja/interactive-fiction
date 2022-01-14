@@ -1,7 +1,13 @@
 import { createApp } from 'vue';
 import './assets/main.scss';
 import App from './App.vue';
-import { parser, lex } from './composables/useParser';
+import {
+  allTokens,
+  tokenVocabulary,
+  parser,
+  lex,
+  parse,
+} from './composables/useParser';
 
 createApp(App).mount('#app');
 
@@ -38,6 +44,13 @@ parser('worry about uncle otto');
 parser('fret about uncle otto');
 parser('agonize about uncle otto');
 
+console.log('ALL TOKENS', allTokens);
+console.log('TOKEN VOCAB', tokenVocabulary);
+
 console.log(lex('attack the troll'));
 console.log(lex('kiss the elf'));
 console.log(lex('attack the milf'));
+
+console.log(parse('attack the troll'));
+console.log(parse('kiss the elf'));
+console.log(parse('attack the milf'));

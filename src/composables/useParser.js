@@ -1,4 +1,4 @@
-import { createToken, Lexer } from 'chevrotain';
+import { createToken, CstParser, Lexer } from 'chevrotain';
 import { theVerb, theObject } from '../composables/useGlobal';
 
 const stripWords = [
@@ -81,7 +81,7 @@ const The = createToken({
 });
 
 // The order of tokens is important
-const allTokens = [
+export const allTokens = [
   WhiteSpace,
   // "keywords" appear before the StringLiteral
   attack,
@@ -97,23 +97,69 @@ const allTokens = [
 
 // the vocabulary will be exported and used in the Parser definition.
 export const tokenVocabulary = {};
-
-// Loop over all our tokens to create a vocabulary
 allTokens.forEach((tokenType) => {
   tokenVocabulary[tokenType.name] = tokenType;
 });
 
 // Create a new Lexer using our tokens
-const MagicLexer = new Lexer(allTokens);
+const magicLexer = new Lexer(allTokens);
 
 // Pass input to the Lexer, handle errors
 // The Lexer should only fail if it finds something it doesn't recognize as a token
 export const lex = (inputText) => {
-  const lexingResult = MagicLexer.tokenize(inputText);
+  const lexingResult = magicLexer.tokenize(inputText);
 
   if (lexingResult.errors.length > 0) {
     throw Error('Sad Sad Panda, lexing errors detected');
   }
 
   return lexingResult;
+};
+
+// Create a new Parser using our vocabulary
+export class magicParser extends CstParser {
+  constructor() {
+    super(tokenVocabulary);
+
+    // for conciseness
+    const $ = this;
+
+    $.RULE('magic', () => {
+      $.SUBRULE($.verb);
+      $.SUBRULE($.noun);
+    });
+
+    $.RULE('verb', () => {
+      $.CONSUME(actions);
+    });
+
+    $.RULE('noun', () => {
+      $.CONSUME(objects);
+    });
+
+    // very important to call this after all the rules have been defined.
+    // otherwise the parser may not work correctly as it will lack information
+    // derived during the self analysis phase.
+    this.performSelfAnalysis();
+  }
+}
+
+// We only ever need one as the parser internal state is reset for each new input.
+export const parserInstance = new magicParser();
+
+export const parse = (inputText) => {
+  const lexResult = lex(inputText);
+
+  // ".input" is a setter which will reset the parser's internal's state.
+  parserInstance.input = lexResult.tokens;
+
+  // No semantic actions so this won't return anything yet.
+  parserInstance.magic();
+
+  if (parserInstance.errors.length > 0) {
+    throw Error(
+      'Sad sad panda, parsing errors detected!\n' +
+        parserInstance.errors[0].message
+    );
+  }
 };
