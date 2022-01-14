@@ -212,14 +212,12 @@ class MagicToAstVisitor extends BaseMagicVisitor {
 const toAstVisitorInstance = new MagicToAstVisitor();
 
 export const toAst = (inputText) => {
+  // Lex
   const lexResult = lex(inputText);
-
-  // ".input" is a setter which will reset the parser's internal's state.
   parserInstance.input = lexResult.tokens;
 
   // Automatic CST created when parsing
   const cst = parserInstance.magic();
-
   if (parserInstance.errors.length > 0) {
     throw Error(
       'Sad sad panda, parsing errors detected!\n' +
@@ -227,7 +225,7 @@ export const toAst = (inputText) => {
     );
   }
 
+  // Visit
   const ast = toAstVisitorInstance.visit(cst);
-
   return ast;
 };
