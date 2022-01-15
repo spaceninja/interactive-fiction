@@ -186,23 +186,17 @@ class MagicToAstVisitor extends BaseMagicVisitor {
   }
 
   verb(ctx) {
-    const verbName = ctx.Actions[0].image;
-    const verbType = ctx.Actions[0].tokenType.name;
-
     return {
-      verbName,
-      verbType,
+      name: ctx.Actions[0].image,
+      type: ctx.Actions[0].tokenType.name,
       ctx,
     };
   }
 
   noun(ctx) {
-    const nounName = ctx.Objects[0].image;
-    const nounType = ctx.Objects[0].tokenType.name;
-
     return {
-      nounName,
-      nounType,
+      name: ctx.Objects[0].image,
+      type: ctx.Objects[0].tokenType.name,
       ctx,
     };
   }
@@ -219,10 +213,12 @@ export const toAst = (inputText) => {
   // Automatic CST created when parsing
   const cst = parserInstance.magic();
   if (parserInstance.errors.length > 0) {
-    throw Error(
-      'Sad sad panda, parsing errors detected!\n' +
-        parserInstance.errors[0].message
-    );
+    return {
+      type: 'ERROR',
+      name: parserInstance.errors[0].name,
+      message: parserInstance.errors[0].message,
+      token: parserInstance.errors[0].token,
+    };
   }
 
   // Visit
