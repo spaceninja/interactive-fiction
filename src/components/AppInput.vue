@@ -54,6 +54,8 @@ const testParser = () => {
   console.log(parser('stab the ogre'));
   console.log(parser('kiss the elf'));
   console.log(parser('attack the milf'));
+  console.log(parser('attack the large carpet'));
+  console.log(parser('attack the trap door'));
 
   console.log(parser('Attack a Troll?'));
   console.log(parser('kiss an ogre'));

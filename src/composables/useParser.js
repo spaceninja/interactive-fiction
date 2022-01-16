@@ -65,16 +65,16 @@ class PlayerInputVisitor extends parserInstance.getBaseCstVisitorConstructor() {
 
   verb(ctx) {
     return {
-      name: ctx.Action[0].image,
-      type: ctx.Action[0].tokenType.name,
+      input: ctx.Action[0].image,
+      name: ctx.Action[0].tokenType.name,
       ctx,
     };
   }
 
   noun(ctx) {
     return {
-      name: ctx.Item[0].image,
-      type: ctx.Item[0].tokenType.name,
+      input: ctx.Item[0].image,
+      name: ctx.Item[0].tokenType.name,
       ctx,
     };
   }

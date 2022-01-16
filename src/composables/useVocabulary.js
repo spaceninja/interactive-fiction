@@ -1,6 +1,5 @@
 import { createToken, Lexer } from 'chevrotain';
 import { items } from './useItem';
-console.log(items);
 
 /**
  * Create Vocabulary Tokens
@@ -22,7 +21,7 @@ const StringLiteral = createToken({
 const Action = createToken({ name: 'Action', pattern: Lexer.NA });
 const Item = createToken({ name: 'Item', pattern: Lexer.NA });
 
-// Actions
+// Example Actions
 
 const Attack = createToken({
   name: 'Attack',
@@ -37,7 +36,7 @@ const Kiss = createToken({
   categories: [Action],
 });
 
-// Items
+// Example Items
 
 const Troll = createToken({
   name: 'Troll',
