@@ -5,7 +5,15 @@
 html {
   font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
     'Liberation Mono', monospace;
-  font-size: 18px;
+  font-size: 14px;
+
+  @media (min-width: 375px) {
+    font-size: 16px;
+  }
+
+  @media (min-width: 640px) {
+    font-size: 18px;
+  }
 }
 
 html,
@@ -42,7 +50,6 @@ h4,
 h5,
 h6 {
   font-size: 1rem;
-  font-weight: normal;
 }
 
 input,
@@ -55,32 +62,125 @@ select {
 .app-container {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: 100vh;
+}
+
+.app-header,
+.app-footer,
+.app-output,
+.app-input,
+.app-help {
+  padding: 0.5rem;
+
+  @media (min-width: 480px) {
+    padding: 0.66rem 1rem;
+  }
 }
 
 .app-header,
 .app-footer {
-  background: rgba(0 255 0 / 2%);
+  align-items: center;
+  background: darkgreen;
+  color: white;
+  display: flex;
   flex: none;
+  gap: 1rem;
   padding: 0.5rem;
+
+  @media (min-width: 480px) {
+    gap: 2rem;
+    padding: 0.66rem 1rem;
+  }
 
   > * {
     margin: 0;
   }
 }
 
+.app-footer {
+  font-size: smaller;
+}
+
 .app-main {
   display: flex;
   flex: 1;
   flex-direction: column;
-  height: 100%;
-  padding: 0.5rem;
+  overflow: auto;
 }
 
+.app-help,
 .app-output {
   flex: 1;
+  overflow-y: auto;
+}
+
+.prose {
+  margin-inline: auto;
+  max-width: 100ch;
 }
 
 .app-input {
+  align-items: center;
+  display: flex;
   flex: none;
+  margin-inline: auto;
+  max-width: 100ch;
+  width: 100%;
+}
+
+.app-input__prompt {
+  flex: none;
+  margin-right: 0.25em;
+}
+
+.app-input__input {
+  flex: 1;
+}
+
+.app-header__location,
+.app-debug__indirect {
+  margin-right: auto;
+}
+
+.visually-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: auto;
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+input,
+button {
+  appearance: none;
+  background: none;
+  border: none;
+  color: inherit;
+  padding: 0;
+}
+
+input:focus {
+  outline: none;
+}
+
+button {
+  border-radius: 2px;
+  cursor: pointer;
+
+  &:focus {
+    outline-color: currentColor;
+  }
+}
+
+ul {
+  list-style: none;
+
+  li::before {
+    content: '>';
+    margin-right: 0.5em;
+  }
 }

@@ -5,7 +5,7 @@ module.exports = {
     'stylelint-config-prettier',
   ],
   rules: {
-    // override/add rules settings here, such as:
-    // 'color-no-invalid-hex': false,
+    'a11y/no-outline-none': null,
+    'no-descending-specificity': null,
   },
 };

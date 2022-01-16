@@ -96,6 +96,7 @@ const visitorInstance = new PlayerInputVisitor();
  * @returns object
  */
 export const parser = (playerInput) => {
+  console.log(playerInput);
   // Lex
   const lexResult = playerInputLexer.tokenize(playerInput.toLowerCase());
   if (lexResult.errors.length > 0) {

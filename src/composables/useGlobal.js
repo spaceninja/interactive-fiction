@@ -1,9 +1,15 @@
 import { ref } from 'vue';
 import { items } from './useItem';
 
-export const here = ref('livingRoom');
+export const here = ref('');
+export const score = ref(0);
+export const scoreMax = ref(null);
+export const moves = ref(0);
+export const showHelp = ref(false);
+
 export const theVerb = ref('');
 export const theObject = ref('');
+export const theIndirect = ref('');
 
 export const magicFlag = ref(false);
 

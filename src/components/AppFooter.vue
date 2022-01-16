@@ -1,5 +1,9 @@
 <template>
   <footer class="app-footer">
-    <p>By Scott Vandehey</p>
+    <AppDebug />
   </footer>
 </template>
+
+<script setup>
+import AppDebug from './AppDebug.vue';
+</script>

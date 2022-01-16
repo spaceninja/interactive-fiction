@@ -25,13 +25,14 @@ This project is an attempt to create an Infocom-style text adventure game engine
 - [x] Create sample Room
 - [x] Add parser scaffolding
 - [x] Add automatic translation of Items to parser tokens
+- [x] Add status bar: HERE, SCORE/MAX, MOVES
+- [x] Add debug bar
+- [x] Add help page
 - [ ] Add PERFORM command (see gmain.zil)
   - [ ] Handle parser errors
   - [ ] Call PRSI action
   - [ ] Call PRSO action
   - [ ] Call Verb action
-- [ ] Add status bar: HERE, SCORE/MAX, MOVES
-- [ ] Add debug bar: https://bit.ly/3nxfP2G
 - [ ] Add TEST verb: https://bit.ly/3nxfP2G
 - [ ] Add TELL routine (output to screen)
 - [ ] Add JIGS-UP routine
