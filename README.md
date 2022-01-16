@@ -1,8 +1,13 @@
-# interactive-fiction
+# Interactive Fictions
+
+> An Infocom-style text adventure game engine.
+
+This project is an attempt to create an Infocom-style text adventure game engine using JavaScript.
 
 ## Game Sequence from Zork
+
 - [ ] Initialize game with GO
-  - [ ] Set special global variables (WINNER, PLAYER, HERE, LIT, SCORE, SCORE-MAX, MOVES, PRSA, PRSO, PRSI>)
+  - [ ] Set special global variables (WINNER, PLAYER, HERE, LIT, SCORE, SCORE-MAX, MOVES, PRSA, PRSO, PRSI)
   - [ ] Queue interrupts based on start of game
   - [ ] Display opening text/title screen
   - [ ] Call V-LOOK to describe current location
@@ -13,6 +18,7 @@
 - [ ] Call CLOCKER
 
 ## TODO: An incomplete and growing list
+
 - [x] Define Item class
 - [x] Create sample Item
 - [x] Define Room class
