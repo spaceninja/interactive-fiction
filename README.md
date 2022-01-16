@@ -24,12 +24,12 @@ This project is an attempt to create an Infocom-style text adventure game engine
 - [x] Define Room class
 - [x] Create sample Room
 - [x] Add parser scaffolding
+- [x] Add automatic translation of Items to parser tokens
 - [ ] Add PERFORM command (see gmain.zil)
   - [ ] Handle parser errors
   - [ ] Call PRSI action
   - [ ] Call PRSO action
   - [ ] Call Verb action
-- [ ] Add automatic translation of Items to parser tokens
 - [ ] Add status bar: HERE, SCORE/MAX, MOVES
 - [ ] Add debug bar: https://bit.ly/3nxfP2G
 - [ ] Add TEST verb: https://bit.ly/3nxfP2G
@@ -43,6 +43,7 @@ This project is an attempt to create an Infocom-style text adventure game engine
   - [ ] Handle BRIEF, SUPERBRIEF, VERBOSE commands
 - [ ] Translate useful SYNTAX entries from Zork
 - [ ] Translate useful VERB entries from Zork
+- [ ] Add automatic translation of Verbs to parser tokens
 - [ ] Translate useful GLOBAL entries from Zork
 - [ ] Add basic commands: DIAGNOSE, SCORE
 - [ ] Handle moving between rooms
