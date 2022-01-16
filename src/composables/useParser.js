@@ -1,127 +1,21 @@
-import { createToken, CstParser, Lexer } from 'chevrotain';
-import { theVerb, theObject } from '../composables/useGlobal';
+import { CstParser, Lexer } from 'chevrotain';
+import { allTokens, tokenVocabulary } from './useVocabulary';
 
-const stripWords = [
-  'a',
-  'an',
-  'the',
-  'is',
-  'and',
-  'of',
-  'then',
-  'all', // I think we need this one?
-  'one',
-  'but',
-  'except',
-  'yes',
-  'no',
-  'y',
-  'here',
-];
+// Create a Player Input Lexer using our game's tokens.
+const playerInputLexer = new Lexer(allTokens);
 
-const punctuationRegEx = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g;
-
-export const parser = (input) => {
-  // Convert to lowercase, strip punction and useless words, break into tokens
-  const lowercase = input.toLowerCase();
-  const punctiationless = lowercase.replace(punctuationRegEx, '');
-  const tokens = punctiationless.split(' ');
-  const filteredTokens = tokens.filter((t) => !stripWords.includes(t));
-
-  console.log(filteredTokens);
-
-  // Assign to globals
-  theVerb.value = filteredTokens[0];
-  theObject.value = filteredTokens[1];
-};
-
-// createToken is used to create a TokenType
-// The Lexer's output will contain an array of token Objects created by metadata
-const StringLiteral = createToken({
-  name: 'StringLiteral',
-  pattern: /[a-zA-Z]\w*/,
-});
-const actions = createToken({ name: 'Actions', pattern: Lexer.NA });
-const objects = createToken({ name: 'Objects', pattern: Lexer.NA });
-// We specify the "longer_alt" property to resolve keywords vs identifiers ambiguity.
-// See: https://github.com/chevrotain/chevrotain/blob/master/examples/lexer/keywords_vs_identifiers/keywords_vs_identifiers.js
-const attack = createToken({
-  name: 'Attack',
-  pattern: /attack|stab/,
-  longer_alt: StringLiteral,
-  categories: [actions],
-});
-const kiss = createToken({
-  name: 'Kiss',
-  pattern: /kiss|smooch/,
-  longer_alt: StringLiteral,
-  categories: [actions],
-});
-const troll = createToken({
-  name: 'Troll',
-  pattern: /troll|ogre/,
-  longer_alt: StringLiteral,
-  categories: [objects],
-});
-const elf = createToken({
-  name: 'Elf',
-  pattern: /elf|drow/,
-  longer_alt: StringLiteral,
-  categories: [objects],
-});
-const WhiteSpace = createToken({
-  name: 'WhiteSpace',
-  pattern: /\s+/,
-  group: Lexer.SKIPPED,
-});
-const The = createToken({
-  name: 'The',
-  pattern: /the/,
-  group: Lexer.SKIPPED,
-});
-
-// The order of tokens is important
-export const allTokens = [
-  WhiteSpace,
-  // "keywords" appear before the StringLiteral
-  attack,
-  kiss,
-  troll,
-  elf,
-  actions,
-  objects,
-  The,
-  // The StringLiteral must appear after the keywords because all keywords are valid identifiers.
-  StringLiteral,
-];
-
-// the vocabulary will be exported and used in the Parser definition.
-export const tokenVocabulary = {};
-allTokens.forEach((tokenType) => {
-  tokenVocabulary[tokenType.name] = tokenType;
-});
-
-// Create a new Lexer using our tokens
-const magicLexer = new Lexer(allTokens);
-
-// Pass input to the Lexer, handle errors
-// The Lexer should only fail if it finds something it doesn't recognize as a token
-export const lex = (inputText) => {
-  const lexingResult = magicLexer.tokenize(inputText);
-
-  if (lexingResult.errors.length > 0) {
-    throw Error('Sad Sad Panda, lexing errors detected');
-  }
-
-  return lexingResult;
-};
-
-// Create a new Parser using our vocabulary
-export class magicParser extends CstParser {
+/**
+ * Parser
+ *
+ * Create a new Parser using our vocabulary, returns a
+ *
+ * 1. Very important to call this after all the rules have been defined.
+ *    Otherwise the parser may not work correctly as it will lack information
+ *    derived during the self analysis phase.
+ */
+class playerInputParser extends CstParser {
   constructor() {
     super(tokenVocabulary);
-
-    // for conciseness
     const $ = this;
 
     $.RULE('magic', () => {
@@ -130,45 +24,29 @@ export class magicParser extends CstParser {
     });
 
     $.RULE('verb', () => {
-      $.CONSUME(actions);
+      $.CONSUME(tokenVocabulary.Actions);
     });
 
     $.RULE('noun', () => {
-      $.CONSUME(objects);
+      $.CONSUME(tokenVocabulary.Objects);
     });
 
-    // very important to call this after all the rules have been defined.
-    // otherwise the parser may not work correctly as it will lack information
-    // derived during the self analysis phase.
-    this.performSelfAnalysis();
+    $.performSelfAnalysis(); // 1
   }
 }
 
-// A new parser instance with CST output (enabled by default).
-// We only ever need one as the parser internal state is reset for each new input.
-export const parserInstance = new magicParser();
+// Create an instance of our Player Input Parser. We only ever need one,
+// as the parser's internal state is reset for each new input.
+const parserInstance = new playerInputParser();
 
-export const parse = (inputText) => {
-  const lexResult = lex(inputText);
-
-  // ".input" is a setter which will reset the parser's internal's state.
-  parserInstance.input = lexResult.tokens;
-
-  // No semantic actions so this won't return anything yet.
-  parserInstance.magic();
-
-  if (parserInstance.errors.length > 0) {
-    throw Error(
-      'Sad sad panda, parsing errors detected!\n' +
-        parserInstance.errors[0].message
-    );
-  }
-};
-
-// The base visitor class can be accessed via the a parser instance.
-const BaseMagicVisitor = parserInstance.getBaseCstVisitorConstructor();
-
-class MagicToAstVisitor extends BaseMagicVisitor {
+/**
+ * CST Visitor
+ *
+ * This "Visitor" goes over the Concrete Syntax Tree (CST) result returned
+ * from the parser, and turns it into an Abstract Syntax Tree (AST),
+ * a more useful return object.
+ */
+class PlayerInputVisitor extends parserInstance.getBaseCstVisitorConstructor() {
   constructor() {
     super();
     this.validateVisitor();
@@ -202,26 +80,46 @@ class MagicToAstVisitor extends BaseMagicVisitor {
   }
 }
 
-// Our visitor has no state, so a single instance is sufficient.
-const toAstVisitorInstance = new MagicToAstVisitor();
+// Create an instance of our Player Input Visitor. Our visitor has no
+// state, so a single instance is sufficient.
+const visitorInstance = new PlayerInputVisitor();
 
-export const toAst = (inputText) => {
+/**
+ * Parse Player Input
+ *
+ * Takes player input, runs it through the lexer, parser, and visitor,
+ * to generate an AST return object with the properties our app expects.
+ *
+ * 1. `.input` is a setter which will reset the parser's internal's state.
+ *
+ * @param {string} playerInput
+ * @returns object
+ */
+export const parser = (playerInput) => {
   // Lex
-  const lexResult = lex(inputText);
-  parserInstance.input = lexResult.tokens;
+  const lexResult = playerInputLexer.tokenize(playerInput.toLowerCase());
+  if (lexResult.errors.length > 0) {
+    return {
+      type: 'ERROR',
+      token: playerInput.slice(
+        lexResult.errors[0].offset,
+        lexResult.errors[0].offset + lexResult.errors[0].length
+      ),
+      message: lexResult.errors[0].message,
+    };
+  }
+  parserInstance.input = lexResult.tokens; // 1
 
-  // Automatic CST created when parsing
+  // Parse
   const cst = parserInstance.magic();
   if (parserInstance.errors.length > 0) {
     return {
       type: 'ERROR',
-      name: parserInstance.errors[0].name,
+      token: parserInstance.errors[0].token.image,
       message: parserInstance.errors[0].message,
-      token: parserInstance.errors[0].token,
     };
   }
 
   // Visit
-  const ast = toAstVisitorInstance.visit(cst);
-  return ast;
+  return visitorInstance.visit(cst);
 };

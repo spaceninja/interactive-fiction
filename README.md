@@ -23,7 +23,7 @@ This project is an attempt to create an Infocom-style text adventure game engine
 - [x] Create sample Item
 - [x] Define Room class
 - [x] Create sample Room
-- [ ] Add parser scaffolding
+- [x] Add parser scaffolding
 - [ ] Add PERFORM command (see gmain.zil)
   - [ ] Handle parser errors
   - [ ] Call PRSI action
