@@ -24,11 +24,11 @@ class playerInputParser extends CstParser {
     });
 
     $.RULE('verb', () => {
-      $.CONSUME(tokenVocabulary.Actions);
+      $.CONSUME(tokenVocabulary.Action);
     });
 
     $.RULE('noun', () => {
-      $.CONSUME(tokenVocabulary.Objects);
+      $.CONSUME(tokenVocabulary.Item);
     });
 
     $.performSelfAnalysis(); // 1
@@ -65,16 +65,16 @@ class PlayerInputVisitor extends parserInstance.getBaseCstVisitorConstructor() {
 
   verb(ctx) {
     return {
-      name: ctx.Actions[0].image,
-      type: ctx.Actions[0].tokenType.name,
+      name: ctx.Action[0].image,
+      type: ctx.Action[0].tokenType.name,
       ctx,
     };
   }
 
   noun(ctx) {
     return {
-      name: ctx.Objects[0].image,
-      type: ctx.Objects[0].tokenType.name,
+      name: ctx.Item[0].image,
+      type: ctx.Item[0].tokenType.name,
       ctx,
     };
   }
@@ -106,6 +106,7 @@ export const parser = (playerInput) => {
         lexResult.errors[0].offset + lexResult.errors[0].length
       ),
       message: lexResult.errors[0].message,
+      errors: lexResult.errors,
     };
   }
   parserInstance.input = lexResult.tokens; // 1
@@ -117,6 +118,8 @@ export const parser = (playerInput) => {
       type: 'ERROR',
       token: parserInstance.errors[0].token.image,
       message: parserInstance.errors[0].message,
+      input: parserInstance.input,
+      errors: parserInstance.errors,
     };
   }
 

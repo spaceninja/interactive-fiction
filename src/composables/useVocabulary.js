@@ -1,47 +1,90 @@
 import { createToken, Lexer } from 'chevrotain';
+import { items } from './useItem';
+console.log(items);
 
-// createToken is used to create a TokenType
-// The Lexer's output will contain an array of token Objects created by metadata
+/**
+ * Create Vocabulary Tokens
+ *
+ * `createToken` is used to create a TokenType.
+ * The Lexer's output will contain an array of token Item created by metadata.
+ *
+ * We specify the "longer_alt" property to resolve keywords vs identifiers ambiguity.
+ * @see: https://github.com/chevrotain/chevrotain/blob/master/examples/lexer/keywords_vs_identifiers/keywords_vs_identifiers.js
+ */
+
+// This will catch any unrecognized words
 const StringLiteral = createToken({
   name: 'StringLiteral',
   pattern: /[a-zA-Z]\w*/,
 });
-const actions = createToken({ name: 'Actions', pattern: Lexer.NA });
-const objects = createToken({ name: 'Objects', pattern: Lexer.NA });
-// We specify the "longer_alt" property to resolve keywords vs identifiers ambiguity.
-// See: https://github.com/chevrotain/chevrotain/blob/master/examples/lexer/keywords_vs_identifiers/keywords_vs_identifiers.js
-const attack = createToken({
+
+// These are categories for the tokens.
+const Action = createToken({ name: 'Action', pattern: Lexer.NA });
+const Item = createToken({ name: 'Item', pattern: Lexer.NA });
+
+// Actions
+
+const Attack = createToken({
   name: 'Attack',
   pattern: /attack|stab/,
   longer_alt: StringLiteral,
-  categories: [actions],
+  categories: [Action],
 });
-const kiss = createToken({
+const Kiss = createToken({
   name: 'Kiss',
   pattern: /kiss|smooch/,
   longer_alt: StringLiteral,
-  categories: [actions],
+  categories: [Action],
 });
-const troll = createToken({
+
+// Items
+
+const Troll = createToken({
   name: 'Troll',
   pattern: /troll|ogre/,
   longer_alt: StringLiteral,
-  categories: [objects],
+  categories: [Item],
 });
-const elf = createToken({
+const Elf = createToken({
   name: 'Elf',
   pattern: /elf|drow/,
   longer_alt: StringLiteral,
-  categories: [objects],
+  categories: [Item],
+});
+
+// Generate Tokens for Each Item
+
+let itemTokens = [];
+Object.entries(items).forEach(([name, item]) => {
+  itemTokens.push(
+    createToken({
+      name: name,
+      pattern: new RegExp(
+        `(${item.value.adjective.join('|')}) (${item.value.synonym.join('|')})`
+      ),
+      longer_alt: StringLiteral,
+      categories: [Item],
+    })
+  );
+});
+
+// Others
+
+const Integer = createToken({ name: 'Integer', pattern: /0|[1-9]\d*/ });
+const Buzzword = createToken({
+  name: 'Buzzword',
+  pattern: /an|a|the|is|of/,
+  longer_alt: StringLiteral,
+  group: Lexer.SKIPPED,
+});
+const Punctuation = createToken({
+  name: 'Punctuation',
+  pattern: /\?/,
+  group: Lexer.SKIPPED,
 });
 const WhiteSpace = createToken({
   name: 'WhiteSpace',
   pattern: /\s+/,
-  group: Lexer.SKIPPED,
-});
-const The = createToken({
-  name: 'The',
-  pattern: /the/,
   group: Lexer.SKIPPED,
 });
 
@@ -49,13 +92,16 @@ const The = createToken({
 export const allTokens = [
   WhiteSpace,
   // "keywords" appear before the StringLiteral
-  attack,
-  kiss,
-  troll,
-  elf,
-  actions,
-  objects,
-  The,
+  Attack,
+  Kiss,
+  Troll,
+  Elf,
+  ...itemTokens,
+  Action,
+  Item,
+  Integer,
+  Buzzword,
+  Punctuation,
   // The StringLiteral must appear after the keywords because all keywords are valid identifiers.
   StringLiteral,
 ];

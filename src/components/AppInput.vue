@@ -55,7 +55,10 @@ const testParser = () => {
   console.log(parser('kiss the elf'));
   console.log(parser('attack the milf'));
 
-  console.log(parser('Attack the Troll?'));
+  console.log(parser('Attack a Troll?'));
+  console.log(parser('kiss an ogre'));
+  console.log(parser('kiss of ogre'));
+  console.log(parser('kiss is ogre'));
   console.log(parser('blow up door with dynamite'));
   console.log(parser('climb up the rope'));
   console.log(parser('climb down the rope'));
