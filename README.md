@@ -23,6 +23,8 @@ This project is an attempt to create an Infocom-style text adventure game engine
 - [x] Create sample Item
 - [x] Define Room class
 - [x] Create sample Room
+- [x] Define Verb class
+- [x] Create sample Verbs
 - [x] Add parser scaffolding
 - [x] Add automatic translation of Items to parser tokens
 - [x] Add status bar: HERE, SCORE/MAX, MOVES
@@ -33,8 +35,6 @@ This project is an attempt to create an Infocom-style text adventure game engine
   - [x] Pass through parser, handle errors
   - [x] Set PRSA, PRSO, PRSI globals
   - [x] If no errors, pass to PERFORM
-- [ ] Define Verb class
-- [ ] Create sample Verbs
 - [ ] Add PERFORM command (see gmain.zil)
   - [ ] Call PRSI action
   - [ ] Call PRSO action

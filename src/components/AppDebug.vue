@@ -19,41 +19,41 @@ import { tokenVocabulary } from '../composables/useVocabulary';
 import { handlePlayerInput } from '../composables/useGlobal';
 
 const testRoom = () => {
-  rooms.livingRoom.value.action('look');
+  rooms.LivingRoom.value.action('look');
 
-  items.rug.value.action('take');
-  items.rug.value.action('climb on');
-  items.rug.value.action('raise');
-  items.rug.value.action('look under');
-  items.rug.value.action('move');
+  items.Rug.value.action('take');
+  items.Rug.value.action('climb on');
+  items.Rug.value.action('raise');
+  items.Rug.value.action('look under');
+  items.Rug.value.action('move');
 
-  rooms.livingRoom.value.action('look');
+  rooms.LivingRoom.value.action('look');
 
-  items.rug.value.action('climb on');
-  items.rug.value.action('raise');
-  items.rug.value.action('look under');
-  items.rug.value.action('move');
+  items.Rug.value.action('climb on');
+  items.Rug.value.action('raise');
+  items.Rug.value.action('look under');
+  items.Rug.value.action('move');
 
-  items.trapDoor.value.action('look under');
-  items.trapDoor.value.action('raise');
-  items.trapDoor.value.action('look under');
-  items.trapDoor.value.action('close');
+  items.TrapDoor.value.action('look under');
+  items.TrapDoor.value.action('raise');
+  items.TrapDoor.value.action('look under');
+  items.TrapDoor.value.action('close');
 
   magicFlag.value = true;
 
-  rooms.livingRoom.value.action('look');
+  rooms.LivingRoom.value.action('look');
 };
 
 const testParser = () => {
   console.log('TOKEN VOCAB', tokenVocabulary);
 
   handlePlayerInput('stab the ogre');
-  handlePlayerInput('kiss the elf');
+  handlePlayerInput('smooch the elf');
   handlePlayerInput('attack the MILF');
   handlePlayerInput('attack the large carpet');
-  handlePlayerInput('attack the rug');
+  handlePlayerInput('attack the Rug');
   handlePlayerInput('attack the trap door');
-  handlePlayerInput('attack the trapdoor');
+  handlePlayerInput('attack the TrapDoor');
 
   handlePlayerInput('Attack a Troll?');
   handlePlayerInput('kiss an ogre');

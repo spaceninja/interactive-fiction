@@ -17,9 +17,9 @@ import AppOutput from './components/AppOutput.vue';
 import AppInput from './components/AppInput.vue';
 import AppFooter from './components/AppFooter.vue';
 import { here, showHelp, tell } from './composables/useGlobal';
-import { livingRoom } from './composables/useRoom';
+import { LivingRoom } from './composables/useRoom';
 
 // GO!
-here.value = livingRoom.value;
+here.value = LivingRoom.value;
 tell(here.value.action('look'));
 </script>

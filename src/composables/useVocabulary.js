@@ -1,5 +1,6 @@
 import { createToken, Lexer } from 'chevrotain';
 import { items } from './useItem';
+import { verbs } from './useVerb';
 
 /**
  * Create Vocabulary Tokens
@@ -22,22 +23,28 @@ const Action = createToken({ name: 'Action', pattern: Lexer.NA });
 const Item = createToken({ name: 'Item', pattern: Lexer.NA });
 
 // Example Actions
-
 const Attack = createToken({
   name: 'Attack',
   pattern: /attack|stab/i,
   longer_alt: StringLiteral,
   categories: [Action],
 });
-const Kiss = createToken({
-  name: 'Kiss',
-  pattern: /kiss|smooch/i,
-  longer_alt: StringLiteral,
-  categories: [Action],
+
+// Generate Tokens for Each Verb
+let verbTokens = [];
+Object.entries(verbs).forEach(([name, item]) => {
+  const i = item.value;
+  verbTokens.push(
+    createToken({
+      name: name,
+      pattern: new RegExp(`${i.synonym.join('|')}`, 'i'),
+      longer_alt: StringLiteral,
+      categories: [Action],
+    })
+  );
 });
 
 // Example Items
-
 const Troll = createToken({
   name: 'Troll',
   pattern: /troll|ogre/i,
@@ -52,7 +59,6 @@ const Elf = createToken({
 });
 
 // Generate Tokens for Each Item
-
 let itemTokens = [];
 Object.entries(items).forEach(([name, item]) => {
   const i = item.value;
@@ -70,7 +76,6 @@ Object.entries(items).forEach(([name, item]) => {
 });
 
 // Others
-
 const Integer = createToken({ name: 'Integer', pattern: /0|[1-9]\d*/ });
 const Buzzword = createToken({
   name: 'Buzzword',
@@ -95,7 +100,7 @@ export const allTokens = [
   WhiteSpace,
   // "keywords" appear before the StringLiteral
   Attack,
-  Kiss,
+  ...verbTokens,
   Troll,
   Elf,
   ...itemTokens,
