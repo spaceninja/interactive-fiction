@@ -1,22 +1,21 @@
 <template>
-  <form class="app-input" @submit.prevent="onSubmit">
-    <span class="app-input__prompt">&gt;</span>
-    <input
-      v-model.trim="userInput"
-      class="app-input__input"
-      placeholder="What do you want to do?"
-    />
-    <button class="app-input__submit visually-hidden">Submit</button>
-  </form>
+  <section class="app-input">
+    <form class="app-input__form prose" @submit.prevent="onSubmit">
+      <span class="app-input__prompt">&gt;</span>
+      <input
+        v-model.trim="playerInput"
+        class="app-input__input"
+        placeholder="What do you want to do?"
+      />
+      <button class="app-input__submit visually-hidden">Submit</button>
+    </form>
+  </section>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { parser } from '../composables/useParser';
-
-const userInput = ref('');
+import { playerInput, handlePlayerInput } from '../composables/useGlobal';
 
 const onSubmit = () => {
-  console.log(parser(userInput.value));
+  handlePlayerInput();
 };
 </script>

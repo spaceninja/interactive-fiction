@@ -16,7 +16,7 @@ import {
 import { items } from '../composables/useItem';
 import { rooms } from '../composables/useRoom';
 import { tokenVocabulary } from '../composables/useVocabulary';
-import { parser } from '../composables/useParser';
+import { handlePlayerInput } from '../composables/useGlobal';
 
 const testRoom = () => {
   rooms.livingRoom.value.action('look');
@@ -47,48 +47,49 @@ const testRoom = () => {
 const testParser = () => {
   console.log('TOKEN VOCAB', tokenVocabulary);
 
-  console.log(parser('stab the ogre'));
-  console.log(parser('kiss the elf'));
-  console.log(parser('attack the milf'));
-  console.log(parser('attack the large carpet'));
-  console.log(parser('attack the trap door'));
+  handlePlayerInput('stab the ogre');
+  handlePlayerInput('kiss the elf');
+  handlePlayerInput('attack the MILF');
+  handlePlayerInput('attack the large carpet');
+  handlePlayerInput('attack the rug');
+  handlePlayerInput('attack the trap door');
+  handlePlayerInput('attack the trapdoor');
 
-  console.log(parser('Attack a Troll?'));
-  console.log(parser('kiss an ogre'));
-  console.log(parser('kiss of ogre'));
-  console.log(parser('kiss is ogre'));
-  console.log(parser('blow up door with dynamite'));
-  console.log(parser('climb up the rope'));
-  console.log(parser('climb down the rope'));
-  console.log(parser('climb in the coffin'));
-  console.log(parser('climb on the table'));
-  console.log(parser('climb over the barricade'));
-  console.log(parser('examine the red key'));
-  console.log(parser('examine salt and pepper'));
-  console.log(parser('get the lamp oil from under the bed'));
-  console.log(parser('give the duck the razor blade'));
-  console.log(parser('give the razor blade to the duck'));
-  console.log(parser('look at the faded picture'));
-  console.log(parser('look behind the oil painting'));
-  console.log(parser('look for the money'));
-  console.log(parser('open the wooden door with the gold key'));
-  console.log(parser('pick up the ticket'));
-  console.log(parser('plant the pot plant in the plant pot'));
-  console.log(parser('put on the jacket'));
-  console.log(parser('put down the gun'));
-  console.log(parser('put the key in the box'));
-  console.log(parser('put the key on the table'));
-  console.log(
-    parser('take all from the basket except the chip and the socket')
-  );
-  console.log(parser('take all from the basket'));
-  console.log(parser('take the chip from the basket'));
-  console.log(parser('talk to ford'));
-  console.log(parser('turn dial to 11'));
-  console.log(parser('turn the oil lamp off'));
-  console.log(parser('turn the oil lamp on'));
-  console.log(parser('worry about uncle otto'));
-  console.log(parser('fret about uncle otto'));
-  console.log(parser('agonize about uncle otto'));
+  handlePlayerInput('Attack a Troll?');
+  handlePlayerInput('kiss an ogre');
+  handlePlayerInput('kiss of ogre');
+  handlePlayerInput('kiss is ogre');
+  handlePlayerInput('blow up door with dynamite');
+  handlePlayerInput('climb up the rope');
+  handlePlayerInput('climb down the rope');
+  handlePlayerInput('climb in the coffin');
+  handlePlayerInput('climb on the table');
+  handlePlayerInput('climb over the barricade');
+  handlePlayerInput('examine the red key');
+  handlePlayerInput('examine salt and pepper');
+  handlePlayerInput('get the lamp oil from under the bed');
+  handlePlayerInput('give the duck the razor blade');
+  handlePlayerInput('give the razor blade to the duck');
+  handlePlayerInput('look at the faded picture');
+  handlePlayerInput('look behind the oil painting');
+  handlePlayerInput('look for the money');
+  handlePlayerInput('open the wooden door with the gold key');
+  handlePlayerInput('pick up the ticket');
+  handlePlayerInput('plant the pot plant in the plant pot');
+  handlePlayerInput('put on the jacket');
+  handlePlayerInput('put down the gun');
+  handlePlayerInput('put the key in the box');
+  handlePlayerInput('put the key on the table');
+
+  handlePlayerInput('take all from the basket except the chip and the socket');
+  handlePlayerInput('take all from the basket');
+  handlePlayerInput('take the chip from the basket');
+  handlePlayerInput('talk to ford');
+  handlePlayerInput('turn dial to 11');
+  handlePlayerInput('turn the oil lamp off');
+  handlePlayerInput('turn the oil lamp on');
+  handlePlayerInput('worry about uncle otto');
+  handlePlayerInput('fret about uncle otto');
+  handlePlayerInput('agonize about uncle otto');
 };
 </script>

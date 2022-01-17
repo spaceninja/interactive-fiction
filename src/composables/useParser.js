@@ -96,18 +96,19 @@ const visitorInstance = new PlayerInputVisitor();
  * @returns object
  */
 export const parser = (playerInput) => {
-  console.log(playerInput);
   // Lex
-  const lexResult = playerInputLexer.tokenize(playerInput.toLowerCase());
+  const lexResult = playerInputLexer.tokenize(playerInput);
   if (lexResult.errors.length > 0) {
     return {
-      type: 'ERROR',
-      token: playerInput.slice(
-        lexResult.errors[0].offset,
-        lexResult.errors[0].offset + lexResult.errors[0].length
-      ),
-      message: lexResult.errors[0].message,
-      errors: lexResult.errors,
+      error: {
+        message: lexResult.errors[0].message,
+        token: playerInput.slice(
+          lexResult.errors[0].offset,
+          lexResult.errors[0].offset + lexResult.errors[0].length
+        ),
+        // TODO: remove once we don't need to reference the full error object
+        errors: lexResult.errors,
+      },
     };
   }
   parserInstance.input = lexResult.tokens; // 1
@@ -116,11 +117,13 @@ export const parser = (playerInput) => {
   const cst = parserInstance.magic();
   if (parserInstance.errors.length > 0) {
     return {
-      type: 'ERROR',
-      token: parserInstance.errors[0].token.image,
-      message: parserInstance.errors[0].message,
-      input: parserInstance.input,
-      errors: parserInstance.errors,
+      error: {
+        message: parserInstance.errors[0].message,
+        token: parserInstance.errors[0].token.image,
+        // TODO: remove once we don't need to reference the full error object
+        input: parserInstance.input,
+        errors: parserInstance.errors,
+      },
     };
   }
 

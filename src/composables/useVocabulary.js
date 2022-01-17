@@ -25,13 +25,13 @@ const Item = createToken({ name: 'Item', pattern: Lexer.NA });
 
 const Attack = createToken({
   name: 'Attack',
-  pattern: /attack|stab/,
+  pattern: /attack|stab/i,
   longer_alt: StringLiteral,
   categories: [Action],
 });
 const Kiss = createToken({
   name: 'Kiss',
-  pattern: /kiss|smooch/,
+  pattern: /kiss|smooch/i,
   longer_alt: StringLiteral,
   categories: [Action],
 });
@@ -40,13 +40,13 @@ const Kiss = createToken({
 
 const Troll = createToken({
   name: 'Troll',
-  pattern: /troll|ogre/,
+  pattern: /troll|ogre/i,
   longer_alt: StringLiteral,
   categories: [Item],
 });
 const Elf = createToken({
   name: 'Elf',
-  pattern: /elf|drow/,
+  pattern: /elf|drow/i,
   longer_alt: StringLiteral,
   categories: [Item],
 });
@@ -55,11 +55,13 @@ const Elf = createToken({
 
 let itemTokens = [];
 Object.entries(items).forEach(([name, item]) => {
+  const i = item.value;
   itemTokens.push(
     createToken({
       name: name,
       pattern: new RegExp(
-        `(${item.value.adjective.join('|')}) (${item.value.synonym.join('|')})`
+        `((${i.adjective.join('|')}) )?(${i.synonym.join('|')})`,
+        'i'
       ),
       longer_alt: StringLiteral,
       categories: [Item],
@@ -72,7 +74,7 @@ Object.entries(items).forEach(([name, item]) => {
 const Integer = createToken({ name: 'Integer', pattern: /0|[1-9]\d*/ });
 const Buzzword = createToken({
   name: 'Buzzword',
-  pattern: /an|a|the|is|of/,
+  pattern: /an|a|the|is|of/i,
   longer_alt: StringLiteral,
   group: Lexer.SKIPPED,
 });
@@ -89,6 +91,7 @@ const WhiteSpace = createToken({
 
 // The order of tokens is important
 export const allTokens = [
+  // WhiteSpace comes first as it is very common thus it will speed up the lexer.
   WhiteSpace,
   // "keywords" appear before the StringLiteral
   Attack,

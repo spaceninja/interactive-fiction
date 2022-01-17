@@ -1,5 +1,13 @@
 :root {
   color-scheme: light dark;
+  --color-page-bg: white;
+  --color-text: #333;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-page-bg: #333;
+    --color-text: white;
+  }
 }
 
 html {
@@ -30,6 +38,8 @@ body {
 }
 
 body {
+  background: var(--color-page-bg);
+  color: var(--color-text);
   line-height: 1.5;
 }
 
@@ -70,6 +80,7 @@ select {
 .app-output,
 .app-input,
 .app-help {
+  margin: 0;
   padding: 0.5rem;
 
   @media (min-width: 480px) {
@@ -111,21 +122,38 @@ select {
 .app-help,
 .app-output {
   flex: 1;
-  overflow-y: auto;
+}
+
+.app-output {
+  list-style: none;
+  margin: 0;
+  padding-bottom: 0;
+
+  li + li {
+    margin-top: 0.5rem;
+
+    @media (min-width: 480px) {
+      margin-top: 0.66rem;
+    }
+  }
 }
 
 .prose {
   margin-inline: auto;
   max-width: 100ch;
+  width: 100%;
 }
 
 .app-input {
+  background: var(--color-page-bg);
+  bottom: 0;
+  flex: none;
+  position: sticky;
+}
+
+.app-input__form {
   align-items: center;
   display: flex;
-  flex: none;
-  margin-inline: auto;
-  max-width: 100ch;
-  width: 100%;
 }
 
 .app-input__prompt {
@@ -176,7 +204,7 @@ button {
   }
 }
 
-ul {
+.app-help ul {
   list-style: none;
 
   li::before {

@@ -28,13 +28,16 @@ This project is an attempt to create an Infocom-style text adventure game engine
 - [x] Add status bar: HERE, SCORE/MAX, MOVES
 - [x] Add debug bar
 - [x] Add help page
+- [x] Add TELL routine (output to screen)
+- [x] Handle Player Input
+  - [x] Pass through parser, handle errors
+  - [x] Set PRSA, PRSO, PRSI globals
+  - [x] If no errors, pass to PERFORM
 - [ ] Add PERFORM command (see gmain.zil)
-  - [ ] Handle parser errors
   - [ ] Call PRSI action
   - [ ] Call PRSO action
   - [ ] Call Verb action
 - [ ] Add TEST verb: https://bit.ly/3nxfP2G
-- [ ] Add TELL routine (output to screen)
 - [ ] Add JIGS-UP routine
 - [ ] Add LOOK (L) command
   - [ ] Describe the room
