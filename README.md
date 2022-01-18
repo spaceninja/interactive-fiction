@@ -35,12 +35,11 @@ This project is an attempt to create an Infocom-style text adventure game engine
   - [x] Pass through parser, handle errors
   - [x] Set PRSA, PRSO, PRSI globals
   - [x] If no errors, pass to PERFORM
-- [ ] Add PERFORM command (see gmain.zil)
-  - [ ] Call PRSI action
-  - [ ] Call PRSO action
-  - [ ] Call Verb action
-- [ ] Add TEST verb: https://bit.ly/3nxfP2G
-- [ ] Add JIGS-UP routine
+  - [x] Fail for unknown tokens
+- [x] Add PERFORM command (see gmain.zil)
+  - [x] Call PRSI action
+  - [x] Call PRSO action
+  - [x] Call Verb action
 - [ ] Add LOOK (L) command
   - [ ] Describe the room
   - [ ] Describe items in the room
@@ -59,14 +58,12 @@ This project is an attempt to create an Infocom-style text adventure game engine
   - [ ] Set TOUCHED bit in new room
   - [ ] Call Room description
 - [ ] Advanced parser
-  - [ ] Take objects if needed
   - [ ] Syntax tokens: HAVE, TAKE, MANY, EVERYWHERE, ADJACENT, HELD, CARRIED, ON-GROUND, IN-ROOM
   - [ ] Switch syntaxes
-  - [ ] Fail for unknown tokens
   - [ ] Add Get-What-I-Mean, Find
-  - [ ] Multiple objects: separate by AND or comma.
+  - [ ] Multiple items: separate by AND or comma.
   - [ ] Handle IT in commands
-  - [ ] Handle ALL in commands (every visible object not inside a container)
+  - [ ] Handle ALL in commands (every visible item not inside a container)
   - [ ] Sequential commands: separate by THEN or period.
     - [ ] Flush input if sequential commands fail
 - [ ] Advanced PERFORM
@@ -74,13 +71,13 @@ This project is an attempt to create an Infocom-style text adventure game engine
   - [ ] Pre: Call Room M-BEG action
   - [ ] Pre: Call pre-verb action
   - [ ] Post: Call Room M-END action
-- [ ] Handle taking objects
+- [ ] Handle taking items
   - [ ] Add INVENTORY (I) command
 - [ ] Handle containers
   - [ ] Open/Close container
   - [ ] Surfaces
 - [ ] Handle lighting
-  - [ ] Objects that emit light
+  - [ ] Items that emit light
   - [ ] Rooms that are lit
   - [ ] Affect room descriptions (check LIT in M-BEG?)
 - [ ] Handle doors
@@ -97,6 +94,7 @@ This project is an attempt to create an Infocom-style text adventure game engine
 - [ ] Add Actors
   - [ ] Handle speaking to actors
   - [ ] Handle giving directions to actors
+- [ ] Add JIGS-UP routine
 - [ ] Add SAVE/RESTORE
   - [ ] Add AUTOSAVE
   - [ ] Add UNDO

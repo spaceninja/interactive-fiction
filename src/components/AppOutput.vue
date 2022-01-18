@@ -1,6 +1,12 @@
 <template>
   <ul class="app-output">
-    <li v-for="message in theOutput" class="prose">{{ message }}</li>
+    <li
+      v-for="{ message, className, key } in theOutput"
+      :key="key"
+      :class="['prose', className]"
+    >
+      {{ message }}
+    </li>
   </ul>
 </template>
 

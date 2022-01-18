@@ -7,11 +7,11 @@ export default class Room extends Item {
    * @param {function} props.action The function called when the room
    *    is interacted with.
    * @param {string} props.description The description of the room.
-   * @param {string} props.location The name of the object/room which
-   *    contains this object.
+   * @param {string} props.location The name of the item/room which
+   *    contains this item.
    * @param {number} props.value The number of points the player gets
-   *    for interacting with the object for the first time.
-   * @param {object} props.flags List of all flags set in the object.
+   *    for interacting with the item for the first time.
+   * @param {object} props.flags List of all flags set in the item.
    * @param {object} props.exits List of exits from this room.
    * @param {string} props.exits.north
    * @param {string} props.exits.south
@@ -25,8 +25,8 @@ export default class Room extends Item {
    * @param {string} props.exits.down
    * @param {string} props.exits.inward
    * @param {string} props.exits.out Only meaningful for rooms with one exit.
-   * @param {array} props.pseudo List of pseudo objects in the room.
-   * @param {array} props.global List of local-global objects in the room.
+   * @param {array} props.pseudo List of pseudo items in the room.
+   * @param {array} props.global List of local-global items in the room.
    */
   constructor({
     name,

@@ -1,7 +1,7 @@
 <template>
   <section class="app-input">
     <form class="app-input__form prose" @submit.prevent="onSubmit">
-      <span class="app-input__prompt">&gt;</span>
+      <span class="app-input__prompt">&gt;&nbsp;</span>
       <input
         v-model.trim="playerInput"
         class="app-input__input"

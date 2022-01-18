@@ -7,9 +7,23 @@ export const Kiss = ref(
     name: 'Kiss',
     synonym: ['kiss', 'make out', 'smooch', 'hug'],
     action: () => {
+      console.log('Kiss: default handler');
       tell("I'd sooner kiss a pig.");
+      return true;
     },
   })
 );
 
-export const verbs = { Kiss };
+export const Yell = ref(
+  new Verb({
+    name: 'Yell',
+    synonym: ['yell', 'shout', 'holler', 'berate'],
+    action: () => {
+      console.log('Yell: default handler');
+      tell('Aaaarrrrgggghhhh!');
+      return true;
+    },
+  })
+);
+
+export const verbs = { Kiss, Yell };

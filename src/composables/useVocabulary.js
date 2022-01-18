@@ -22,14 +22,6 @@ const StringLiteral = createToken({
 const Action = createToken({ name: 'Action', pattern: Lexer.NA });
 const Item = createToken({ name: 'Item', pattern: Lexer.NA });
 
-// Example Actions
-const Attack = createToken({
-  name: 'Attack',
-  pattern: /attack|stab/i,
-  longer_alt: StringLiteral,
-  categories: [Action],
-});
-
 // Generate Tokens for Each Verb
 let verbTokens = [];
 Object.entries(verbs).forEach(([name, item]) => {
@@ -42,20 +34,6 @@ Object.entries(verbs).forEach(([name, item]) => {
       categories: [Action],
     })
   );
-});
-
-// Example Items
-const Troll = createToken({
-  name: 'Troll',
-  pattern: /troll|ogre/i,
-  longer_alt: StringLiteral,
-  categories: [Item],
-});
-const Elf = createToken({
-  name: 'Elf',
-  pattern: /elf|drow/i,
-  longer_alt: StringLiteral,
-  categories: [Item],
 });
 
 // Generate Tokens for Each Item
@@ -79,7 +57,7 @@ Object.entries(items).forEach(([name, item]) => {
 const Integer = createToken({ name: 'Integer', pattern: /0|[1-9]\d*/ });
 const Buzzword = createToken({
   name: 'Buzzword',
-  pattern: /an|a|the|is|of/i,
+  pattern: /an|at|a|the|is|of/i,
   longer_alt: StringLiteral,
   group: Lexer.SKIPPED,
 });
@@ -99,10 +77,7 @@ export const allTokens = [
   // WhiteSpace comes first as it is very common thus it will speed up the lexer.
   WhiteSpace,
   // "keywords" appear before the StringLiteral
-  Attack,
   ...verbTokens,
-  Troll,
-  Elf,
   ...itemTokens,
   Action,
   Item,

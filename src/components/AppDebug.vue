@@ -1,6 +1,6 @@
 <template>
   <span class="app-debug__verb">V: {{ theVerb }}</span>
-  <span class="app-debug__object">O: {{ theObject }}</span>
+  <span class="app-debug__object">O: {{ theDirect }}</span>
   <span class="app-debug__indirect">I: {{ theIndirect }}</span>
   <button type="button" @click="testRoom">Test Room</button>
   <button type="button" @click="testParser">Test Parser</button>
@@ -10,7 +10,7 @@
 import {
   magicFlag,
   theVerb,
-  theObject,
+  theDirect,
   theIndirect,
 } from '../composables/useGlobal';
 import { items } from '../composables/useItem';
@@ -47,15 +47,18 @@ const testRoom = () => {
 const testParser = () => {
   console.log('TOKEN VOCAB', tokenVocabulary);
 
-  handlePlayerInput('stab the ogre');
-  handlePlayerInput('smooch the elf');
-  handlePlayerInput('attack the MILF');
-  handlePlayerInput('attack the large carpet');
-  handlePlayerInput('attack the Rug');
-  handlePlayerInput('attack the trap door');
-  handlePlayerInput('attack the TrapDoor');
+  handlePlayerInput('yell at the ugly troll');
+  handlePlayerInput('holler at the elf');
+  handlePlayerInput('smooch the pretty elf');
+  handlePlayerInput('kill the ogre');
 
-  handlePlayerInput('Attack a Troll?');
+  handlePlayerInput('yell at the MILF');
+  handlePlayerInput('yell at the large carpet');
+  handlePlayerInput('yell at the Rug');
+  handlePlayerInput('yell at the trap door');
+  handlePlayerInput('yell at the TrapDoor');
+
+  handlePlayerInput('yell at a Troll?');
   handlePlayerInput('kiss an ogre');
   handlePlayerInput('kiss of ogre');
   handlePlayerInput('kiss is ogre');

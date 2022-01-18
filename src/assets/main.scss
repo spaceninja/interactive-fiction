@@ -145,6 +145,14 @@ select {
   width: 100%;
 }
 
+.command {
+  opacity: 50%;
+}
+
+.error {
+  opacity: 75%;
+}
+
 .app-input {
   background: var(--color-page-bg);
   bottom: 0;
@@ -159,7 +167,6 @@ select {
 
 .app-input__prompt {
   flex: none;
-  margin-right: 0.25em;
 }
 
 .app-input__input {
@@ -209,7 +216,6 @@ button {
   list-style: none;
 
   li::before {
-    content: '>';
-    margin-right: 0.5em;
+    content: '> ';
   }
 }

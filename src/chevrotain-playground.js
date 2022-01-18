@@ -10,32 +10,32 @@
     pattern: /[a-zA-Z]\w*/,
   });
 
-  const actions = createToken({ name: 'Actions', pattern: Lexer.NA });
-  const objects = createToken({ name: 'Objects', pattern: Lexer.NA });
+  const Actions = createToken({ name: 'Actions', pattern: Lexer.NA });
+  const Items = createToken({ name: 'Items', pattern: Lexer.NA });
 
   const attack = createToken({
     name: 'Attack',
     pattern: /attack/,
     longer_alt: StringLiteral,
-    categories: [actions],
+    categories: [Actions],
   });
   const kiss = createToken({
     name: 'Kiss',
     pattern: /kiss/,
     longer_alt: StringLiteral,
-    categories: [actions],
+    categories: [Actions],
   });
   const troll = createToken({
     name: 'Troll',
     pattern: /troll/,
     longer_alt: StringLiteral,
-    categories: [objects],
+    categories: [Items],
   });
   const elf = createToken({
     name: 'Elf',
     pattern: /elf/,
     longer_alt: StringLiteral,
-    categories: [objects],
+    categories: [Items],
   });
 
   const WhiteSpace = createToken({
@@ -56,8 +56,8 @@
     kiss,
     troll,
     elf,
-    actions,
-    objects,
+    Actions,
+    Items,
     The,
     StringLiteral,
   ];
@@ -79,11 +79,11 @@
       });
 
       $.RULE('verb', () => {
-        $.CONSUME(actions);
+        $.CONSUME(Actions);
       });
 
       $.RULE('noun', () => {
-        $.CONSUME(objects);
+        $.CONSUME(Items);
       });
 
       // very important to call this after all the rules have been setup.

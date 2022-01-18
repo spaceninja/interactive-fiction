@@ -1,6 +1,51 @@
 import { ref } from 'vue';
 import Item from '../classes/Item';
-import { here, openClose, tell, pickOne, dummyMessages } from './useGlobal';
+import { pickOne } from '../composables/useHelper';
+import { theVerb, here, openClose, tell, dummyMessages } from './useGlobal';
+
+export const Elf = ref(
+  new Item({
+    name: 'Elf',
+    location: false,
+    synonym: ['elf', 'drow'],
+    adjective: ['pretty', 'fancy'],
+    action: () => {
+      console.log('Elf handler', theVerb.value);
+      switch (theVerb.value) {
+        case 'Kiss':
+          console.log('Elf: kiss handler');
+          tell('The elf enthusiastically agrees to make out with you.');
+          return true;
+        default:
+          console.log('Elf: default handler');
+          return false;
+      }
+    },
+  })
+);
+
+export const Troll = ref(
+  new Item({
+    name: 'Troll',
+    location: false,
+    synonym: ['troll', 'ogre'],
+    adjective: ['ugly', 'smelly'],
+    action: () => {
+      console.log('Troll handler', theVerb.value);
+      switch (theVerb.value) {
+        case 'Yell':
+          console.log('Troll: kiss handler');
+          tell(
+            'Excited to finally find a competitor in a shouting competition, the Troll yells back at you even louder.'
+          );
+          return true;
+        default:
+          console.log('Troll: default handler');
+          return false;
+      }
+    },
+  })
+);
 
 export const TrapDoor = ref(
   new Item({
@@ -124,4 +169,4 @@ export const Rug = ref(
   })
 );
 
-export const items = { TrapDoor, Rug };
+export const items = { Elf, Troll, TrapDoor, Rug };
