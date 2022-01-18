@@ -2,12 +2,12 @@
   <header class="app-header">
     <span class="app-header__location">{{ here.name }}</span>
     <span class="app-header__score"
-      >Score: {{ score }}
-      <span v-if="scoreMax" class="app-header__score-max"
-        >/ {{ scoreMax }}</span
+      >Score: {{ theScore }}
+      <span v-if="theScoreMax" class="app-header__score-max"
+        >/ {{ theScoreMax }}</span
       ></span
     >
-    <span class="app-header__moves">Moves: {{ moves }}</span>
+    <span class="app-header__moves">Moves: {{ theMoves }}</span>
     <span class="app-header__help">
       <button @click="helpClick">
         <span class="visually-hidden">Help</span>
@@ -20,9 +20,9 @@
 <script setup>
 import {
   here,
-  score,
-  scoreMax,
-  moves,
+  theScore,
+  theScoreMax,
+  theMoves,
   showHelp,
 } from '../composables/useGlobal';
 

@@ -40,6 +40,9 @@ This project is an attempt to create an Infocom-style text adventure game engine
   - [x] Call PRSI action
   - [x] Call PRSO action
   - [x] Call Verb action
+- [x] Add Score verb
+- [ ] Add SCORE command
+- [ ] Add DIAGNOSE verb and command
 - [ ] Add LOOK (L) command
   - [ ] Describe the room
   - [ ] Describe items in the room
@@ -50,7 +53,6 @@ This project is an attempt to create an Infocom-style text adventure game engine
 - [ ] Translate useful VERB entries from Zork
 - [ ] Add automatic translation of Verbs to parser tokens
 - [ ] Translate useful GLOBAL entries from Zork
-- [ ] Add basic commands: DIAGNOSE, SCORE
 - [ ] Handle moving between rooms
   - [ ] Add GOTO and DO-WALK
   - [ ] Check if there is an exit in this direction

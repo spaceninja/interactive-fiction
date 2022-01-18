@@ -5,9 +5,9 @@ import { parser } from '../composables/useParser';
 import { pickOne, uuid } from '../composables/useHelper';
 
 export const here = ref('');
-export const score = ref(0);
-export const scoreMax = ref(null);
-export const moves = ref(0);
+export const theScore = ref(0);
+export const theScoreMax = ref(null);
+export const theMoves = ref(0);
 export const showHelp = ref(false);
 
 export const playerInput = ref('kiss the elf');
@@ -124,7 +124,7 @@ export const handlePlayerInput = (command = playerInput.value) => {
     parsedPlayerInput.indirect?.name
   );
   playerInput.value = ''; // clear the input bar
-  moves.value++; // TODO this should live in CLOCKER
+  theMoves.value++; // TODO this should live in CLOCKER
   return true;
 };
 
