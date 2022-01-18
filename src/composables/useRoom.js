@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 import Room from '../classes/Room';
-import { magicFlag, TrapDoorExit, tell } from './useGlobal';
+import { magicFlag, trapDoorExit, tell } from './useGlobal';
 import { items } from './useItem';
 
 export const LivingRoom = ref(
@@ -9,7 +9,7 @@ export const LivingRoom = ref(
     exits: {
       east: 'kitchen',
       west: magicFlag.value ? 'strangePassage' : 'The door is nailed shut.',
-      down: TrapDoorExit(),
+      down: trapDoorExit(),
     },
     flags: { isOnLand: true, isOn: true, isSacred: true },
     global: ['stairs'],
