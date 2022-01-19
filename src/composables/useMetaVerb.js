@@ -11,9 +11,20 @@ import {
 import { items } from './useItem';
 import { verbs } from './useVerb';
 
+export const PrintCont = ref(
+  new Verb({
+    name: 'PrintCont',
+    synonym: ['print contents'],
+    action: () => {
+      tell('There are some objects here, I guess?');
+      return true;
+    },
+  })
+);
+
 export const DescribeRoom = ref(
   new Verb({
-    name: 'Describe Room',
+    name: 'DescribeRoom',
     synonym: ['describe room'],
     action: () => {
       if (!here.value.flags.isOn) {
@@ -31,10 +42,14 @@ export const DescribeRoom = ref(
 
 export const DescribeObjects = ref(
   new Verb({
-    name: 'Describe Objects',
+    name: 'DescribeObjects',
     synonym: ['describe objects'],
     action: () => {
-      tell('There are some objects here, I guess?');
+      if (!here.value.flags.isOn) {
+        tell("Only bats can see in the dark. And you're not one.");
+        return false;
+      }
+      PrintCont.value.action(here.value);
       return true;
     },
   })
@@ -45,8 +60,8 @@ export const Look = ref(
     name: 'Look',
     synonym: ['look', 'l', 'stare', 'gaze'],
     action: () => {
-      DescribeRoom.value.action();
-      DescribeObjects.value.action();
+      const wasRoomDescribed = DescribeRoom.value.action();
+      if (wasRoomDescribed) DescribeObjects.value.action();
       return true;
     },
   })
