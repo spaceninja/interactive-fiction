@@ -18,16 +18,22 @@ class playerInputParser extends CstParser {
     super(tokenVocabulary);
     const $ = this;
 
+    // TODO: is there a way to move these to a separate file?
+
     $.RULE('magic', () => {
-      $.SUBRULE($.verb);
-      $.SUBRULE($.noun);
+      $.OR([
+        { ALT: () => $.SUBRULE($.score) },
+        { ALT: () => $.SUBRULE($.verbNoun) },
+      ]);
     });
 
-    $.RULE('verb', () => {
+    $.RULE('score', () => {
+      $.CONSUME(tokenVocabulary.Score);
+    });
+
+    // our fallback is a simple two word parser
+    $.RULE('verbNoun', () => {
       $.CONSUME(tokenVocabulary.Action);
-    });
-
-    $.RULE('noun', () => {
       $.CONSUME(tokenVocabulary.Item);
     });
 
@@ -49,33 +55,46 @@ const parserInstance = new playerInputParser();
 class PlayerInputVisitor extends parserInstance.getBaseCstVisitorConstructor() {
   constructor() {
     super();
+    // This helper will detect any missing or redundant methods on this visitor
     this.validateVisitor();
   }
 
   magic(ctx) {
-    const verb = this.visit(ctx.verb);
-    const noun = this.visit(ctx.noun);
+    const scoreAst = this.visit(ctx.score);
+    const verbNounAst = this.visit(ctx.verbNoun);
 
     return {
-      type: 'MAGIC',
-      verb,
-      noun,
+      ...scoreAst,
+      ...verbNounAst,
     };
   }
 
-  verb(ctx) {
+  // NOTE: All these methods MUST return an object containing a `verb`,
+  // and an optional `noun` and `indirect`. All of these should be objects
+  // containing an `input` key with the text the player typed, and a
+  // `name` key with the system name of that verb or item.
+
+  // TODO: is there a way to move these to a separate file?
+
+  score(ctx) {
     return {
-      input: ctx.Action[0].image,
-      name: ctx.Action[0].tokenType.name,
-      ctx,
+      verb: {
+        input: ctx.Score[0].image,
+        name: ctx.Score[0].tokenType.name,
+      },
     };
   }
 
-  noun(ctx) {
+  verbNoun(ctx) {
     return {
-      input: ctx.Item[0].image,
-      name: ctx.Item[0].tokenType.name,
-      ctx,
+      verb: {
+        input: ctx.Action[0].image,
+        name: ctx.Action[0].tokenType.name,
+      },
+      noun: {
+        input: ctx.Item[0].image,
+        name: ctx.Item[0].tokenType.name,
+      },
     };
   }
 }
@@ -126,6 +145,8 @@ export const parser = (playerInput) => {
       },
     };
   }
+
+  console.log('CST RESULTS', cst);
 
   // Visit
   return visitorInstance.visit(cst);

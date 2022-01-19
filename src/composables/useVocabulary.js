@@ -1,6 +1,7 @@
 import { createToken, Lexer } from 'chevrotain';
 import { items } from './useItem';
 import { verbs } from './useVerb';
+import { metaVerbs } from './useMetaVerb';
 
 /**
  * Create Vocabulary Tokens
@@ -21,6 +22,7 @@ const StringLiteral = createToken({
 // These are categories for the tokens.
 const Action = createToken({ name: 'Action', pattern: Lexer.NA });
 const Item = createToken({ name: 'Item', pattern: Lexer.NA });
+const Meta = createToken({ name: 'Meta', pattern: Lexer.NA });
 
 // Generate Tokens for Each Verb
 let verbTokens = [];
@@ -53,6 +55,20 @@ Object.entries(items).forEach(([name, item]) => {
   );
 });
 
+// Generate Tokens for Each Meta Verb
+let metaVerbTokens = [];
+Object.entries(metaVerbs).forEach(([name, item]) => {
+  const i = item.value;
+  metaVerbTokens.push(
+    createToken({
+      name: name,
+      pattern: new RegExp(`${i.synonym.join('|')}`, 'i'),
+      longer_alt: StringLiteral,
+      categories: [Meta],
+    })
+  );
+});
+
 // Others
 const Integer = createToken({ name: 'Integer', pattern: /0|[1-9]\d*/ });
 const Buzzword = createToken({
@@ -78,9 +94,11 @@ export const allTokens = [
   WhiteSpace,
   // "keywords" appear before the StringLiteral
   ...verbTokens,
+  ...metaVerbTokens,
   ...itemTokens,
   Action,
   Item,
+  Meta,
   Integer,
   Buzzword,
   Punctuation,

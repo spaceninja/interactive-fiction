@@ -20,7 +20,7 @@ import { items } from '../composables/useItem';
 import { rooms } from '../composables/useRoom';
 import { tokenVocabulary } from '../composables/useVocabulary';
 import { handlePlayerInput } from '../composables/useGlobal';
-import { Score } from '../composables/useVerb';
+import { Score } from '../composables/useMetaVerb';
 
 const testScore = () => {
   Score.value.action();

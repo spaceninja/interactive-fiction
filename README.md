@@ -41,7 +41,7 @@ This project is an attempt to create an Infocom-style text adventure game engine
   - [x] Call PRSO action
   - [x] Call Verb action
 - [x] Add Score verb
-- [ ] Add SCORE command
+- [x] Add SCORE command
 - [ ] Add DIAGNOSE verb and command
 - [ ] Add LOOK (L) command
   - [ ] Describe the room

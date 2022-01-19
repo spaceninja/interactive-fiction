@@ -1,6 +1,7 @@
 import { ref } from 'vue';
 import { items } from './useItem';
 import { verbs } from './useVerb';
+import { metaVerbs } from './useMetaVerb';
 import { parser } from '../composables/useParser';
 import { pickOne, uuid } from '../composables/useHelper';
 
@@ -79,6 +80,10 @@ export const perform = (v, d = false, i = false) => {
   // Nothing else handled it, so pass to the verb
   const verbHandled = v ? verbs[v]?.value.action() : false;
   if (verbHandled) return true;
+
+  // If it's not a verb, it might be a meta verb
+  const metaVerbHandled = v ? metaVerbs[v]?.value.action() : false;
+  if (metaVerbHandled) return true;
 
   // Something went wrong, nothing handled the input!
   tell("I don't know how to do that.", 'error');
