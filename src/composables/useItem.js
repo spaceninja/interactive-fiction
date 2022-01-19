@@ -34,7 +34,7 @@ export const Troll = ref(
       console.log('Troll handler', theVerb.value);
       switch (theVerb.value) {
         case 'Yell':
-          console.log('Troll: kiss handler');
+          console.log('Troll: yell handler');
           tell(
             'Excited to finally find a competitor in a shouting competition, the Troll yells back at you even louder.'
           );
