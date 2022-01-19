@@ -34,7 +34,7 @@ export const Yell = ref(
 export const Examine = ref(
   new Verb({
     name: 'Examine',
-    synonym: ['examine', 'describe', 'what', 'whats'],
+    synonym: ['examine', 'describe', 'what', 'whats', 'look at'],
     action: () => {
       const item = items[theDirect.value].value;
       if (item.text) {

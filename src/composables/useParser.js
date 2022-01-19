@@ -23,6 +23,7 @@ class playerInputParser extends CstParser {
     $.RULE('magic', () => {
       $.OR([
         { ALT: () => $.SUBRULE($.score) },
+        { ALT: () => $.SUBRULE($.look) },
         { ALT: () => $.SUBRULE($.test) },
         { ALT: () => $.SUBRULE($.verbNoun) },
       ]);
@@ -30,6 +31,10 @@ class playerInputParser extends CstParser {
 
     $.RULE('score', () => {
       $.CONSUME(tokenVocabulary.Score);
+    });
+
+    $.RULE('look', () => {
+      $.CONSUME(tokenVocabulary.Look);
     });
 
     $.RULE('test', () => {
@@ -71,11 +76,13 @@ class PlayerInputVisitor extends parserInstance.getBaseCstVisitorConstructor() {
 
   magic(ctx) {
     const scoreAst = this.visit(ctx.score);
+    const lookAst = this.visit(ctx.look);
     const testAst = this.visit(ctx.test);
     const verbNounAst = this.visit(ctx.verbNoun);
 
     return {
       ...scoreAst,
+      ...lookAst,
       ...testAst,
       ...verbNounAst,
     };
@@ -93,6 +100,15 @@ class PlayerInputVisitor extends parserInstance.getBaseCstVisitorConstructor() {
       verb: {
         input: ctx.Score[0].image,
         name: ctx.Score[0].tokenType.name,
+      },
+    };
+  }
+
+  look(ctx) {
+    return {
+      verb: {
+        input: ctx.Look[0].image,
+        name: ctx.Look[0].tokenType.name,
       },
     };
   }

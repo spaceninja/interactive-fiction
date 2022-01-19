@@ -49,9 +49,8 @@ This project is an attempt to create an Infocom-style text adventure game engine
   - [x] Add example of item with examine action
   - [x] Add example of item with text to read
 - [ ] Add LOOK (L) command
-  - [ ] Describe the room
+  - [x] Describe the room
   - [ ] Describe items in the room
-  - [ ] Describe the exits
 - [ ] Add Brief/Verbose modes
   - [ ] Handle BRIEF, SUPERBRIEF, VERBOSE commands
 - [ ] Handle moving between rooms

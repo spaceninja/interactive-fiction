@@ -1,8 +1,56 @@
 import { ref } from 'vue';
 import Verb from '../classes/Verb';
-import { tell, theDirect, theScore, theScoreMax, theMoves } from './useGlobal';
+import {
+  tell,
+  here,
+  theDirect,
+  theScore,
+  theScoreMax,
+  theMoves,
+} from './useGlobal';
 import { items } from './useItem';
 import { verbs } from './useVerb';
+
+export const DescribeRoom = ref(
+  new Verb({
+    name: 'Describe Room',
+    synonym: ['describe room'],
+    action: () => {
+      if (!here.value.flags.isOn) {
+        tell('It is pitch black. You are likely to be eaten by a grue.');
+        return false;
+      }
+      // TODO: add touched logic
+      tell(here.value.name, 'room-name');
+      // TODO: add vehicle logic
+      tell(here.value.action('look'));
+      return true;
+    },
+  })
+);
+
+export const DescribeObjects = ref(
+  new Verb({
+    name: 'Describe Objects',
+    synonym: ['describe objects'],
+    action: () => {
+      tell('There are some objects here, I guess?');
+      return true;
+    },
+  })
+);
+
+export const Look = ref(
+  new Verb({
+    name: 'Look',
+    synonym: ['look', 'l', 'stare', 'gaze'],
+    action: () => {
+      DescribeRoom.value.action();
+      DescribeObjects.value.action();
+      return true;
+    },
+  })
+);
 
 export const Test = ref(
   new Verb({
@@ -84,4 +132,4 @@ export const Score = ref(
   })
 );
 
-export const metaVerbs = { Score, Test };
+export const metaVerbs = { Look, Score, Test };

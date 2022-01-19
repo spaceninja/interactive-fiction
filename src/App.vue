@@ -18,8 +18,9 @@ import AppInput from './components/AppInput.vue';
 import AppFooter from './components/AppFooter.vue';
 import { here, showHelp, tell } from './composables/useGlobal';
 import { LivingRoom } from './composables/useRoom';
+import { Look } from './composables/useMetaVerb';
 
 // GO!
 here.value = LivingRoom.value;
-tell(here.value.action('look'));
+Look.value.action();
 </script>

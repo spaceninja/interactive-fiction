@@ -11,7 +11,7 @@ export const theScoreMax = ref(null);
 export const theMoves = ref(0);
 export const showHelp = ref(false);
 
-export const playerInput = ref('kiss the elf');
+export const playerInput = ref('');
 export const theVerb = ref('');
 export const theDirect = ref('');
 export const theIndirect = ref('');
