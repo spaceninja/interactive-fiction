@@ -1,6 +1,34 @@
 import { ref } from 'vue';
 import Verb from '../classes/Verb';
-import { tell, theScore, theScoreMax, theMoves } from './useGlobal';
+import { tell, theDirect, theScore, theScoreMax, theMoves } from './useGlobal';
+import { items } from './useItem';
+import { verbs } from './useVerb';
+
+export const Test = ref(
+  new Verb({
+    name: 'Test',
+    synonym: ['test'],
+    action: () => {
+      // Try the direct item's handler
+      const itemTest = items[theDirect.value]?.value.test;
+      const itemHandled = itemTest ? itemTest() : false;
+      if (itemHandled) return true;
+
+      // Nothing else handled it, so pass to the verb
+      const verbTest = verbs[theDirect.value]?.value.test;
+      const verbHandled = verbTest ? verbTest() : false;
+      if (verbHandled) return true;
+
+      // If it's not a verb, it might be a meta verb
+      const metaVerbTest = metaVerbs[theDirect.value]?.value.test;
+      const metaVerbHandled = metaVerbTest ? metaVerbTest() : false;
+      if (metaVerbHandled) return true;
+
+      tell("That item doesn't have a test routine.");
+      return true;
+    },
+  })
+);
 
 export const Score = ref(
   new Verb({
@@ -18,7 +46,6 @@ export const Score = ref(
       if (theScoreMax.value) {
         let scoreRank = 'Beginner';
         let scorePercent = theScore.value / theScoreMax.value;
-        console.log('score percent', scorePercent);
         if (scorePercent > 0.05) scoreRank = 'Amateur Adventurer';
         if (scorePercent > 0.3) scoreRank = 'Novice Adventurer';
         if (scorePercent > 0.45) scoreRank = 'Junior Adventurer';
@@ -31,7 +58,30 @@ export const Score = ref(
       }
       return true;
     },
+    test: () => {
+      console.log('Score: test handler');
+      Score.value.action();
+      theScoreMax.value = 100;
+      Score.value.action();
+      theScore.value = 6;
+      Score.value.action();
+      theScore.value = 31;
+      Score.value.action();
+      theScore.value = 46;
+      Score.value.action();
+      theScore.value = 61;
+      Score.value.action();
+      theScore.value = 76;
+      Score.value.action();
+      theScore.value = 91;
+      Score.value.action();
+      theScore.value = 100;
+      Score.value.action();
+      theScore.value = 105;
+      Score.value.action();
+      return true;
+    },
   })
 );
 
-export const metaVerbs = { Score };
+export const metaVerbs = { Score, Test };

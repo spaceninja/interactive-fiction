@@ -23,12 +23,22 @@ class playerInputParser extends CstParser {
     $.RULE('magic', () => {
       $.OR([
         { ALT: () => $.SUBRULE($.score) },
+        { ALT: () => $.SUBRULE($.test) },
         { ALT: () => $.SUBRULE($.verbNoun) },
       ]);
     });
 
     $.RULE('score', () => {
       $.CONSUME(tokenVocabulary.Score);
+    });
+
+    $.RULE('test', () => {
+      $.CONSUME(tokenVocabulary.Test);
+      $.OR([
+        { ALT: () => $.CONSUME(tokenVocabulary.Action) },
+        { ALT: () => $.CONSUME(tokenVocabulary.Item) },
+        { ALT: () => $.CONSUME(tokenVocabulary.Meta) },
+      ]);
     });
 
     // our fallback is a simple two word parser
@@ -61,10 +71,12 @@ class PlayerInputVisitor extends parserInstance.getBaseCstVisitorConstructor() {
 
   magic(ctx) {
     const scoreAst = this.visit(ctx.score);
+    const testAst = this.visit(ctx.test);
     const verbNounAst = this.visit(ctx.verbNoun);
 
     return {
       ...scoreAst,
+      ...testAst,
       ...verbNounAst,
     };
   }
@@ -82,6 +94,40 @@ class PlayerInputVisitor extends parserInstance.getBaseCstVisitorConstructor() {
         input: ctx.Score[0].image,
         name: ctx.Score[0].tokenType.name,
       },
+    };
+  }
+
+  test(ctx) {
+    let noun = false;
+
+    if (ctx.Item) {
+      noun = {
+        input: ctx.Item[0].image,
+        name: ctx.Item[0].tokenType.name,
+      };
+    }
+
+    if (ctx.Action) {
+      noun = {
+        input: ctx.Action[0].image,
+        name: ctx.Action[0].tokenType.name,
+      };
+    }
+
+    if (ctx.Meta) {
+      noun = {
+        input: ctx.Meta[0].image,
+        name: ctx.Meta[0].tokenType.name,
+      };
+    }
+
+    return {
+      ctx,
+      verb: {
+        input: ctx.Test[0].image,
+        name: ctx.Test[0].tokenType.name,
+      },
+      noun,
     };
   }
 
@@ -145,8 +191,6 @@ export const parser = (playerInput) => {
       },
     };
   }
-
-  console.log('CST RESULTS', cst);
 
   // Visit
   return visitorInstance.visit(cst);

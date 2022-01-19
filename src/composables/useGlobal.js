@@ -61,7 +61,7 @@ export const tell = (message, className) => {
  * @param {string} i - the Indirect Item receives the direct item.
  * @returns boolean
  */
-export const perform = (v, d = false, i = false) => {
+export const perform = (v = false, d = false, i = false) => {
   console.log('PERFORM', v, d, i);
 
   // Save the tokens to their global variables
@@ -123,8 +123,9 @@ export const handlePlayerInput = (command = playerInput.value) => {
   }
 
   // Pass the parsed command to `perform`
+  console.log('PARSED PLAYER INPUT', parsedPlayerInput);
   perform(
-    parsedPlayerInput.verb.name,
+    parsedPlayerInput.verb?.name,
     parsedPlayerInput.noun?.name,
     parsedPlayerInput.indirect?.name
   );

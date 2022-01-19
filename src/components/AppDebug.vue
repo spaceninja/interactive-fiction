@@ -2,7 +2,6 @@
   <span class="app-debug__verb">V: {{ theVerb }}</span>
   <span class="app-debug__object">O: {{ theDirect }}</span>
   <span class="app-debug__indirect">I: {{ theIndirect }}</span>
-  <button type="button" @click="testScore">Test Score</button>
   <button type="button" @click="testRoom">Test Room</button>
   <button type="button" @click="testParser">Test Parser</button>
 </template>
@@ -13,36 +12,11 @@ import {
   theVerb,
   theDirect,
   theIndirect,
-  theScore,
-  theScoreMax,
 } from '../composables/useGlobal';
 import { items } from '../composables/useItem';
 import { rooms } from '../composables/useRoom';
 import { tokenVocabulary } from '../composables/useVocabulary';
 import { handlePlayerInput } from '../composables/useGlobal';
-import { Score } from '../composables/useMetaVerb';
-
-const testScore = () => {
-  Score.value.action();
-  theScoreMax.value = 100;
-  Score.value.action();
-  theScore.value = 6;
-  Score.value.action();
-  theScore.value = 31;
-  Score.value.action();
-  theScore.value = 46;
-  Score.value.action();
-  theScore.value = 61;
-  Score.value.action();
-  theScore.value = 76;
-  Score.value.action();
-  theScore.value = 91;
-  Score.value.action();
-  theScore.value = 100;
-  Score.value.action();
-  theScore.value = 105;
-  Score.value.action();
-};
 
 const testRoom = () => {
   rooms.LivingRoom.value.action('look');

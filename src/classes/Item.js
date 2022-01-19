@@ -8,6 +8,8 @@ export default class Item {
    *    used to refer to the item.
    * @param {function} props.action The function called when the item
    *    is interacted with.
+   * @param {function} props.test The function called when the item
+   *    is being tested.
    * @param {function} props.descriptionFunction A function used to
    *    describe the item. Can be the same function as `action`, if
    *    set up to handle `M-OBJDESC` or `M-OBJDESC?`.
@@ -32,6 +34,7 @@ export default class Item {
     synonym,
     adjective,
     action,
+    test,
     descriptionFunction,
     description,
     initialDescription,
@@ -46,6 +49,7 @@ export default class Item {
     this.synonym = synonym;
     this.adjective = adjective;
     this.action = action;
+    this.test = test;
     this.descriptionFunction = descriptionFunction;
     this.description = description;
     this.initialDescription = initialDescription;

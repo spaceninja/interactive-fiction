@@ -23,6 +23,10 @@ export const Yell = ref(
       tell('Aaaarrrrgggghhhh!');
       return true;
     },
+    test: () => {
+      tell('🎉🎉🎉');
+      return true;
+    },
   })
 );
 

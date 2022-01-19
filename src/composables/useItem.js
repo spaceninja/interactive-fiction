@@ -44,6 +44,10 @@ export const Troll = ref(
           return false;
       }
     },
+    test: () => {
+      tell("The troll doesn't like being tested!");
+      return true;
+    },
   })
 );
 
