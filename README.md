@@ -12,9 +12,9 @@ This project is an attempt to create an Infocom-style text adventure game engine
   - [ ] Display opening text/title screen
   - [ ] Call V-LOOK to describe current location
   - [ ] Call the MAIN-LOOP
-- [ ] Heartbeat of game with MAIN-LOOP
-- [ ] Understand the user with PARSER
-- [ ] Call the action with PERFORM
+- [x] Heartbeat of game with MAIN-LOOP
+- [x] Understand the user with PARSER
+- [x] Call the action with PERFORM
 - [ ] Call CLOCKER
 
 ## TODO: An incomplete and growing list
