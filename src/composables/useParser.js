@@ -177,6 +177,7 @@ export const parser = (playerInput) => {
     };
   }
   parserInstance.input = lexResult.tokens; // 1
+  console.log('INPUT', parserInstance.input);
 
   // Parse
   const cst = parserInstance.magic();
@@ -191,6 +192,8 @@ export const parser = (playerInput) => {
       },
     };
   }
+
+  console.log('CST', cst);
 
   // Visit
   return visitorInstance.visit(cst);

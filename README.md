@@ -27,6 +27,7 @@ This project is an attempt to create an Infocom-style text adventure game engine
 - [x] Create sample Verbs
 - [x] Add parser scaffolding
 - [x] Add automatic translation of Items to parser tokens
+- [x] Add automatic translation of Verbs to parser tokens
 - [x] Add status bar: HERE, SCORE/MAX, MOVES
 - [x] Add debug bar
 - [x] Add help page
@@ -43,23 +44,25 @@ This project is an attempt to create an Infocom-style text adventure game engine
 - [x] Add Score verb
 - [x] Add SCORE command
 - [x] Add TEST command
-- [ ] Add DIAGNOSE verb and command
+- [x] Add EXAMINE command
+  - [x] Default verb functionality
+  - [x] Add example of item with examine action
+  - [x] Add example of item with text to read
 - [ ] Add LOOK (L) command
   - [ ] Describe the room
   - [ ] Describe items in the room
   - [ ] Describe the exits
 - [ ] Add Brief/Verbose modes
   - [ ] Handle BRIEF, SUPERBRIEF, VERBOSE commands
-- [ ] Translate useful SYNTAX entries from Zork
-- [ ] Translate useful VERB entries from Zork
-- [ ] Add automatic translation of Verbs to parser tokens
-- [ ] Translate useful GLOBAL entries from Zork
 - [ ] Handle moving between rooms
   - [ ] Add GOTO and DO-WALK
   - [ ] Check if there is an exit in this direction
   - [ ] Set HERE to new room
   - [ ] Set TOUCHED bit in new room
   - [ ] Call Room description
+- [ ] Translate useful SYNTAX entries from Zork
+- [ ] Translate useful VERB entries from Zork
+- [ ] Translate useful GLOBAL entries from Zork
 - [ ] Advanced parser
   - [ ] Syntax tokens: HAVE, TAKE, MANY, EVERYWHERE, ADJACENT, HELD, CARRIED, ON-GROUND, IN-ROOM
   - [ ] Switch syntaxes
@@ -97,6 +100,7 @@ This project is an attempt to create an Infocom-style text adventure game engine
 - [ ] Add Actors
   - [ ] Handle speaking to actors
   - [ ] Handle giving directions to actors
+- [ ] Add DIAGNOSE verb and command
 - [ ] Add JIGS-UP routine
 - [ ] Add SAVE/RESTORE
   - [ ] Add AUTOSAVE

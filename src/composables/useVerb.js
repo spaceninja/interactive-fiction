@@ -1,6 +1,7 @@
 import { ref } from 'vue';
 import Verb from '../classes/Verb';
-import { tell } from './useGlobal';
+import { perform, tell, theDirect } from './useGlobal';
+import { items } from './useItem';
 
 export const Kiss = ref(
   new Verb({
@@ -30,4 +31,24 @@ export const Yell = ref(
   })
 );
 
-export const verbs = { Kiss, Yell };
+export const Examine = ref(
+  new Verb({
+    name: 'Examine',
+    synonym: ['examine', 'describe', 'what', 'whats'],
+    action: () => {
+      const item = items[theDirect.value].value;
+      if (item.text) {
+        tell(item.text);
+        return true;
+      }
+      if (item.flags?.isContainer || item.flags?.isDoor) {
+        perform('LookInside', theDirect.value);
+        return true;
+      }
+      tell(`There's nothing special about the ${item.name}.`);
+      return true;
+    },
+  })
+);
+
+export const verbs = { Kiss, Yell, Examine };

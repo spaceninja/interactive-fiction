@@ -39,6 +39,9 @@ export const Troll = ref(
             'Excited to finally find a competitor in a shouting competition, the Troll yells back at you even louder.'
           );
           return true;
+        case 'Examine':
+          tell("The Troll doesn't like the way you're looking at him.");
+          return true;
         default:
           console.log('Troll: default handler');
           return false;
@@ -51,6 +54,20 @@ export const Troll = ref(
   })
 );
 
+export const OwnersManual = ref(
+  new Item({
+    name: "owner's manual",
+    location: 'studio',
+    synonym: ['manual', 'piece of paper', 'paper'],
+    adjective: ['zork', "owner's", 'small'],
+    description: "ZORK owner's manual",
+    flags: { readBit: true, takeBit: true },
+    initialDescription: 'Loosely attached to a wall is a small piece of paper.',
+    text: 'Congratulations! You are the privileged owner of ZORK I: The Great Underground Empire, a self-contained and self-maintaining universe. If used and maintained in accordance with normal operating practices for small universes, ZORK will provide many months of trouble-free operation.',
+    action: () => false,
+  })
+);
+
 export const TrapDoor = ref(
   new Item({
     name: 'trap door',
@@ -58,8 +75,9 @@ export const TrapDoor = ref(
     synonym: ['door', 'trapdoor', 'trap-door', 'cover'],
     adjective: ['trap', 'dusty'],
     flags: { isDoor: true, doNotDescribe: true, isInvisible: true },
-    action: (verb) => {
-      switch (verb) {
+    action: () => {
+      console.log('Trap Door Handler', theVerb.value);
+      switch (theVerb.value) {
         case 'raise':
         case 'unlock':
           TrapDoor.value.action('open');
@@ -70,13 +88,13 @@ export const TrapDoor = ref(
           if (here.value === 'LivingRoom') {
             openClose(
               TrapDoor,
-              verb,
+              theVerb.value,
               'The door reluctantly opens to reveal a rickety staircase descending into darkness.',
               'The door swings shut and closes.'
             );
           } else if (here.value === 'cellar') {
             if (!TrapDoor.value.flags.isOpen) {
-              if (verb === 'open') {
+              if (theVerb.value === 'open') {
                 tell('The door is locked from above.');
               } else {
                 TrapDoor.value.flags.isTouched = false;
@@ -87,15 +105,16 @@ export const TrapDoor = ref(
             }
           }
           break;
-        case 'look under':
-          console.log('LOOK UNDER TRAP DOOR');
-          if (here.value !== 'LivingRoom') return;
+        case 'LookUnder':
+        case 'LookInside':
+          console.log('LOOK UNDER TRAP DOOR', here.value.name);
+          if (here.value.name !== 'Living Room') return;
           if (TrapDoor.value.flags.isOpen) {
             tell('You see a rickety staircase descending into darkness.');
           } else {
             tell("It's closed.");
           }
-          break;
+          return true;
         default:
           break;
       }
@@ -173,4 +192,4 @@ export const Rug = ref(
   })
 );
 
-export const items = { Elf, Troll, TrapDoor, Rug };
+export const items = { Elf, Troll, OwnersManual, TrapDoor, Rug };
