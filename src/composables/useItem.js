@@ -6,7 +6,7 @@ import { theVerb, here, openClose, tell, dummyMessages } from './useGlobal';
 export const Elf = ref(
   new Item({
     name: 'Elf',
-    location: false,
+    location: 'livingRoom',
     synonym: ['elf', 'drow'],
     adjective: ['pretty', 'fancy'],
     action: () => {
@@ -27,7 +27,7 @@ export const Elf = ref(
 export const Troll = ref(
   new Item({
     name: 'Troll',
-    location: false,
+    location: 'livingRoom',
     synonym: ['troll', 'ogre'],
     adjective: ['ugly', 'smelly'],
     action: () => {
@@ -57,7 +57,7 @@ export const Troll = ref(
 export const OwnersManual = ref(
   new Item({
     name: "owner's manual",
-    location: 'studio',
+    location: 'livingRoom',
     synonym: ['manual', 'piece of paper', 'paper'],
     adjective: ['zork', "owner's", 'small'],
     description: "ZORK owner's manual",
@@ -71,7 +71,7 @@ export const OwnersManual = ref(
 export const TrapDoor = ref(
   new Item({
     name: 'trap door',
-    location: 'living room',
+    location: 'livingRoom',
     synonym: ['door', 'trapdoor', 'trap-door', 'cover'],
     adjective: ['trap', 'dusty'],
     flags: { isDoor: true, doNotDescribe: true, isInvisible: true },

@@ -3,13 +3,43 @@ import Room from '../classes/Room';
 import { magicFlag, trapDoorExit, tell } from './useGlobal';
 import { items } from './useItem';
 
+export const DarkRoom = ref(
+  new Room({
+    name: 'DarkRoom',
+    action: () => {
+      return false;
+    },
+  })
+);
+
+export const RoomA = ref(
+  new Room({
+    name: 'RoomA',
+    flags: { isOn: true },
+    action: () => {
+      return false;
+    },
+  })
+);
+
+export const RoomB = ref(
+  new Room({
+    name: 'RoomB',
+    flags: { isOn: true },
+    description: 'This is the Room B long description.',
+    action: () => {
+      return false;
+    },
+  })
+);
+
 export const LivingRoom = ref(
   new Room({
     name: 'Living Room',
     exits: {
       east: 'kitchen',
-      west: magicFlag.value ? 'strangePassage' : 'The door is nailed shut.',
-      down: trapDoorExit(),
+      // west: magicFlag.value ? 'strangePassage' : 'The door is nailed shut.',
+      // down: trapDoorExit(),
     },
     flags: { isOnLand: true, isOn: true, isSacred: true },
     global: ['stairs'],
@@ -43,4 +73,4 @@ export const LivingRoom = ref(
   })
 );
 
-export const rooms = { LivingRoom };
+export const rooms = { DarkRoom, RoomA, RoomB, LivingRoom };

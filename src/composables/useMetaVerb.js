@@ -7,7 +7,9 @@ import {
   theScore,
   theScoreMax,
   theMoves,
+  handlePlayerInput,
 } from './useGlobal';
+import { rooms } from './useRoom';
 import { items } from './useItem';
 import { verbs } from './useVerb';
 
@@ -27,14 +29,20 @@ export const DescribeRoom = ref(
     name: 'DescribeRoom',
     synonym: ['describe room'],
     action: () => {
-      if (!here.value.flags.isOn) {
+      if (!here.value.flags?.isOn) {
         tell('It is pitch black. You are likely to be eaten by a grue.');
         return false;
       }
       // TODO: add touched logic
       tell(here.value.name, 'room-name');
       // TODO: add vehicle logic
-      tell(here.value.action('look'));
+
+      if (here.value.description) {
+        tell(here.value.description);
+        return true;
+      }
+
+      here.value.action('look');
       return true;
     },
   })
@@ -62,6 +70,17 @@ export const Look = ref(
     action: () => {
       const wasRoomDescribed = DescribeRoom.value.action();
       if (wasRoomDescribed) DescribeObjects.value.action();
+      return true;
+    },
+    test: () => {
+      here.value = rooms.DarkRoom.value;
+      handlePlayerInput('look');
+      here.value = rooms.RoomA.value;
+      handlePlayerInput('look');
+      here.value = rooms.RoomB.value;
+      handlePlayerInput('look');
+      here.value = rooms.LivingRoom.value;
+      handlePlayerInput('look');
       return true;
     },
   })
