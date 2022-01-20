@@ -24,6 +24,21 @@ export const PrintCont = ref(
   })
 );
 
+export const DescribeObjects = ref(
+  new Verb({
+    name: 'DescribeObjects',
+    synonym: ['describe objects'],
+    action: () => {
+      if (!here.value.flags?.isOn) {
+        tell("Only bats can see in the dark. And you're not one.");
+        return false;
+      }
+      PrintCont.value.action(here.value);
+      return true;
+    },
+  })
+);
+
 export const DescribeRoom = ref(
   new Verb({
     name: 'DescribeRoom',
@@ -43,21 +58,6 @@ export const DescribeRoom = ref(
       }
 
       here.value.action('look');
-      return true;
-    },
-  })
-);
-
-export const DescribeObjects = ref(
-  new Verb({
-    name: 'DescribeObjects',
-    synonym: ['describe objects'],
-    action: () => {
-      if (!here.value.flags.isOn) {
-        tell("Only bats can see in the dark. And you're not one.");
-        return false;
-      }
-      PrintCont.value.action(here.value);
       return true;
     },
   })
