@@ -17,6 +17,7 @@ export const Elf = ref(
     location: 'RoomA',
     synonym: ['elf', 'drow'],
     adjective: ['pretty', 'fancy'],
+    flags: {},
     action: () => {
       console.log('Elf handler', theVerb.value);
       switch (theVerb.value) {
@@ -39,6 +40,7 @@ export const Troll = ref(
     location: 'LivingRoom',
     synonym: ['troll', 'ogre'],
     adjective: ['ugly', 'smelly'],
+    flags: {},
     action: () => {
       console.log('Troll handler', theVerb.value);
       switch (theVerb.value) {

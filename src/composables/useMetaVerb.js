@@ -13,49 +13,59 @@ import { rooms } from './useRoom';
 import { items } from './useItem';
 import { verbs } from './useVerb';
 
-export const DescribeObject = ref(
-  new Verb({
-    name: 'DescribeObject',
-    synonym: ['describe object'],
-    action: (item, level = 0) => {
-      console.group(`DESCRIBE OBJECT: ${item.value.name}, level ${level}`);
-      if (level === 0) {
-        if (item.value.descriptionFunction) {
-          // TODO: test this
-          console.log('Object has a description function');
-          item.value.descriptionFunction();
-        } else if (
-          !item.value.flags.touchBit &&
-          item.value.initialDescription
-        ) {
-          console.log(
-            'Object is untouched and has an initial description function'
-          );
-          tell(item.value.initialDescription);
-        } else if (item.value.description) {
-          console.log('Object has a description');
-          tell(item.value.description);
-        } else {
-          console.log('Using default object description');
-          tell(
-            `There is a ${item.value.name} here${
-              item.value.flags.isOn ? ' (providing light)' : ''
-            }.`
-          );
-        }
-      } else {
-        console.log('Object is nested, using indented default description');
-        tell(
-          `A ${item.value.name}${
-            item.value.flags.isOn ? ' (providing light)' : ''
-          }${item.value.flags.isWorn ? ' (being worn)' : ''}`,
-          `indent-${level}`
-        );
-      }
-      console.groupEnd();
-    },
-  })
-);
+export const describeObject = (item, level = 0) => {
+  if (level < 0) level = 0;
+  console.group(`DESCRIBE OBJECT: ${item.value.name}, level ${level}`);
+  if (level === 0) {
+    if (item.value.descriptionFunction) {
+      // TODO: test this
+      console.log('Object has a description function');
+      item.value.descriptionFunction();
+    } else if (!item.value.flags.touchBit && item.value.initialDescription) {
+      console.log(
+        'Object is untouched and has an initial description function'
+      );
+      tell(item.value.initialDescription);
+    } else if (item.value.description) {
+      console.log('Object has a description');
+      tell(item.value.description);
+    } else {
+      console.log('Using default object description');
+      tell(
+        `There is a ${item.value.name} here${
+          item.value.flags.isOn ? ' (providing light)' : ''
+        }.`
+      );
+    }
+  } else {
+    console.log('Object is nested, using indented default description');
+    tell(
+      `A ${item.value.name}${
+        item.value.flags.isOn ? ' (providing light)' : ''
+      }${item.value.flags.isWorn ? ' (being worn)' : ''}`,
+      `indent-${level}`
+    );
+  }
+  console.groupEnd();
+};
+
+export const containerListIntro = (container, level = 0) => {
+  console.log('CONTAINER LIST INTRO', container.value.id);
+  // if (container.value.id === Winner.value.id) {
+  //   tell('You are carrying:');
+  // }
+  if (Object.keys(rooms).includes(container.value.id)) return true;
+  if (container.value.flags.isSurface) {
+    tell(`Sitting on the ${container.value.name} is:`, `indent-${level}`);
+    return true;
+  }
+  if (container.value.flags.isActor) {
+    tell(`The ${container.value.name} is holding:`, `indent-${level}`);
+    return true;
+  }
+  tell(`The ${container.value.name} contains:`, `indent-${level}`);
+  return true;
+};
 
 export const getContents = (containerId) => {
   return Object.values(items).filter(
@@ -67,8 +77,8 @@ export const PrintCont = ref(
   new Verb({
     name: 'PrintCont',
     synonym: ['print contents'],
-    action: (container) => {
-      console.group(`PRINT CONTENTS: ${container}`);
+    action: (container, level = 0) => {
+      console.group(`PRINT CONTENTS: ${container}, level ${level}`);
       // get all items with this container set as their locations
       const containerItems = getContents(container);
       console.log(
@@ -84,7 +94,7 @@ export const PrintCont = ref(
 
       // loop over items and describe them
       containerItems.forEach((item) => {
-        console.group(`ITEM LOOP: ${item.value.name}`);
+        console.group(`ITEM LOOP: ${item.value.name}, level ${level}`);
 
         // if the item is invisible, return early
         if (item.value.flags.invisible) {
@@ -95,7 +105,13 @@ export const PrintCont = ref(
         // if the item is describable
         if (!item.value.flags.doNotDescribe) {
           console.log('ITEM IS DESCRIBABLE');
-          DescribeObject.value.action(item);
+          describeObject(item, level);
+          if (
+            item.value.flags.isContainer &&
+            (item.value.flags.isTransparent || item.value.flags.isOpen)
+          ) {
+            containerListIntro(item, level);
+          }
         }
         if (item.value.flags.doNotDescribe) {
           console.log('ITEM IS NOT DESCRIBABLE');
@@ -103,10 +119,13 @@ export const PrintCont = ref(
 
         // if the item is a container
         if (item.value.flags.isContainer) {
-          console.log('ITEM IS A CONTAINER');
+          console.log('ITEM IS A CONTAINER', level);
           if (item.value.flags.isTransparent || item.value.flags.isOpen) {
-            console.log('ITEM IS OPEN OR TRANSPARENT');
-            PrintCont.value.action(item.value.id);
+            console.log('ITEM IS OPEN OR TRANSPARENT', level);
+            level++;
+            console.log('LEVEL', level);
+            PrintCont.value.action(item.value.id, level);
+            level--;
           } else {
             console.log('ITEM IS CLOSED OR OPAQUE');
           }
@@ -129,7 +148,7 @@ export const DescribeObjects = ref(
         tell("Only bats can see in the dark. And you're not one.");
         return false;
       }
-      PrintCont.value.action(here.value.id);
+      PrintCont.value.action(here.value.id, -1);
       return true;
     },
   })
