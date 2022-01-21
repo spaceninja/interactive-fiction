@@ -4,6 +4,7 @@ export default class Room extends Item {
   /**
    * @param {object} props
    * @param {string} props.name The name of the room.
+   * @param {string} props.id The ID of the room.
    * @param {function} props.action The function called when the room
    *    is interacted with.
    * @param {string} props.description The description of the room.
@@ -30,6 +31,7 @@ export default class Room extends Item {
    */
   constructor({
     name,
+    id,
     action,
     description,
     value,
@@ -40,6 +42,7 @@ export default class Room extends Item {
   }) {
     super({
       name,
+      id,
       action,
       description,
       location: 'rooms',

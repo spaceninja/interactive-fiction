@@ -13,12 +13,108 @@ import { rooms } from './useRoom';
 import { items } from './useItem';
 import { verbs } from './useVerb';
 
+export const DescribeObject = ref(
+  new Verb({
+    name: 'DescribeObject',
+    synonym: ['describe object'],
+    action: (item, level = 0) => {
+      console.group(`DESCRIBE OBJECT: ${item.value.name}, level ${level}`);
+      if (level === 0) {
+        if (item.value.descriptionFunction) {
+          // TODO: test this
+          console.log('Object has a description function');
+          item.value.descriptionFunction();
+        } else if (
+          !item.value.flags.touchBit &&
+          item.value.initialDescription
+        ) {
+          console.log(
+            'Object is untouched and has an initial description function'
+          );
+          tell(item.value.initialDescription);
+        } else if (item.value.description) {
+          console.log('Object has a description');
+          tell(item.value.description);
+        } else {
+          console.log('Using default object description');
+          tell(
+            `There is a ${item.value.name} here${
+              item.value.flags.isOn ? ' (providing light)' : ''
+            }.`
+          );
+        }
+      } else {
+        console.log('Object is nested, using indented default description');
+        tell(
+          `A ${item.value.name}${
+            item.value.flags.isOn ? ' (providing light)' : ''
+          }${item.value.flags.isWorn ? ' (being worn)' : ''}`,
+          `indent-${level}`
+        );
+      }
+      console.groupEnd();
+    },
+  })
+);
+
+export const getContents = (containerId) => {
+  return Object.values(items).filter(
+    (item) => item.value.location === containerId
+  );
+};
+
 export const PrintCont = ref(
   new Verb({
     name: 'PrintCont',
     synonym: ['print contents'],
-    action: () => {
-      tell('There are some objects here, I guess?');
+    action: (container) => {
+      console.group(`PRINT CONTENTS: ${container}`);
+      // get all items with this container set as their locations
+      const containerItems = getContents(container);
+      console.log(
+        'CONTAINER ITEMS',
+        containerItems.map((i) => i.value.name)
+      );
+
+      // if this container is empty, return early
+      if (containerItems.length < 1) {
+        console.log('NO ITEMS, RETURNING EARLY', containerItems);
+        return true;
+      }
+
+      // loop over items and describe them
+      containerItems.forEach((item) => {
+        console.group(`ITEM LOOP: ${item.value.name}`);
+
+        // if the item is invisible, return early
+        if (item.value.flags.invisible) {
+          console.log('ITEM IS INVISIBLE');
+          return true;
+        }
+
+        // if the item is describable
+        if (!item.value.flags.doNotDescribe) {
+          console.log('ITEM IS DESCRIBABLE');
+          DescribeObject.value.action(item);
+        }
+        if (item.value.flags.doNotDescribe) {
+          console.log('ITEM IS NOT DESCRIBABLE');
+        }
+
+        // if the item is a container
+        if (item.value.flags.isContainer) {
+          console.log('ITEM IS A CONTAINER');
+          if (item.value.flags.isTransparent || item.value.flags.isOpen) {
+            console.log('ITEM IS OPEN OR TRANSPARENT');
+            PrintCont.value.action(item.value.id);
+          } else {
+            console.log('ITEM IS CLOSED OR OPAQUE');
+          }
+        }
+        console.groupEnd();
+      });
+
+      console.groupEnd();
       return true;
     },
   })
@@ -33,7 +129,7 @@ export const DescribeObjects = ref(
         tell("Only bats can see in the dark. And you're not one.");
         return false;
       }
-      PrintCont.value.action(here.value);
+      PrintCont.value.action(here.value.id);
       return true;
     },
   })
@@ -94,16 +190,19 @@ export const Test = ref(
       // Try the direct item's handler
       const itemTest = items[theDirect.value]?.value.test;
       const itemHandled = itemTest ? itemTest() : false;
+      console.log('TEST as item', theDirect.value, itemHandled);
       if (itemHandled) return true;
 
       // Nothing else handled it, so pass to the verb
       const verbTest = verbs[theDirect.value]?.value.test;
       const verbHandled = verbTest ? verbTest() : false;
+      console.log('TEST as verb', theDirect.value, verbHandled);
       if (verbHandled) return true;
 
       // If it's not a verb, it might be a meta verb
       const metaVerbTest = metaVerbs[theDirect.value]?.value.test;
       const metaVerbHandled = metaVerbTest ? metaVerbTest() : false;
+      console.log('TEST as meta verb', theDirect.value, metaVerbHandled);
       if (metaVerbHandled) return true;
 
       tell("That item doesn't have a test routine.");

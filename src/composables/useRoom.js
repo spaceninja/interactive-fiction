@@ -5,7 +5,8 @@ import { items } from './useItem';
 
 export const DarkRoom = ref(
   new Room({
-    name: 'DarkRoom',
+    name: 'dark room',
+    id: 'DarkRoom',
     action: () => {
       return false;
     },
@@ -14,7 +15,8 @@ export const DarkRoom = ref(
 
 export const RoomA = ref(
   new Room({
-    name: 'RoomA',
+    name: 'room A',
+    id: 'RoomA',
     flags: { isOn: true },
     action: () => {
       return false;
@@ -24,7 +26,8 @@ export const RoomA = ref(
 
 export const RoomB = ref(
   new Room({
-    name: 'RoomB',
+    name: 'room B',
+    id: 'RoomB',
     flags: { isOn: true },
     description: 'This is the Room B long description.',
     action: () => {
@@ -33,11 +36,37 @@ export const RoomB = ref(
   })
 );
 
+export const Kitchen = ref(
+  new Room({
+    name: 'kitchen',
+    id: 'Kitchen',
+    exits: {
+      west: 'LivingRoom',
+    },
+    flags: { isOnLand: true, isOn: true, isSacred: true },
+    global: ['kitchen-window', 'chimney', 'stairs'],
+    action: (verb) => {
+      switch (verb) {
+        case 'look': {
+          console.log('KITCHEN:');
+          tell(
+            'You are in the kitchen of the white house. A table seems to have been used recently for the preparation of food. A passage leads to the west and a dark staircase can be seen leading upward. A dark chimney leads down and to the east is a small window which is closed.'
+          );
+          return true;
+        }
+        default:
+          break;
+      }
+    },
+  })
+);
+
 export const LivingRoom = ref(
   new Room({
-    name: 'Living Room',
+    name: 'living room',
+    id: 'LivingRoom',
     exits: {
-      east: 'kitchen',
+      east: 'Kitchen',
       // west: magicFlag.value ? 'strangePassage' : 'The door is nailed shut.',
       // down: trapDoorExit(),
     },
@@ -61,7 +90,7 @@ export const LivingRoom = ref(
             ? TrapDoorMessage
             : 'and a large oriental rug in the center of the room.';
           tell(message);
-          break;
+          return true;
         }
         case 'end':
           // some sort of complex logic involving the trophy case and the score
@@ -73,4 +102,4 @@ export const LivingRoom = ref(
   })
 );
 
-export const rooms = { DarkRoom, RoomA, RoomB, LivingRoom };
+export const rooms = { DarkRoom, RoomA, RoomB, Kitchen, LivingRoom };

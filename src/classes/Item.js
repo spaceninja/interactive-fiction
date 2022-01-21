@@ -2,6 +2,7 @@ export default class Item {
   /**
    * @param {object} props
    * @param {string} props.name The name of the item.
+   * @param {string} props.id The ID of the item.
    * @param {array} props.synonym List of all nouns which can be used to
    *    refer to the item.
    * @param {array} props.adjective List of all adjectives which can be
@@ -31,6 +32,7 @@ export default class Item {
    */
   constructor({
     name,
+    id,
     synonym,
     adjective,
     action,
@@ -46,6 +48,7 @@ export default class Item {
     flags,
   }) {
     this.name = name;
+    this.id = id;
     this.synonym = synonym;
     this.adjective = adjective;
     this.action = action;

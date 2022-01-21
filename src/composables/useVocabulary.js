@@ -46,7 +46,7 @@ Object.entries(items).forEach(([name, item]) => {
     createToken({
       name: name,
       pattern: new RegExp(
-        `((${i.adjective.join('|')}) )?(${i.synonym.join('|')})`,
+        `((${i.adjective?.join('|')}) )?(${i.synonym.join('|')})`,
         'i'
       ),
       longer_alt: StringLiteral,

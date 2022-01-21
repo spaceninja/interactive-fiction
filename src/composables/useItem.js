@@ -1,12 +1,20 @@
 import { ref } from 'vue';
 import Item from '../classes/Item';
 import { pickOne } from '../composables/useHelper';
-import { theVerb, here, openClose, tell, dummyMessages } from './useGlobal';
+import {
+  theVerb,
+  here,
+  openClose,
+  tell,
+  dummyMessages,
+  theDirect,
+} from './useGlobal';
 
 export const Elf = ref(
   new Item({
-    name: 'Elf',
-    location: 'livingRoom',
+    name: 'elf',
+    id: 'Elf',
+    location: 'RoomA',
     synonym: ['elf', 'drow'],
     adjective: ['pretty', 'fancy'],
     action: () => {
@@ -26,8 +34,9 @@ export const Elf = ref(
 
 export const Troll = ref(
   new Item({
-    name: 'Troll',
-    location: 'livingRoom',
+    name: 'troll',
+    id: 'Troll',
+    location: 'LivingRoom',
     synonym: ['troll', 'ogre'],
     adjective: ['ugly', 'smelly'],
     action: () => {
@@ -54,10 +63,191 @@ export const Troll = ref(
   })
 );
 
+export const Garlic = ref(
+  new Item({
+    name: 'clove of garlic',
+    id: 'Garlic',
+    location: 'SandwichBag',
+    synonym: ['garlic', 'clove'],
+    flags: { takeBit: true, foodBit: true },
+    size: 4,
+    action: () => {
+      console.log('Garlic Handler', theVerb.value);
+      switch (theVerb.value) {
+        case 'Eat':
+          Garlic.value.location = null;
+          tell(
+            "What the heck! You won't make friends this way, but nobody around here is too friendly anyhow. Gulp!"
+          );
+          return true;
+        default:
+          break;
+      }
+    },
+  })
+);
+
+export const Lunch = ref(
+  new Item({
+    name: 'lunch',
+    id: 'Lunch',
+    location: 'SandwichBag',
+    synonym: ['food', 'sandwich', 'lunch', 'dinner'],
+    adjective: ['hot', 'pepper'],
+    flags: { takeBit: true, foodBit: true },
+    description: 'A hot pepper sandwich is here.',
+  })
+);
+
+export const SandwichBag = ref(
+  new Item({
+    name: 'brown sack',
+    id: 'SandwichBag',
+    location: 'KitchenTable',
+    synonym: ['bag', 'sack'],
+    adjective: ['brown', 'elongated', 'smelly'],
+    flags: { takeBit: true, isContainer: true, burnBit: true, isOpen: false },
+    initialDescription:
+      'On the table is an elongated brown sack, smelling of hot peppers.',
+    capacity: 9,
+    size: 9,
+    action: () => {
+      console.log('Sandwich Bag Handler', theVerb.value);
+      switch (theVerb.value) {
+        case 'Smell':
+          if (Lunch.value.location === SandwichBag.value.id) {
+            tell('It smells of hot peppers.');
+            return true;
+          }
+          return false;
+        default:
+          break;
+      }
+    },
+  })
+);
+
+export const Water = ref(
+  new Item({
+    name: 'quantity of water',
+    id: 'Water',
+    location: 'Bottle',
+    synonym: ['water', 'quantity', 'liquid', 'h20'],
+    flags: { tryTakeBit: true, takeBit: true, drinkBit: true },
+    size: 4,
+    action: () => {
+      // TODO add these
+      return false;
+    },
+  })
+);
+
+export const Bottle = ref(
+  new Item({
+    name: 'glass bottle',
+    id: 'Bottle',
+    location: 'KitchenTable',
+    synonym: ['bottle', 'container'],
+    adjective: ['clear', 'glass'],
+    flags: { takeBit: true, isTransparent: true, isContainer: true },
+    initialDescription: 'A bottle is sitting on the table.',
+    capacity: 4,
+    action: () => {
+      console.log('Bottle Handler', theVerb.value);
+      let empty = false;
+      switch (theVerb.value) {
+        case 'Throw':
+          if (theDirect.value === 'Bottle') {
+            empty = true;
+            Bottle.value.location = null;
+            tell('The bottle hits the far wall and shatters.');
+          }
+          break;
+        case 'Destroy':
+          empty = true;
+          Bottle.value.location = null;
+          tell('A brilliant maneuver destroys the bottle.');
+          break;
+        case 'Open':
+          Bottle.value.flags.isOpen = true;
+          console.log('OPEN', Bottle.value.flags);
+          tell('You open the bottle');
+          break;
+        case 'Shake':
+          console.log('SHAKE', Bottle.value.flags);
+          if (Bottle.value.flags.isOpen && Water.value.location === 'Bottle') {
+            console.log('HANDLE WATER');
+            empty = true;
+            tell(
+              'You shake the bottle as hard as you can, spraying water everywhere.'
+            );
+          } else {
+            tell('You shake the bottle to no effect.');
+          }
+          break;
+        default:
+          return false;
+      }
+      if (empty === true && Water.value.location === 'Bottle') {
+        Water.value.location = null;
+        tell('The water spills to the floor and evaporates.');
+      }
+      return true;
+    },
+    test: () => {
+      theDirect.value = 'Bottle';
+
+      tell('> throw bottle', 'command');
+      theVerb.value = 'Throw';
+      Bottle.value.action();
+
+      tell('> destroy bottle', 'command');
+      Water.value.location = 'Bottle';
+      theVerb.value = 'Destroy';
+      Bottle.value.action();
+
+      tell('> shake bottle', 'command');
+      Water.value.location = 'Bottle';
+      theVerb.value = 'Shake';
+      Bottle.value.action();
+
+      tell('> open bottle', 'command');
+      Water.value.location = 'Bottle';
+      theVerb.value = 'Open';
+      Bottle.value.action();
+
+      tell('> shake bottle', 'command');
+      Water.value.location = 'Bottle';
+      theVerb.value = 'Shake';
+      Bottle.value.action();
+
+      return true;
+    },
+  })
+);
+
+export const KitchenTable = ref(
+  new Item({
+    name: 'kitchen table',
+    id: 'KitchenTable',
+    location: 'Kitchen',
+    synonym: ['table'],
+    adjective: ['kitchen'],
+    flags: {
+      doNotDescribe: true,
+      isContainer: true,
+      isOpen: true,
+      isSurface: true,
+    },
+    capacity: 50,
+  })
+);
+
 export const OwnersManual = ref(
   new Item({
     name: "owner's manual",
-    location: 'livingRoom',
+    id: 'OwnersManual',
+    location: 'LivingRoom',
     synonym: ['manual', 'piece of paper', 'paper'],
     adjective: ['zork', "owner's", 'small'],
     description: "ZORK owner's manual",
@@ -71,7 +261,8 @@ export const OwnersManual = ref(
 export const TrapDoor = ref(
   new Item({
     name: 'trap door',
-    location: 'livingRoom',
+    id: 'TrapDoor',
+    location: 'LivingRoom',
     synonym: ['door', 'trapdoor', 'trap-door', 'cover'],
     adjective: ['trap', 'dusty'],
     flags: { isDoor: true, doNotDescribe: true, isInvisible: true },
@@ -125,6 +316,7 @@ export const TrapDoor = ref(
 export const Rug = ref(
   new Item({
     name: 'carpet',
+    id: 'Rug',
     location: 'LivingRoom',
     synonym: ['rug', 'carpet'],
     adjective: ['large', 'oriental'],
@@ -192,4 +384,16 @@ export const Rug = ref(
   })
 );
 
-export const items = { Elf, Troll, OwnersManual, TrapDoor, Rug };
+export const items = {
+  Elf,
+  Troll,
+  KitchenTable,
+  Lunch,
+  Garlic,
+  SandwichBag,
+  Water,
+  Bottle,
+  OwnersManual,
+  TrapDoor,
+  Rug,
+};
