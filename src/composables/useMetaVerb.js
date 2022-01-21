@@ -14,9 +14,8 @@ import { items } from './useItem';
 import { verbs } from './useVerb';
 
 export const describeObject = (item, level = 0) => {
-  if (level < 0) level = 0;
-  console.group(`DESCRIBE OBJECT: ${item.value.name}, level ${level}`);
-  if (level === 0) {
+  console.group(`DESCRIBE OBJECT: ${item.value.id}, level ${level}`);
+  if (level < 1) {
     if (item.value.descriptionFunction) {
       // TODO: test this
       console.log('Object has a description function');
@@ -50,21 +49,27 @@ export const describeObject = (item, level = 0) => {
 };
 
 export const containerListIntro = (container, level = 0) => {
-  console.log('CONTAINER LIST INTRO', container.value.id);
+  console.group(`CONTAINER LIST INTRO, ${container.value.id}, level ${level}`);
   // if (container.value.id === Winner.value.id) {
   //   tell('You are carrying:');
   // }
-  if (Object.keys(rooms).includes(container.value.id)) return true;
+  if (Object.keys(rooms).includes(container.value.id)) {
+    console.log('Container is a room, do not print a container list intro.');
+    return true;
+  }
   if (container.value.flags.isSurface) {
+    console.log('Container is a surface');
     tell(`Sitting on the ${container.value.name} is:`, `indent-${level}`);
     return true;
   }
   if (container.value.flags.isActor) {
+    console.log('Container is an actor');
     tell(`The ${container.value.name} is holding:`, `indent-${level}`);
     return true;
   }
+  console.log('Container is a simple container. Using default intro.');
   tell(`The ${container.value.name} contains:`, `indent-${level}`);
-  return true;
+  console.groupEnd();
 };
 
 export const getContents = (containerId) => {
@@ -82,29 +87,29 @@ export const PrintCont = ref(
       // get all items with this container set as their locations
       const containerItems = getContents(container);
       console.log(
-        'CONTAINER ITEMS',
+        'Container items:',
         containerItems.map((i) => i.value.name)
       );
 
       // if this container is empty, return early
       if (containerItems.length < 1) {
-        console.log('NO ITEMS, RETURNING EARLY', containerItems);
+        console.log('No items, returning early', containerItems);
         return true;
       }
 
       // loop over items and describe them
       containerItems.forEach((item) => {
-        console.group(`ITEM LOOP: ${item.value.name}, level ${level}`);
+        console.group(`ITEM LOOP: ${item.value.id}, level ${level}`);
 
         // if the item is invisible, return early
         if (item.value.flags.invisible) {
-          console.log('ITEM IS INVISIBLE');
+          console.log('Item is invisible');
           return true;
         }
 
         // if the item is describable
         if (!item.value.flags.doNotDescribe) {
-          console.log('ITEM IS DESCRIBABLE');
+          console.log('Item is describable');
           describeObject(item, level);
           if (
             item.value.flags.isContainer &&
@@ -112,22 +117,19 @@ export const PrintCont = ref(
           ) {
             containerListIntro(item, level);
           }
-        }
-        if (item.value.flags.doNotDescribe) {
-          console.log('ITEM IS NOT DESCRIBABLE');
+        } else {
+          console.log('Item is not describable');
         }
 
         // if the item is a container
         if (item.value.flags.isContainer) {
-          console.log('ITEM IS A CONTAINER', level);
           if (item.value.flags.isTransparent || item.value.flags.isOpen) {
-            console.log('ITEM IS OPEN OR TRANSPARENT', level);
+            console.log('Item is open or transparent container');
             level++;
-            console.log('LEVEL', level);
             PrintCont.value.action(item.value.id, level);
             level--;
           } else {
-            console.log('ITEM IS CLOSED OR OPAQUE');
+            console.log('Item is closed or opaque container');
           }
         }
         console.groupEnd();
