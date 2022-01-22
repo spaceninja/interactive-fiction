@@ -14,7 +14,7 @@ export const Elf = ref(
   new Item({
     name: 'elf',
     id: 'Elf',
-    location: 'RoomA',
+    location: 'Attic',
     synonym: ['elf', 'drow'],
     adjective: ['pretty', 'fancy'],
     flags: {},
@@ -37,7 +37,7 @@ export const Troll = ref(
   new Item({
     name: 'troll',
     id: 'Troll',
-    location: 'LivingRoom',
+    location: 'TrollRoom',
     synonym: ['troll', 'ogre'],
     adjective: ['ugly', 'smelly'],
     flags: {},

@@ -57,6 +57,7 @@ This project is an attempt to create an Infocom-style text adventure game engine
   - [ ] Set HERE to new room
   - [ ] Set TOUCHED bit in new room
   - [ ] Call Room description
+  - [ ] Add to score?
 - [ ] Translate useful SYNTAX entries from Zork
 - [ ] Translate useful VERB entries from Zork
 - [ ] Translate useful GLOBAL entries from Zork

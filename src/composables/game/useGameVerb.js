@@ -30,11 +30,11 @@ export const Look = ref(
       return true;
     },
     test: () => {
-      here.value = rooms.DarkRoom.value;
+      here.value = rooms.Attic.value;
       handlePlayerInput('look');
-      here.value = rooms.RoomA.value;
+      here.value = rooms.Cellar.value;
       handlePlayerInput('look');
-      here.value = rooms.RoomB.value;
+      here.value = rooms.TrollRoom.value;
       handlePlayerInput('look');
       here.value = rooms.LivingRoom.value;
       handlePlayerInput('look');
