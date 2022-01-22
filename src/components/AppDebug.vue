@@ -12,11 +12,11 @@ import {
   theVerb,
   theDirect,
   theIndirect,
-} from '../composables/useGlobal';
+} from '../composables/game/useGame';
 import { items } from '../composables/useItem';
 import { rooms } from '../composables/useRoom';
-import { tokenVocabulary } from '../composables/useVocabulary';
-import { handlePlayerInput } from '../composables/useGlobal';
+import { tokenVocabulary } from '../composables/game/useParserVocabulary';
+import { handlePlayerInput } from '../composables/game/useGame';
 
 const testRoom = () => {
   rooms.LivingRoom.value.action('look');

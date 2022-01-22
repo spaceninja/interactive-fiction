@@ -24,7 +24,7 @@ import {
   theScoreMax,
   theMoves,
   showHelp,
-} from '../composables/useGlobal';
+} from '../composables/game/useGame';
 
 const helpClick = () => {
   showHelp.value = !showHelp.value;

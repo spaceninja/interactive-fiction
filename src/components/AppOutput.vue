@@ -12,7 +12,7 @@
 
 <script setup>
 import { watch, nextTick } from 'vue';
-import { theOutput } from '../composables/useGlobal';
+import { theOutput } from '../composables/game/useGame';
 
 const scrollToBottom = () => {
   const lastOutputEl = document.querySelector('.app-output :last-child');

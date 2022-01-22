@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 import Verb from '../classes/Verb';
-import { perform, tell, theDirect } from './useGlobal';
+import { perform, tell, theDirect } from './game/useGame';
 import { items } from './useItem';
 
 export const Kiss = ref(

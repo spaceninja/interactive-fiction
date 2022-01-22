@@ -1,5 +1,5 @@
 import { CstParser, Lexer } from 'chevrotain';
-import { allTokens, tokenVocabulary } from './useVocabulary';
+import { allTokens, tokenVocabulary } from './useParserVocabulary';
 
 // Create a Player Input Lexer using our game's tokens.
 const playerInputLexer = new Lexer(allTokens);
@@ -40,16 +40,16 @@ class playerInputParser extends CstParser {
     $.RULE('test', () => {
       $.CONSUME(tokenVocabulary.Test);
       $.OR([
-        { ALT: () => $.CONSUME(tokenVocabulary.Action) },
-        { ALT: () => $.CONSUME(tokenVocabulary.Item) },
-        { ALT: () => $.CONSUME(tokenVocabulary.Meta) },
+        { ALT: () => $.CONSUME(tokenVocabulary.GameVerb) },
+        { ALT: () => $.CONSUME(tokenVocabulary.Verb) },
+        { ALT: () => $.CONSUME(tokenVocabulary.Noun) },
       ]);
     });
 
     // our fallback is a simple two word parser
     $.RULE('verbNoun', () => {
-      $.CONSUME(tokenVocabulary.Action);
-      $.CONSUME(tokenVocabulary.Item);
+      $.CONSUME(tokenVocabulary.Verb);
+      $.CONSUME(tokenVocabulary.Noun);
     });
 
     $.performSelfAnalysis(); // 1
@@ -116,24 +116,24 @@ class PlayerInputVisitor extends parserInstance.getBaseCstVisitorConstructor() {
   test(ctx) {
     let noun = false;
 
-    if (ctx.Item) {
+    if (ctx.GameVerb) {
       noun = {
-        input: ctx.Item[0].image,
-        name: ctx.Item[0].tokenType.name,
+        input: ctx.GameVerb[0].image,
+        name: ctx.GameVerb[0].tokenType.name,
       };
     }
 
-    if (ctx.Action) {
+    if (ctx.Verb) {
       noun = {
-        input: ctx.Action[0].image,
-        name: ctx.Action[0].tokenType.name,
+        input: ctx.Verb[0].image,
+        name: ctx.Verb[0].tokenType.name,
       };
     }
 
-    if (ctx.Meta) {
+    if (ctx.Noun) {
       noun = {
-        input: ctx.Meta[0].image,
-        name: ctx.Meta[0].tokenType.name,
+        input: ctx.Noun[0].image,
+        name: ctx.Noun[0].tokenType.name,
       };
     }
 
@@ -150,12 +150,12 @@ class PlayerInputVisitor extends parserInstance.getBaseCstVisitorConstructor() {
   verbNoun(ctx) {
     return {
       verb: {
-        input: ctx.Action[0].image,
-        name: ctx.Action[0].tokenType.name,
+        input: ctx.Verb[0].image,
+        name: ctx.Verb[0].tokenType.name,
       },
       noun: {
-        input: ctx.Item[0].image,
-        name: ctx.Item[0].tokenType.name,
+        input: ctx.Noun[0].image,
+        name: ctx.Noun[0].tokenType.name,
       },
     };
   }

@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 import Item from '../classes/Item';
-import { pickOne } from '../composables/useHelper';
+import { pickOne } from '../helpers/pickOne';
 import {
   theVerb,
   here,
@@ -8,7 +8,7 @@ import {
   tell,
   dummyMessages,
   theDirect,
-} from './useGlobal';
+} from './game/useGame';
 
 export const Elf = ref(
   new Item({

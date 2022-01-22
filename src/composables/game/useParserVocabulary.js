@@ -1,13 +1,13 @@
 import { createToken, Lexer } from 'chevrotain';
-import { items } from './useItem';
-import { verbs } from './useVerb';
-import { metaVerbs } from './useMetaVerb';
+import { gameVerbs } from './useGameVerb';
+import { verbs } from '../useVerb';
+import { items } from '../useItem';
 
 /**
  * Create Vocabulary Tokens
  *
  * `createToken` is used to create a TokenType.
- * The Lexer's output will contain an array of token Item created by metadata.
+ * The Lexer's output will contain an array of tokens created by metadata.
  *
  * We specify the "longer_alt" property to resolve keywords vs identifiers ambiguity.
  * @see: https://github.com/chevrotain/chevrotain/blob/master/examples/lexer/keywords_vs_identifiers/keywords_vs_identifiers.js
@@ -20,9 +20,23 @@ const StringLiteral = createToken({
 });
 
 // These are categories for the tokens.
-const Action = createToken({ name: 'Action', pattern: Lexer.NA });
-const Item = createToken({ name: 'Item', pattern: Lexer.NA });
-const Meta = createToken({ name: 'Meta', pattern: Lexer.NA });
+const GameVerb = createToken({ name: 'GameVerb', pattern: Lexer.NA });
+const Verb = createToken({ name: 'Verb', pattern: Lexer.NA });
+const Noun = createToken({ name: 'Noun', pattern: Lexer.NA });
+
+// Generate Tokens for Each Game Verb
+let gameVerbTokens = [];
+Object.entries(gameVerbs).forEach(([name, item]) => {
+  const i = item.value;
+  gameVerbTokens.push(
+    createToken({
+      name: name,
+      pattern: new RegExp(`${i.synonym.join('|')}`, 'i'),
+      longer_alt: StringLiteral,
+      categories: [GameVerb],
+    })
+  );
+});
 
 // Generate Tokens for Each Verb
 let verbTokens = [];
@@ -33,7 +47,7 @@ Object.entries(verbs).forEach(([name, item]) => {
       name: name,
       pattern: new RegExp(`${i.synonym.join('|')}`, 'i'),
       longer_alt: StringLiteral,
-      categories: [Action],
+      categories: [Verb],
     })
   );
 });
@@ -50,21 +64,7 @@ Object.entries(items).forEach(([name, item]) => {
         'i'
       ),
       longer_alt: StringLiteral,
-      categories: [Item],
-    })
-  );
-});
-
-// Generate Tokens for Each Meta Verb
-let metaVerbTokens = [];
-Object.entries(metaVerbs).forEach(([name, item]) => {
-  const i = item.value;
-  metaVerbTokens.push(
-    createToken({
-      name: name,
-      pattern: new RegExp(`${i.synonym.join('|')}`, 'i'),
-      longer_alt: StringLiteral,
-      categories: [Meta],
+      categories: [Noun],
     })
   );
 });
@@ -93,12 +93,12 @@ export const allTokens = [
   // WhiteSpace comes first as it is very common thus it will speed up the lexer.
   WhiteSpace,
   // "keywords" appear before the StringLiteral
+  ...gameVerbTokens,
   ...verbTokens,
-  ...metaVerbTokens,
   ...itemTokens,
-  Action,
-  Item,
-  Meta,
+  GameVerb,
+  Verb,
+  Noun,
   Integer,
   Buzzword,
   Punctuation,

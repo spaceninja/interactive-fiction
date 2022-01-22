@@ -1,9 +1,10 @@
 import { ref } from 'vue';
-import { items } from './useItem';
-import { verbs } from './useVerb';
-import { metaVerbs } from './useMetaVerb';
-import { parser } from '../composables/useParser';
-import { pickOne, uuid } from '../composables/useHelper';
+import { pickOne } from '../../helpers/pickOne';
+import { uuid } from '../../helpers/uuid';
+import { items } from '../useItem';
+import { verbs } from '../useVerb';
+import { gameVerbs } from './useGameVerb';
+import { parser } from './useParser';
 
 export const here = ref('');
 export const theScore = ref(0);
@@ -48,17 +49,17 @@ export const tell = (message, className) => {
  * Perform
  *
  * The parser translates the command "Hit the Troll with the Rock" into
- * a Verb (Hit), a Direct Item (Troll), and an Indirect Item (Rock).
+ * a Verb (Hit), a Direct Noun (Troll), and an Indirect Noun (Rock).
  *
  * This routine saves those tokens to global state, and tries to handle
- * the command by calling the action handlers of the Indirect Item followed
- * by the Direct Item, followed by the Verb iteself.
+ * the command by calling the action handlers of the Indirect Noun followed
+ * by the Direct Noun, followed by the Verb iteself.
  *
  * If none of those handle the command, then a simple fallback is used.
  *
  * @param {string} v - the Verb to perform.
- * @param {string} d - the Direct Item receives the action of the verb.
- * @param {string} i - the Indirect Item receives the direct item.
+ * @param {string} d - the Direct Noun receives the action of the verb.
+ * @param {string} i - the Indirect Noun receives the direct item.
  * @returns boolean
  */
 export const perform = (v = false, d = false, i = false) => {
@@ -81,9 +82,9 @@ export const perform = (v = false, d = false, i = false) => {
   const verbHandled = v ? verbs[v]?.value.action() : false;
   if (verbHandled) return true;
 
-  // If it's not a verb, it might be a meta verb
-  const metaVerbHandled = v ? metaVerbs[v]?.value.action() : false;
-  if (metaVerbHandled) return true;
+  // If it's not a verb, it might be a game verb
+  const gameVerbHandled = v ? gameVerbs[v]?.value.action() : false;
+  if (gameVerbHandled) return true;
 
   // Something went wrong, nothing handled the input!
   tell("I don't know how to do that.", 'error');

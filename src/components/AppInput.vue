@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import { playerInput, handlePlayerInput } from '../composables/useGlobal';
+import { playerInput, handlePlayerInput } from '../composables/game/useGame';
 
 const onSubmit = () => {
   handlePlayerInput();

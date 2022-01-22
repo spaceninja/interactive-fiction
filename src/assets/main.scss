@@ -3,11 +3,13 @@
 
   --color-page-bg: white;
   --color-text: #333;
+  --font-weight: normal;
 }
 @media (prefers-color-scheme: dark) {
   :root {
     --color-page-bg: #333;
-    --color-text: white;
+    --color-text: rgba(255 255 255 / 90%);
+    --font-weight: 300;
   }
 }
 
@@ -15,6 +17,7 @@ html {
   font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
     'Liberation Mono', monospace;
   font-size: 14px;
+  font-weight: var(--font-weight);
 
   @media (min-width: 375px) {
     font-size: 16px;
@@ -109,6 +112,10 @@ select {
   }
 }
 
+.app-header__location {
+  text-transform: capitalize;
+}
+
 .app-footer {
   font-size: smaller;
 }
@@ -155,6 +162,7 @@ select {
 
 .room-name {
   font-weight: 600;
+  text-transform: capitalize;
 }
 
 .indent-1 {

@@ -1,4 +1,4 @@
-export default class Item {
+export default class Verb {
   /**
    * @param {object} props
    * @param {string} props.name The internal name of the verb.

@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 import Room from '../classes/Room';
-import { magicFlag, tell } from './useGlobal';
+import { magicFlag, tell } from './game/useGame';
 import { items } from './useItem';
 
 export const DarkRoom = ref(
