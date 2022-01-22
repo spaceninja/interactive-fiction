@@ -48,11 +48,9 @@ This project is an attempt to create an Infocom-style text adventure game engine
   - [x] Default verb functionality
   - [x] Add example of item with examine action
   - [x] Add example of item with text to read
-- [ ] Add LOOK (L) command
+- [x] Add LOOK (L) command
   - [x] Describe the room
-  - [ ] Describe items in the room
-- [ ] Add Brief/Verbose modes
-  - [ ] Handle BRIEF, SUPERBRIEF, VERBOSE commands
+  - [x] Describe items in the room
 - [ ] Handle moving between rooms
   - [ ] Add GOTO and DO-WALK
   - [ ] Check if there is an exit in this direction
@@ -62,20 +60,6 @@ This project is an attempt to create an Infocom-style text adventure game engine
 - [ ] Translate useful SYNTAX entries from Zork
 - [ ] Translate useful VERB entries from Zork
 - [ ] Translate useful GLOBAL entries from Zork
-- [ ] Advanced parser
-  - [ ] Syntax tokens: HAVE, TAKE, MANY, EVERYWHERE, ADJACENT, HELD, CARRIED, ON-GROUND, IN-ROOM
-  - [ ] Switch syntaxes
-  - [ ] Add Get-What-I-Mean, Find
-  - [ ] Multiple items: separate by AND or comma.
-  - [ ] Handle IT in commands
-  - [ ] Handle ALL in commands (every visible item not inside a container)
-  - [ ] Sequential commands: separate by THEN or period.
-    - [ ] Flush input if sequential commands fail
-- [ ] Advanced PERFORM
-  - [ ] Pre: Call WINNER action
-  - [ ] Pre: Call Room M-BEG action
-  - [ ] Pre: Call pre-verb action
-  - [ ] Post: Call Room M-END action
 - [ ] Handle taking items
   - [ ] Add INVENTORY (I) command
 - [ ] Handle containers
@@ -91,6 +75,23 @@ This project is an attempt to create an Infocom-style text adventure game engine
 - [ ] Handle elevation changes
   - [ ] Add stairs
   - [ ] Add elevator
+- [ ] Add Brief/Verbose modes
+  - [ ] Handle BRIEF, SUPERBRIEF, VERBOSE commands
+- [ ] Advanced parser
+  - [ ] Syntax tokens:
+    - HAVE, TAKE, MANY, EVERYWHERE, ADJACENT, HELD, CARRIED, ON-GROUND, IN-ROOM
+  - [ ] Switch syntaxes
+  - [ ] Add Get-What-I-Mean, Find
+  - [ ] Multiple items: separate by AND or comma.
+  - [ ] Handle IT in commands
+  - [ ] Handle ALL in commands (every visible item not inside a container)
+  - [ ] Sequential commands: separate by THEN or period.
+    - [ ] Flush input if sequential commands fail
+- [ ] Advanced PERFORM
+  - [ ] Pre: Call WINNER action
+  - [ ] Pre: Call Room M-BEG action
+  - [ ] Pre: Call pre-verb action
+  - [ ] Post: Call Room M-END action
 - [ ] Add Event System
   - [ ] Add CLOCKER
   - [ ] Add Interrupt routines
