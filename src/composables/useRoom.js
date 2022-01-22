@@ -43,7 +43,7 @@ export const Attic = ref(
     exits: {
       down: 'Kitchen',
     },
-    flags: { isOn: false },
+    flags: { isOn: true },
     global: ['stairs'],
     description: 'This is the attic. The only exit is a stairway leading down.',
     action: () => false,

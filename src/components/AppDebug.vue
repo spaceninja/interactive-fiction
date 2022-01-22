@@ -62,6 +62,9 @@ const testParser = () => {
   handlePlayerInput('kiss an ogre');
   handlePlayerInput('kiss of ogre');
   handlePlayerInput('kiss is ogre');
+  handlePlayerInput('examine blade');
+  handlePlayerInput('examine antique blade');
+  handlePlayerInput('examine nasty blade');
   handlePlayerInput('blow up door with dynamite');
   handlePlayerInput('climb up the rope');
   handlePlayerInput('climb down the rope');

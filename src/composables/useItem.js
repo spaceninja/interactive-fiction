@@ -10,11 +10,24 @@ import {
   theDirect,
 } from './game/useGame';
 
+/*
+export const Something = ref(
+  new Item({
+    name: 'some thing',
+    id: 'Something',
+    location: 'Somewhere',
+    synonym: [],
+    flags: {},
+    action: () => {},
+  })
+);
+*/
+
 export const Elf = ref(
   new Item({
     name: 'elf',
     id: 'Elf',
-    location: 'Attic',
+    location: 'Cellar',
     synonym: ['elf', 'drow'],
     adjective: ['pretty', 'fancy'],
     flags: {},
@@ -39,16 +52,21 @@ export const Troll = ref(
     id: 'Troll',
     location: 'TrollRoom',
     synonym: ['troll', 'ogre'],
-    adjective: ['ugly', 'smelly'],
-    flags: {},
+    adjective: ['nasty', 'ugly', 'smelly'],
+    description:
+      'A nasty-looking troll, brandishing a bloody axe, blocks all passages out of the room.',
+    flags: { isActor: true, isOpen: true, tryTakeBit: true },
+    strength: 2,
     action: () => {
       console.log('Troll handler', theVerb.value);
       switch (theVerb.value) {
         case 'Yell':
-          console.log('Troll: yell handler');
           tell(
             'Excited to finally find a competitor in a shouting competition, the Troll yells back at you even louder.'
           );
+          return true;
+        case 'Tell':
+          tell("The troll isn't much of a conversationalist.");
           return true;
         case 'Examine':
           tell("The Troll doesn't like the way you're looking at him.");
@@ -61,6 +79,253 @@ export const Troll = ref(
     test: () => {
       tell("The troll doesn't like being tested!");
       return true;
+    },
+  })
+);
+
+export const Rope = ref(
+  new Item({
+    name: 'rope',
+    id: 'Rope',
+    location: 'Attic',
+    synonym: ['rope', 'hemp', 'coil'],
+    adjective: ['large'],
+    flags: { takeBit: true, tryTakeBit: true },
+    initialDescription: 'A large coil of rope is lying in the corner.',
+    size: 10,
+    action: () => {
+      switch (theVerb.value) {
+        case 'Tie':
+          tell("You can't tie the rope to that.");
+          return true;
+        default:
+          break;
+      }
+    },
+  })
+);
+
+export const AtticTable = ref(
+  new Item({
+    name: 'table',
+    id: 'AtticTable',
+    location: 'Attic',
+    synonym: ['table'],
+    flags: {
+      doNotDescribe: true,
+      isContainer: true,
+      isOpen: true,
+      isSurface: true,
+    },
+    capacity: 40,
+  })
+);
+
+export const Knife = ref(
+  new Item({
+    name: 'nasty knife',
+    id: 'Knife',
+    location: 'AtticTable',
+    synonym: ['knives', 'knife', 'blade'],
+    adjective: ['nasty', 'unrusty'],
+    flags: { takeBit: true, isWeapon: true, tryTakeBit: true },
+    initialDescription: 'On the table is a nasty-looking knife.',
+    action: () => {
+      switch (theVerb.value) {
+        case 'Take':
+          AtticTable.value.flags.doNotDescribe = false;
+          return false;
+        default:
+          break;
+      }
+    },
+  })
+);
+
+export const TrophyCase = ref(
+  new Item({
+    name: 'trophy case',
+    id: 'TrophyCase',
+    location: 'LivingRoom',
+    synonym: ['case'],
+    adjective: ['trophy'],
+    flags: {
+      isTransparent: true,
+      isContainer: true,
+      doNotDescribe: true,
+      tryTakeBit: true,
+      searchBit: true,
+    },
+    capacity: 1000,
+    priority: 99,
+    action: () => {
+      switch (theVerb.value) {
+        case 'Take':
+          if (theDirect.value === TrophyCase.value.id) {
+            tell('The trophy case is securely fastened to the wall.');
+            return true;
+          }
+          return false;
+        default:
+          break;
+      }
+    },
+  })
+);
+
+export const Map = ref(
+  new Item({
+    name: 'ancient map',
+    id: 'Map',
+    location: 'TrophyCase',
+    synonym: ['parchment', 'map'],
+    adjective: ['antique', 'old', 'ancient'],
+    flags: { isInvisible: true, readBit: true, takeBit: true },
+    initialDescription:
+      'In the trophy case is an ancient parchment which appears to be a map.',
+    size: 2,
+    text: `The map shows a forest with three clearings.
+           The largest clearing contains a house.
+           Three paths leave the large clearing.
+           One of these paths, leading southwest, is marked "To Stone Barrow".`,
+  })
+);
+
+export const Lamp = ref(
+  new Item({
+    name: 'brass lantern',
+    id: 'Lamp',
+    location: 'LivingRoom',
+    synonym: ['lamp', 'lantern', 'light'],
+    adjective: ['brass'],
+    flags: { takeBit: true, isLight: true },
+    size: 15,
+    priority: 1,
+    description: 'There is a brass lantern (battery-powered) here.',
+    initialDescription:
+      'A battery-powered brass lantern is on the trophy case.',
+    action: () => {
+      switch (theVerb.value) {
+        case 'Throw':
+          tell(
+            'The lamp has smashed into the floor, and the light has gone out.'
+          );
+          // TODO: handle removing queued event
+          // dequeue('iLantern');
+          Lamp.value.location = null;
+          BrokenLamp.value.location = here.value.id;
+          return true;
+        case 'LampOn':
+          if (Lamp.value.flags.isDestroyed) {
+            tell("A burned-out lamp won't light");
+            return true;
+          }
+          // TODO: handle queued event
+          // queue('iLantern');
+          return false;
+        case 'LampOff':
+          if (Lamp.value.flags.isDestroyed) {
+            tell('The lamp has already burned out.');
+            return true;
+          }
+          // TODO: handle removing queued event
+          // dequeue('iLantern');
+          return false;
+        case 'Examine':
+          if (Lamp.value.flags.isDestroyed) {
+            tell('The lamp has burned out.');
+          } else if (Lamp.value.flags.isOn) {
+            tell('The lamp is on.');
+          } else {
+            tell('The lamp is turned off.');
+          }
+          return true;
+        default:
+          break;
+      }
+    },
+  })
+);
+
+export const BrokenLamp = ref(
+  new Item({
+    name: 'broken lantern',
+    id: 'BrokenLamp',
+    location: null,
+    synonym: ['lamp', 'lantern'],
+    adjective: ['broken'],
+    flags: { takeBit: true },
+  })
+);
+
+export const WoodenDoor = ref(
+  new Item({
+    name: 'wooden door',
+    id: 'WoodenDoor',
+    location: 'LivingRoom',
+    synonym: ['door', 'lettering', 'writing'],
+    adjective: ['wooden', 'gothic', 'strange', 'west'],
+    flags: {
+      readBit: true,
+      isDoor: true,
+      doNotDescribe: true,
+      isTransparent: true,
+    },
+    text: 'The engravings translate to "This space intentionally left blank."',
+    action: () => {
+      switch (theVerb.value) {
+        case 'Open':
+          tell('The door cannot be opened.');
+          return true;
+        case 'Burn':
+          tell('You cannot burn this door.');
+          return true;
+        case 'Destroy':
+          tell("You can't seem to damage the door.");
+          return true;
+        case 'LookBehind':
+          tell("It won't open.");
+          return true;
+        default:
+          break;
+      }
+    },
+  })
+);
+
+export const Sword = ref(
+  new Item({
+    name: 'sword',
+    id: 'Sword',
+    location: 'LivingRoom',
+    synonym: ['sword', 'orcrist', 'glamdring', 'blade'],
+    adjective: ['elvish', 'old', 'antique'],
+    flags: { takeBit: true, isWeapon: true, tryTakeBit: true },
+    size: 30,
+    tValue: 0,
+    initialDescription:
+      'Above the trophy case hangs an elvish sword of great antiquity.',
+    action: () => {
+      switch (theVerb.value) {
+        case 'Take':
+          // TODO: handle queued event
+          // if (winner.value === adventurer.value) {
+          //   queue('iSword', -1);
+          // }
+          return false;
+        case 'Examine':
+          if (Sword.value.tValue === 1) {
+            tell('Your sword is glowing with a faint blue glow.');
+            return true;
+          }
+          if (Sword.value.tValue === 2) {
+            tell('Your sword is glowing very brightly.');
+            return true;
+          }
+          return false;
+        default:
+          break;
+      }
     },
   })
 );
@@ -113,6 +378,7 @@ export const SandwichBag = ref(
       'On the table is an elongated brown sack, smelling of hot peppers.',
     capacity: 9,
     size: 9,
+    priority: 1,
     action: () => {
       console.log('Sandwich Bag Handler', theVerb.value);
       switch (theVerb.value) {

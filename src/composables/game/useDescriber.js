@@ -10,9 +10,20 @@ import * as items from '../useItem';
  * @returns array
  */
 export const getContents = (containerId) => {
-  return Object.values(items).filter(
-    (item) => item.value.location === containerId
-  );
+  return Object.values(items)
+    .filter((item) => item.value.location === containerId)
+    .sort((a, b) => {
+      if (!a.value.priority) a.value.priority = 0;
+      if (!b.value.priority) b.value.priority = 0;
+      console.log(
+        'SORT',
+        a.value.id,
+        a.value.priority,
+        b.value.id,
+        b.value.priority
+      );
+      return b.value.priority - a.value.priority;
+    });
 };
 
 /**
@@ -71,7 +82,7 @@ const describeContents = (container, level = 0) => {
   const containerItems = getContents(container);
   console.log(
     'Container items:',
-    containerItems.map((i) => i.value.name)
+    containerItems.map((i) => i.value.id)
   );
 
   // if this container is empty, return early

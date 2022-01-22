@@ -29,6 +29,7 @@ export default class Item {
    * @param {string} props.text A string used when the player tries to
    *    read the item.
    * @param {object} props.flags List of all flags set in the item.
+   * @param {number} props.priority Priority of this item when sorting
    */
   constructor({
     name,
@@ -46,6 +47,7 @@ export default class Item {
     value,
     text,
     flags,
+    priority,
   }) {
     this.name = name;
     this.id = id;
@@ -62,5 +64,6 @@ export default class Item {
     this.value = value;
     this.text = text;
     this.flags = flags;
+    this.priority = priority;
   }
 }
