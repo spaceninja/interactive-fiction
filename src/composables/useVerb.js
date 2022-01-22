@@ -1,7 +1,7 @@
 import { ref } from 'vue';
 import Verb from '../classes/Verb';
 import { perform, tell, theDirect } from './game/useGame';
-import { items } from './useItem';
+import * as items from './useItem';
 
 export const Kiss = ref(
   new Verb({
@@ -50,5 +50,3 @@ export const Examine = ref(
     },
   })
 );
-
-export const verbs = { Kiss, Yell, Examine };

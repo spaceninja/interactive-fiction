@@ -13,8 +13,8 @@ import {
   theDirect,
   theIndirect,
 } from '../composables/game/useGame';
-import { items } from '../composables/useItem';
-import { rooms } from '../composables/useRoom';
+import * as items from '../composables/useItem';
+import * as rooms from '../composables/useRoom';
 import { tokenVocabulary } from '../composables/game/useParserVocabulary';
 import { handlePlayerInput } from '../composables/game/useGame';
 

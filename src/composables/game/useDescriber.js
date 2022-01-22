@@ -1,6 +1,6 @@
 import { tell, here } from './useGame';
-import { rooms } from '../useRoom';
-import { items } from '../useItem';
+import * as rooms from '../useRoom';
+import * as items from '../useItem';
 
 /**
  * Get Contents

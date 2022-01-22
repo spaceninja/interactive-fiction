@@ -1,7 +1,7 @@
 import { ref } from 'vue';
 import Room from '../classes/Room';
 import { magicFlag, tell } from './game/useGame';
-import { items } from './useItem';
+import * as items from './useItem';
 
 export const DarkRoom = ref(
   new Room({
@@ -65,6 +65,7 @@ export const LivingRoom = ref(
   new Room({
     name: 'living room',
     id: 'LivingRoom',
+    synonym: ['livingroom'],
     exits: {
       east: 'Kitchen',
       // west: magicFlag.value ? 'strangePassage' : 'The door is nailed shut.',
@@ -101,5 +102,3 @@ export const LivingRoom = ref(
     },
   })
 );
-
-export const rooms = { DarkRoom, RoomA, RoomB, Kitchen, LivingRoom };

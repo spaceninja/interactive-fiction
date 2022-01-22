@@ -10,9 +10,11 @@ import {
   handlePlayerInput,
 } from './useGame';
 import { describeHere, describeHereObjects } from './useDescriber';
-import { rooms } from '../useRoom';
-import { items } from '../useItem';
-import { verbs } from '../useVerb';
+import * as rooms from '../useRoom';
+import * as items from '../useItem';
+import * as verbs from '../useVerb';
+// this is dumb, but I need to refer to an unknown gameVerb in test
+import * as gameVerbs from './useGameVerb';
 
 /**
  * Look
@@ -35,6 +37,8 @@ export const Look = ref(
       here.value = rooms.RoomB.value;
       handlePlayerInput('look');
       here.value = rooms.LivingRoom.value;
+      handlePlayerInput('look');
+      here.value = rooms.Kitchen.value;
       handlePlayerInput('look');
       return true;
     },
@@ -100,7 +104,8 @@ export const Score = ref(
         if (scorePercent > 0.6) scoreRank = 'Adventurer';
         if (scorePercent > 0.75) scoreRank = 'Master';
         if (scorePercent > 0.9) scoreRank = 'Wizard';
-        if (scorePercent >= 1) scoreRank = 'Master Adventurer';
+        if (scorePercent === 1) scoreRank = 'Master Adventurer';
+        if (scorePercent > 1) scoreRank = 'Double Wizard';
         let rankMessage = `This gives you a rank of ${scoreRank}.`;
         tell(rankMessage);
       }
@@ -131,5 +136,3 @@ export const Score = ref(
     },
   })
 );
-
-export const gameVerbs = { Look, Score, Test };

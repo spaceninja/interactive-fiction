@@ -1,7 +1,7 @@
 import { createToken, Lexer } from 'chevrotain';
-import { gameVerbs } from './useGameVerb';
-import { verbs } from '../useVerb';
-import { items } from '../useItem';
+import * as gameVerbs from './useGameVerb';
+import * as verbs from '../useVerb';
+import * as items from '../useItem';
 
 /**
  * Create Vocabulary Tokens

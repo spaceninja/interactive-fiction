@@ -385,17 +385,3 @@ export const Rug = ref(
     },
   })
 );
-
-export const items = {
-  Elf,
-  Troll,
-  KitchenTable,
-  Lunch,
-  Garlic,
-  SandwichBag,
-  Water,
-  Bottle,
-  OwnersManual,
-  TrapDoor,
-  Rug,
-};

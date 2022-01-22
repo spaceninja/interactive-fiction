@@ -1,9 +1,9 @@
 import { ref } from 'vue';
 import { pickOne } from '../../helpers/pickOne';
 import { uuid } from '../../helpers/uuid';
-import { items } from '../useItem';
-import { verbs } from '../useVerb';
-import { gameVerbs } from './useGameVerb';
+import * as items from '../useItem';
+import * as verbs from '../useVerb';
+import * as gameVerbs from './useGameVerb';
 import { parser } from './useParser';
 
 export const here = ref('');
