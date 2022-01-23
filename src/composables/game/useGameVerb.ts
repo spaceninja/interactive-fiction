@@ -56,21 +56,18 @@ export const Test = ref(
     synonym: ['test'],
     action: () => {
       // Try the direct item's handler
-      // @ts-ignore
       const itemTest = items[theDirect.value]?.value.test;
       const itemHandled = itemTest ? itemTest() : false;
       console.log('TEST as item', theDirect.value, itemHandled);
       if (itemHandled) return true;
 
       // Nothing else handled it, so pass to the verb
-      // @ts-ignore
       const verbTest = verbs[theDirect.value]?.value.test;
       const verbHandled = verbTest ? verbTest() : false;
       console.log('TEST as verb', theDirect.value, verbHandled);
       if (verbHandled) return true;
 
       // If it's not a verb, it might be a game verb
-      // @ts-ignore
       const gameVerbTest = gameVerbs[theDirect.value]?.value.test;
       const gameVerbHandled = gameVerbTest ? gameVerbTest() : false;
       console.log('TEST as game verb', theDirect.value, gameVerbHandled);

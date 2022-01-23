@@ -21,45 +21,33 @@ class playerInputParser extends CstParser {
 
     this.RULE('magic', () => {
       this.OR([
-        // @ts-ignore
         { ALT: () => this.SUBRULE(this.score) },
-        // @ts-ignore
         { ALT: () => this.SUBRULE(this.look) },
-        // @ts-ignore
         { ALT: () => this.SUBRULE(this.test) },
-        // @ts-ignore
         { ALT: () => this.SUBRULE(this.verbNoun) },
       ]);
     });
 
     this.RULE('score', () => {
-      // @ts-ignore
       this.CONSUME(tokenVocabulary.Score);
     });
 
     this.RULE('look', () => {
-      // @ts-ignore
       this.CONSUME(tokenVocabulary.Look);
     });
 
     this.RULE('test', () => {
-      // @ts-ignore
       this.CONSUME(tokenVocabulary.Test);
       this.OR([
-        // @ts-ignore
         { ALT: () => this.CONSUME(tokenVocabulary.GameVerb) },
-        // @ts-ignore
         { ALT: () => this.CONSUME(tokenVocabulary.Verb) },
-        // @ts-ignore
         { ALT: () => this.CONSUME(tokenVocabulary.Noun) },
       ]);
     });
 
     // our fallback is a simple two word parser
     this.RULE('verbNoun', () => {
-      // @ts-ignore
       this.CONSUME(tokenVocabulary.Verb);
-      // @ts-ignore
       this.CONSUME(tokenVocabulary.Noun);
     });
 
@@ -85,7 +73,6 @@ class PlayerInputVisitor extends parserInstance.getBaseCstVisitorConstructor() {
     this.validateVisitor();
   }
 
-  // @ts-ignore
   magic(ctx) {
     const scoreAst = this.visit(ctx.score);
     const lookAst = this.visit(ctx.look);
@@ -107,7 +94,6 @@ class PlayerInputVisitor extends parserInstance.getBaseCstVisitorConstructor() {
 
   // TODO: is there a way to move these to a separate file?
 
-  // @ts-ignore
   score(ctx) {
     return {
       verb: {
@@ -117,7 +103,6 @@ class PlayerInputVisitor extends parserInstance.getBaseCstVisitorConstructor() {
     };
   }
 
-  // @ts-ignore
   look(ctx) {
     return {
       verb: {
@@ -127,7 +112,6 @@ class PlayerInputVisitor extends parserInstance.getBaseCstVisitorConstructor() {
     };
   }
 
-  // @ts-ignore
   test(ctx) {
     let noun = {};
 
@@ -162,7 +146,6 @@ class PlayerInputVisitor extends parserInstance.getBaseCstVisitorConstructor() {
     };
   }
 
-  // @ts-ignore
   verbNoun(ctx) {
     return {
       verb: {
@@ -192,7 +175,6 @@ const visitorInstance = new PlayerInputVisitor();
  * @param {string} playerInput
  * @returns object
  */
-// @ts-ignore
 export const parser = (playerInput) => {
   // Lex
   const lexResult = playerInputLexer.tokenize(playerInput);
@@ -213,7 +195,6 @@ export const parser = (playerInput) => {
   console.log('INPUT', parserInstance.input);
 
   // Parse
-  // @ts-ignore
   const cst = parserInstance.magic();
   if (parserInstance.errors.length > 0) {
     return {

@@ -31,7 +31,6 @@ export const dummyMessages = [
 ];
 
 export const evaluate = () => {
-  // @ts-ignore
   items[theDirect.value].value.action(theVerb.value);
 };
 
@@ -44,7 +43,6 @@ export const evaluate = () => {
  * @param className - a CSS class to add to the text.
  */
 export const tell = (message: string, className?: string) => {
-  // @ts-ignore
   theOutput.value.push({ message, className, key: uuid() });
 };
 
@@ -74,22 +72,18 @@ export const perform = (v = '', d = '', i = '') => {
   theIndirect.value = i;
 
   // Try the indirect item's handler
-  // @ts-ignore
   const indirectHandled = i ? items[i]?.value.action() : false;
   if (indirectHandled) return true;
 
   // Try the direct item's handler
-  // @ts-ignore
   const directHandled = d ? items[d]?.value.action() : false;
   if (directHandled) return true;
 
   // Nothing else handled it, so pass to the verb
-  // @ts-ignore
   const verbHandled = v ? verbs[v]?.value.action() : false;
   if (verbHandled) return true;
 
   // If it's not a verb, it might be a game verb
-  // @ts-ignore
   const gameVerbHandled = v ? gameVerbs[v]?.value.action() : false;
   if (gameVerbHandled) return true;
 
@@ -151,7 +145,6 @@ export const handlePlayerInput = (command = playerInput.value) => {
  * @param {string} closeMessage - the messgage to show when closing.
  */
 export const openClose = (
-  // @ts-ignore
   item,
   verb: string,
   openMessage: string,
