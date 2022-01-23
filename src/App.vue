@@ -10,17 +10,16 @@
   <AppFooter />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import AppHeader from './components/AppHeader.vue';
 import AppHelp from './components/AppHelp.vue';
 import AppOutput from './components/AppOutput.vue';
 import AppInput from './components/AppInput.vue';
 import AppFooter from './components/AppFooter.vue';
-import { here, showHelp } from './composables/game/useGame';
-import * as rooms from './composables/useRoom';
+import { showHelp, theVerb } from './composables/game/useGame';
 import { Look } from './composables/game/useGameVerb';
 
 // GO!
-here.value = rooms.Kitchen.value;
+theVerb.value = 'Look';
 Look.value.action();
 </script>

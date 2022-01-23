@@ -56,7 +56,6 @@ export const Troll = ref(
     description:
       'A nasty-looking troll, brandishing a bloody axe, blocks all passages out of the room.',
     flags: { isActor: true, isOpen: true, tryTakeBit: true },
-    strength: 2,
     action: () => {
       console.log('Troll handler', theVerb.value);
       switch (theVerb.value) {
@@ -99,7 +98,7 @@ export const Rope = ref(
           tell("You can't tie the rope to that.");
           return true;
         default:
-          break;
+          return false;
       }
     },
   })
@@ -118,6 +117,7 @@ export const AtticTable = ref(
       isSurface: true,
     },
     capacity: 40,
+    action: () => false,
   })
 );
 
@@ -136,7 +136,7 @@ export const Knife = ref(
           AtticTable.value.flags.doNotDescribe = false;
           return false;
         default:
-          break;
+          return false;
       }
     },
   })
@@ -167,7 +167,7 @@ export const TrophyCase = ref(
           }
           return false;
         default:
-          break;
+          return false;
       }
     },
   })
@@ -188,6 +188,7 @@ export const Map = ref(
            The largest clearing contains a house.
            Three paths leave the large clearing.
            One of these paths, leading southwest, is marked "To Stone Barrow".`,
+    action: () => false,
   })
 );
 
@@ -241,7 +242,7 @@ export const Lamp = ref(
           }
           return true;
         default:
-          break;
+          return false;
       }
     },
   })
@@ -255,6 +256,7 @@ export const BrokenLamp = ref(
     synonym: ['lamp', 'lantern'],
     adjective: ['broken'],
     flags: { takeBit: true },
+    action: () => false,
   })
 );
 
@@ -287,7 +289,7 @@ export const WoodenDoor = ref(
           tell("It won't open.");
           return true;
         default:
-          break;
+          return false;
       }
     },
   })
@@ -302,7 +304,7 @@ export const Sword = ref(
     adjective: ['elvish', 'old', 'antique'],
     flags: { takeBit: true, isWeapon: true, tryTakeBit: true },
     size: 30,
-    tValue: 0,
+    // tValue: 0,
     initialDescription:
       'Above the trophy case hangs an elvish sword of great antiquity.',
     action: () => {
@@ -314,17 +316,17 @@ export const Sword = ref(
           // }
           return false;
         case 'Examine':
-          if (Sword.value.tValue === 1) {
-            tell('Your sword is glowing with a faint blue glow.');
-            return true;
-          }
-          if (Sword.value.tValue === 2) {
-            tell('Your sword is glowing very brightly.');
-            return true;
-          }
+          // if (Sword.value.tValue === 1) {
+          //   tell('Your sword is glowing with a faint blue glow.');
+          //   return true;
+          // }
+          // if (Sword.value.tValue === 2) {
+          //   tell('Your sword is glowing very brightly.');
+          //   return true;
+          // }
           return false;
         default:
-          break;
+          return false;
       }
     },
   })
@@ -348,7 +350,7 @@ export const Garlic = ref(
           );
           return true;
         default:
-          break;
+          return false;
       }
     },
   })
@@ -363,6 +365,7 @@ export const Lunch = ref(
     adjective: ['hot', 'pepper'],
     flags: { takeBit: true, foodBit: true },
     description: 'A hot pepper sandwich is here.',
+    action: () => false,
   })
 );
 
@@ -389,7 +392,7 @@ export const SandwichBag = ref(
           }
           return false;
         default:
-          break;
+          return false;
       }
     },
   })
@@ -430,17 +433,17 @@ export const Bottle = ref(
             Bottle.value.location = null;
             tell('The bottle hits the far wall and shatters.');
           }
-          break;
+          return false;
         case 'Destroy':
           empty = true;
           Bottle.value.location = null;
           tell('A brilliant maneuver destroys the bottle.');
-          break;
+          return false;
         case 'Open':
           Bottle.value.flags.isOpen = true;
           console.log('OPEN', Bottle.value.flags);
           tell('You open the bottle');
-          break;
+          return false;
         case 'Shake':
           console.log('SHAKE', Bottle.value.flags);
           if (Bottle.value.flags.isOpen && Water.value.location === 'Bottle') {
@@ -452,7 +455,7 @@ export const Bottle = ref(
           } else {
             tell('You shake the bottle to no effect.');
           }
-          break;
+          return false;
         default:
           return false;
       }
@@ -508,6 +511,7 @@ export const KitchenTable = ref(
       isSurface: true,
     },
     capacity: 50,
+    action: () => false,
   })
 );
 
@@ -539,19 +543,20 @@ export const TrapDoor = ref(
       switch (theVerb.value) {
         case 'raise':
         case 'unlock':
-          TrapDoor.value.action('open');
-          break;
+          // TODO: replace with PERFORM
+          // TrapDoor.value.action('open');
+          return false;
         case 'open':
         case 'close':
           console.log('OPEN OR CLOSE TRAP DOOR');
-          if (here.value === 'LivingRoom') {
+          if (here.value.id === 'LivingRoom') {
             openClose(
               TrapDoor,
               theVerb.value,
               'The door reluctantly opens to reveal a rickety staircase descending into darkness.',
               'The door swings shut and closes.'
             );
-          } else if (here.value === 'cellar') {
+          } else if (here.value.id === 'Cellar') {
             if (!TrapDoor.value.flags.isOpen) {
               if (theVerb.value === 'open') {
                 tell('The door is locked from above.');
@@ -563,11 +568,11 @@ export const TrapDoor = ref(
               tell(pickOne(dummyMessages));
             }
           }
-          break;
+          return false;
         case 'LookUnder':
         case 'LookInside':
           console.log('LOOK UNDER TRAP DOOR', here.value.name);
-          if (here.value.name !== 'Living Room') return;
+          if (here.value.name !== 'Living Room') return false;
           if (TrapDoor.value.flags.isOpen) {
             tell('You see a rickety staircase descending into darkness.');
           } else {
@@ -575,7 +580,7 @@ export const TrapDoor = ref(
           }
           return true;
         default:
-          break;
+          return false;
       }
     },
   })
@@ -589,8 +594,8 @@ export const Rug = ref(
     synonym: ['rug', 'carpet'],
     adjective: ['large', 'oriental'],
     flags: { doNotDescribe: true, tryTakeBit: true, isMoved: false },
-    action: (verb) => {
-      switch (verb) {
+    action: () => {
+      switch (theVerb.value) {
         case 'raise':
           console.log('RAISE RUG');
           tell(
@@ -600,7 +605,7 @@ export const Rug = ref(
                 : ', but in trying to take it you have noticed an irregularity beneath it.'
             }`
           );
-          break;
+          return false;
         case 'move':
         case 'push':
           console.log('MOVE OR PUSH RUG');
@@ -616,11 +621,11 @@ export const Rug = ref(
             TrapDoor.value.flags.isInvisible = false;
             // this-is-it trap-door
           }
-          break;
+          return false;
         case 'take':
           console.log('TAKE RUG');
           tell('The rug is extremely heavy and cannot be carried.');
-          break;
+          return false;
         case 'look under':
           console.log('LOOK UNDER RUG');
           if (!Rug.value.flags.isMoved && !TrapDoor.value.flags.isOpen) {
@@ -632,7 +637,7 @@ export const Rug = ref(
               'Having moved the rug previously, there is nothing to see under it.'
             );
           }
-          break;
+          return false;
         case 'climb on':
           console.log('CLIMB ON RUG');
           if (!Rug.value.flags.isMoved && !TrapDoor.value.flags.isOpen) {
@@ -642,11 +647,11 @@ export const Rug = ref(
           } else {
             tell("I suppose you think it's a magic carpet?");
           }
-          break;
+          return false;
         default:
           // TODO: My sneaking suspicion is we'll need to return a single value
           // from the action function, and return false in the default state.
-          break;
+          return false;
       }
     },
   })

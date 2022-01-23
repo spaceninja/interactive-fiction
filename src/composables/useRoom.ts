@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 import Room from '../classes/Room';
-import { magicFlag, tell } from './game/useGame';
+import { magicFlag, tell, theVerb } from './game/useGame';
 import * as items from './useItem';
 
 export const Kitchen = ref(
@@ -14,9 +14,10 @@ export const Kitchen = ref(
     flags: { isOn: true },
     value: 10,
     global: ['stairs'],
-    action: (verb) => {
-      switch (verb) {
-        case 'look': {
+    action: () => {
+      console.log('KITCHEN HANDLER');
+      switch (theVerb.value) {
+        case 'Look': {
           tell(
             `You are in the kitchen of the white house.
              A table seems to have been used recently for the preparation of food.
@@ -28,9 +29,9 @@ export const Kitchen = ref(
           // TODO: ???
           // some sort of logic around climbing the stairs.
           // probably shouldn't live here
-          break;
+          return false;
         default:
-          break;
+          return false;
       }
     },
   })
@@ -64,9 +65,10 @@ export const LivingRoom = ref(
     global: ['stairs'],
     // TODO: handle pseudos
     pseudo: [{ name: 'nails' }, { name: 'nail' }],
-    action: (verb) => {
-      switch (verb) {
-        case 'look': {
+    action: () => {
+      console.log('LIVING ROOM HANDLER');
+      switch (theVerb.value) {
+        case 'Look': {
           let message =
             'You are in the living room. There is a doorway to the east';
           message += magicFlag.value
@@ -87,9 +89,9 @@ export const LivingRoom = ref(
         case 'end':
           // TODO: ???
           // some sort of complex logic involving the trophy case and the score
-          break;
+          return false;
         default:
-          break;
+          return false;
       }
     },
   })
@@ -106,9 +108,9 @@ export const Cellar = ref(
     flags: { isOn: false },
     value: 25,
     global: ['TrapDoor', 'stairs'],
-    action: (verb) => {
-      switch (verb) {
-        case 'look':
+    action: () => {
+      switch (theVerb.value) {
+        case 'Look':
           tell(
             `You are in a dark and damp cellar with a narrow passageway leading north.`
           );
@@ -116,9 +118,9 @@ export const Cellar = ref(
         case 'enter':
           // TODO: ???
           // some sort of complex logic involving the trap door closing
-          break;
+          return false;
         default:
-          break;
+          return false;
       }
     },
   })
@@ -135,14 +137,14 @@ export const TrollRoom = ref(
     description: `This is a small room with a forbidding hole leading west.
                   Bloodstains and deep scratches (perhaps made by an axe)
                   mar the walls.`,
-    action: (verb) => {
-      switch (verb) {
+    action: () => {
+      switch (theVerb.value) {
         case 'enter':
           // TODO: ???
           // some sort of complex logic involving the troll
-          break;
+          return false;
         default:
-          break;
+          return false;
       }
     },
   })

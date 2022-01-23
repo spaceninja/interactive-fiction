@@ -25,6 +25,7 @@ export const Look = ref(
     name: 'Look',
     synonym: ['look', 'l', 'stare', 'gaze'],
     action: () => {
+      console.log('LOOK!');
       const wasRoomDescribed = describeHere();
       if (wasRoomDescribed) describeHereObjects();
       return true;
@@ -55,18 +56,21 @@ export const Test = ref(
     synonym: ['test'],
     action: () => {
       // Try the direct item's handler
+      // @ts-ignore
       const itemTest = items[theDirect.value]?.value.test;
       const itemHandled = itemTest ? itemTest() : false;
       console.log('TEST as item', theDirect.value, itemHandled);
       if (itemHandled) return true;
 
       // Nothing else handled it, so pass to the verb
+      // @ts-ignore
       const verbTest = verbs[theDirect.value]?.value.test;
       const verbHandled = verbTest ? verbTest() : false;
       console.log('TEST as verb', theDirect.value, verbHandled);
       if (verbHandled) return true;
 
       // If it's not a verb, it might be a game verb
+      // @ts-ignore
       const gameVerbTest = gameVerbs[theDirect.value]?.value.test;
       const gameVerbHandled = gameVerbTest ? gameVerbTest() : false;
       console.log('TEST as game verb', theDirect.value, gameVerbHandled);
@@ -97,7 +101,7 @@ export const Score = ref(
       tell(scoreMessage);
       if (theScoreMax.value) {
         let scoreRank = 'Beginner';
-        let scorePercent = theScore.value / theScoreMax.value;
+        const scorePercent = theScore.value / theScoreMax.value;
         if (scorePercent > 0.05) scoreRank = 'Amateur Adventurer';
         if (scorePercent > 0.3) scoreRank = 'Novice Adventurer';
         if (scorePercent > 0.45) scoreRank = 'Junior Adventurer';
@@ -106,7 +110,7 @@ export const Score = ref(
         if (scorePercent > 0.9) scoreRank = 'Wizard';
         if (scorePercent === 1) scoreRank = 'Master Adventurer';
         if (scorePercent > 1) scoreRank = 'Double Wizard';
-        let rankMessage = `This gives you a rank of ${scoreRank}.`;
+        const rankMessage = `This gives you a rank of ${scoreRank}.`;
         tell(rankMessage);
       }
       return true;

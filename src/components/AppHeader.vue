@@ -17,7 +17,7 @@
   </header>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {
   here,
   theScore,
