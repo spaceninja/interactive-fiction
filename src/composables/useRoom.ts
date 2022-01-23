@@ -25,11 +25,6 @@ export const Kitchen = ref(
           );
           return true;
         }
-        case 'beginning':
-          // TODO: ???
-          // some sort of logic around climbing the stairs.
-          // probably shouldn't live here
-          return false;
         default:
           return false;
       }
@@ -86,10 +81,6 @@ export const LivingRoom = ref(
           tell(message);
           return true;
         }
-        case 'end':
-          // TODO: ???
-          // some sort of complex logic involving the trophy case and the score
-          return false;
         default:
           return false;
       }
@@ -115,10 +106,6 @@ export const Cellar = ref(
             `You are in a dark and damp cellar with a narrow passageway leading north.`
           );
           return true;
-        case 'enter':
-          // TODO: ???
-          // some sort of complex logic involving the trap door closing
-          return false;
         default:
           return false;
       }
@@ -139,10 +126,6 @@ export const TrollRoom = ref(
                   mar the walls.`,
     action: () => {
       switch (theVerb.value) {
-        case 'enter':
-          // TODO: ???
-          // some sort of complex logic involving the troll
-          return false;
         default:
           return false;
       }

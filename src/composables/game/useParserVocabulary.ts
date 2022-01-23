@@ -14,10 +14,10 @@ import * as items from '../useItem';
  */
 
 // This will catch any unrecognized words
-const StringLiteral = createToken({
-  name: 'StringLiteral',
-  pattern: /[a-zA-Z]\w*/,
-});
+// const StringLiteral = createToken({
+//   name: 'StringLiteral',
+//   pattern: /[a-zA-Z]\w*/,
+// });
 
 // These are categories for the tokens.
 const GameVerb = createToken({ name: 'GameVerb', pattern: Lexer.NA });
@@ -33,7 +33,7 @@ Object.entries(gameVerbs).forEach(([name, item]) => {
     createToken({
       name: name,
       pattern: new RegExp(`${i.synonym.join('|')}`, 'i'),
-      longer_alt: StringLiteral,
+      // longer_alt: StringLiteral,
       categories: [GameVerb],
     })
   );
@@ -48,7 +48,7 @@ Object.entries(verbs).forEach(([name, item]) => {
     createToken({
       name: name,
       pattern: new RegExp(`${i.synonym.join('|')}`, 'i'),
-      longer_alt: StringLiteral,
+      // longer_alt: StringLiteral,
       categories: [Verb],
     })
   );
@@ -66,7 +66,7 @@ Object.entries(items).forEach(([name, item]) => {
         `((${i.adjective?.join('|')}) )?(${i.synonym.join('|')})`,
         'i'
       ),
-      longer_alt: StringLiteral,
+      // longer_alt: StringLiteral,
       categories: [Noun],
     })
   );
@@ -77,7 +77,7 @@ const Integer = createToken({ name: 'Integer', pattern: /0|[1-9]\d*/ });
 const Buzzword = createToken({
   name: 'Buzzword',
   pattern: /an|at|a|the|is|of/i,
-  longer_alt: StringLiteral,
+  // longer_alt: StringLiteral,
   group: Lexer.SKIPPED,
 });
 const Punctuation = createToken({
@@ -109,7 +109,7 @@ export const allTokens = [
   Buzzword,
   Punctuation,
   // The StringLiteral must appear after the keywords because all keywords are valid identifiers.
-  StringLiteral,
+  // StringLiteral,
 ];
 
 // the vocabulary will be exported and used in the Parser definition.

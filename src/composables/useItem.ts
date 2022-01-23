@@ -221,6 +221,7 @@ export const Lamp = ref(
             tell("A burned-out lamp won't light");
             return true;
           }
+          // TODO: V-LAMP-ON
           // TODO: handle queued event
           // queue('iLantern');
           return false;
@@ -229,6 +230,7 @@ export const Lamp = ref(
             tell('The lamp has already burned out.');
             return true;
           }
+          // TODO: V-LAMP-OFF
           // TODO: handle removing queued event
           // dequeue('iLantern');
           return false;
@@ -525,7 +527,10 @@ export const OwnersManual = ref(
     description: "ZORK owner's manual",
     flags: { readBit: true, takeBit: true },
     initialDescription: 'Loosely attached to a wall is a small piece of paper.',
-    text: 'Congratulations! You are the privileged owner of ZORK I: The Great Underground Empire, a self-contained and self-maintaining universe. If used and maintained in accordance with normal operating practices for small universes, ZORK will provide many months of trouble-free operation.',
+    text: `Congratulations! You are the privileged owner of ZORK I:
+      The Great Underground Empire, a self-contained and self-maintaining universe.
+      If used and maintained in accordance with normal operating practices for
+      small universes, ZORK will provide many months of trouble-free operation.`,
     action: () => false,
   })
 );
@@ -649,8 +654,6 @@ export const Rug = ref(
           }
           return false;
         default:
-          // TODO: My sneaking suspicion is we'll need to return a single value
-          // from the action function, and return false in the default state.
           return false;
       }
     },

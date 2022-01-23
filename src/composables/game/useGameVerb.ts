@@ -23,7 +23,7 @@ import * as gameVerbs from './useGameVerb';
 export const Look = ref(
   new Verb({
     name: 'Look',
-    synonym: ['look', 'l', 'stare', 'gaze'],
+    synonym: ['look', 'stare', 'gaze'],
     action: () => {
       console.log('LOOK!');
       const wasRoomDescribed = describeHere();

@@ -121,9 +121,9 @@ export const handlePlayerInput = (command = playerInput.value) => {
 
   // Handle any parser errors
   if (parsedPlayerInput.error) {
-    console.error(parsedPlayerInput.error.message);
+    console.error(parsedPlayerInput.error);
     tell(
-      `Sorry, I don't understand the word “${parsedPlayerInput.error.token}.”`,
+      `You used the word “${parsedPlayerInput.error.token}” in a way that I don't understand.`,
       'error'
     );
     playerInput.value = ''; // clear the input bar

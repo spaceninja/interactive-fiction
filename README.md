@@ -6,6 +6,7 @@ This project is an attempt to create an Infocom-style text adventure game engine
 
 ## Game Sequence from Zork
 
+- [ ] Print game title/copyright/version/etc
 - [ ] Initialize game with GO
   - [ ] Set special global variables (WINNER, PLAYER, HERE, LIT, SCORE, SCORE-MAX, MOVES, PRSA, PRSO, PRSI)
   - [ ] Queue interrupts based on start of game
@@ -51,6 +52,22 @@ This project is an attempt to create an Infocom-style text adventure game engine
 - [x] Add LOOK (L) command
   - [x] Describe the room
   - [x] Describe items in the room
+- [ ] Add real objects for pseudo-objects
+  - [ ] Remove pseudo property
+- [ ] Add GO routine from 1dungeon
+  - [ ] Set intitial game state for critical variables
+- [ ] Translate useful VERB entries from Zork
+  - [ ] Add LOOK-BEHIND/LOOK-INSIDE/LOOK-ON/LOOK-UNDER commands
+  - [ ] Add MOVE command
+  - [ ] Add READ command
+  - [ ] Add SMELL command
+  - [ ] Add ATTACK command
+  - [ ] Add BLOW UP command
+- [ ] Translate useful GLOBAL entries from Zork
+  - [ ] Add STAIRS object?
+  - [ ] Add GROUND object?
+  - [ ] Add ME object?
+  - [ ] Add ADVENTURER object
 - [ ] Handle moving between rooms
   - [ ] Add GOTO and DO-WALK
   - [ ] Check if there is an exit in this direction
@@ -58,24 +75,34 @@ This project is an attempt to create an Infocom-style text adventure game engine
   - [ ] Set TOUCHED bit in new room
   - [ ] Call Room description
   - [ ] Add to score?
-- [ ] Translate useful SYNTAX entries from Zork
-- [ ] Translate useful VERB entries from Zork
-- [ ] Translate useful GLOBAL entries from Zork
 - [ ] Handle taking items
+  - [ ] Add ACCESSIBLE? check from gparser
+  - [ ] Add SEE-INSIDE? check from gverbs
+  - [ ] Add OPENABLE? check from gmacros
   - [ ] Add INVENTORY (I) command
+  - [ ] Add GET/TAKE/DROP/PUT/PUT-ON/PUT-UNDER/PUT-BEHIND commands
+  - [ ] "The object that you mentioned isn't here" response
+  - [ ] "There's nothing here you can take" response
 - [ ] Handle containers
   - [ ] Open/Close container
   - [ ] Surfaces
-- [ ] Handle lighting
-  - [ ] Items that emit light
-  - [ ] Rooms that are lit
-  - [ ] Affect room descriptions (check LIT in M-BEG?)
 - [ ] Handle doors
   - [ ] Handle locked/unlocked
   - [ ] Handle open/closed
 - [ ] Handle elevation changes
-  - [ ] Add stairs
-  - [ ] Add elevator
+  - [ ] Add stairs (? what's to handle?)
+  - [ ] Add elevator (? how does an elevator work?)
+  - [ ] Add rope
+  - [ ] Add CLIMB-DOWN/UP commands
+- [ ] Handle lighting
+  - [ ] Add candles?
+  - [ ] Add Lantern queue item
+  - [ ] Add LIT? check from gparser
+  - [ ] Add REMOVE-CAREFULLY method (handles lighting changes)
+  - [ ] Items that emit light
+  - [ ] Rooms that are lit
+  - [ ] Affect room descriptions (check LIT in M-BEG?)
+  - [ ] "It's too dark to see"/"It's not clear what you're referring to" responses
 - [ ] Add Brief/Verbose modes
   - [ ] Handle BRIEF, SUPERBRIEF, VERBOSE commands
 - [ ] Advanced parser
@@ -93,18 +120,27 @@ This project is an attempt to create an Infocom-style text adventure game engine
   - [ ] Pre: Call Room M-BEG action
   - [ ] Pre: Call pre-verb action
   - [ ] Post: Call Room M-END action
+  - [ ] Add HELD? check from gverbs
+  - [ ] "I don't see what you're referring to" response
 - [ ] Add Event System
   - [ ] Add CLOCKER
   - [ ] Add Interrupt routines
   - [ ] Add Queing
   - [ ] Add WAIT command
 - [ ] Add Actors
-  - [ ] Handle speaking to actors
+  - [ ] Handle speaking to actors V-SAY
   - [ ] Handle giving directions to actors
-- [ ] Add DIAGNOSE verb and command
-- [ ] Add JIGS-UP routine
+  - [ ] Add GIVE command
+- [ ] Add Fighting
+  - [ ] Add ATTACK/STAB/STRIKE/THROW commands
+  - [ ] Add DIAGNOSE verb and command
+  - [ ] Add JIGS-UP routine
+- [ ] Add Vehicles
+  - [ ] Updates to describe routines
+  - [ ] Add BOARD/CLIMB-ON/DISEMBARK/EXIT commands
 - [ ] Add SAVE/RESTORE
   - [ ] Add AUTOSAVE
   - [ ] Add UNDO
   - [ ] Add QUIT
+  - [ ] Add FINISH
   - [ ] Add RESTART
