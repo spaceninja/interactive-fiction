@@ -97,7 +97,7 @@ export const Score = ref(
       tell(scoreMessage);
       if (theScoreMax.value) {
         let scoreRank = 'Beginner';
-        let scorePercent = theScore.value / theScoreMax.value;
+        const scorePercent = theScore.value / theScoreMax.value;
         if (scorePercent > 0.05) scoreRank = 'Amateur Adventurer';
         if (scorePercent > 0.3) scoreRank = 'Novice Adventurer';
         if (scorePercent > 0.45) scoreRank = 'Junior Adventurer';
@@ -106,7 +106,7 @@ export const Score = ref(
         if (scorePercent > 0.9) scoreRank = 'Wizard';
         if (scorePercent === 1) scoreRank = 'Master Adventurer';
         if (scorePercent > 1) scoreRank = 'Double Wizard';
-        let rankMessage = `This gives you a rank of ${scoreRank}.`;
+        const rankMessage = `This gives you a rank of ${scoreRank}.`;
         tell(rankMessage);
       }
       return true;

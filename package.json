@@ -1,5 +1,5 @@
 {
-  "name": "interactive-fiction",
+  "name": "interactive-fiction-typescript",
   "version": "0.1.0",
   "main": "index.js",
   "repository": "git@github.com:spaceninja/interactive-fiction.git",
@@ -7,8 +7,9 @@
   "license": "MIT",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "serve": "vite preview",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "type-check": "vue-tsc --noEmit",
     "lint": "run-s lint:js lint:css lint:prettier",
     "lint:check": "run-s lint:*:check",
     "lint:js": "eslint . --fix",
@@ -20,12 +21,14 @@
   },
   "dependencies": {
     "chevrotain": "^10.0.0",
-    "vue": "^3.2.26"
+    "vue": "^3.2.25"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "2.1.0",
+    "@typescript-eslint/eslint-plugin": "^5.10.0",
+    "@typescript-eslint/parser": "^5.10.0",
+    "@vitejs/plugin-vue": "^2.0.0",
     "@vue/compiler-sfc": "3.2.28",
-    "eslint": "8.7.0",
+    "eslint": "^8.7.0",
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-vue": "8.3.0",
     "npm-run-all": "4.1.5",
@@ -36,6 +39,8 @@
     "stylelint-config-prettier": "9.0.3",
     "stylelint-config-recommended-vue": "1.1.0",
     "stylelint-config-spaceninja": "9.0.1",
-    "vite": "2.7.13"
+    "typescript": "^4.5.5",
+    "vite": "^2.7.2",
+    "vue-tsc": "^0.29.8"
   }
 }

@@ -9,7 +9,7 @@ import * as items from '../useItem';
  * @param {string} containerId - ID of the container to search
  * @returns array
  */
-export const getContents = (containerId) => {
+export const getContents = (containerId: string) => {
   return Object.values(items)
     .filter((item) => item.value.location === containerId)
     .sort((a, b) => {

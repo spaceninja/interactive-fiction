@@ -3,5 +3,5 @@
  * @param {array} array
  * @returns any
  */
-export const pickOne = (array) =>
+export const pickOne = (array: string[]) =>
   array[Math.floor(Math.random() * array.length)];

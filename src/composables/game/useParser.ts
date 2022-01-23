@@ -16,43 +16,42 @@ const playerInputLexer = new Lexer(allTokens);
 class playerInputParser extends CstParser {
   constructor() {
     super(tokenVocabulary);
-    const $ = this;
 
     // TODO: is there a way to move these to a separate file?
 
-    $.RULE('magic', () => {
-      $.OR([
-        { ALT: () => $.SUBRULE($.score) },
-        { ALT: () => $.SUBRULE($.look) },
-        { ALT: () => $.SUBRULE($.test) },
-        { ALT: () => $.SUBRULE($.verbNoun) },
+    this.RULE('magic', () => {
+      this.OR([
+        { ALT: () => this.SUBRULE(this.score) },
+        { ALT: () => this.SUBRULE(this.look) },
+        { ALT: () => this.SUBRULE(this.test) },
+        { ALT: () => this.SUBRULE(this.verbNoun) },
       ]);
     });
 
-    $.RULE('score', () => {
-      $.CONSUME(tokenVocabulary.Score);
+    this.RULE('score', () => {
+      this.CONSUME(tokenVocabulary.Score);
     });
 
-    $.RULE('look', () => {
-      $.CONSUME(tokenVocabulary.Look);
+    this.RULE('look', () => {
+      this.CONSUME(tokenVocabulary.Look);
     });
 
-    $.RULE('test', () => {
-      $.CONSUME(tokenVocabulary.Test);
-      $.OR([
-        { ALT: () => $.CONSUME(tokenVocabulary.GameVerb) },
-        { ALT: () => $.CONSUME(tokenVocabulary.Verb) },
-        { ALT: () => $.CONSUME(tokenVocabulary.Noun) },
+    this.RULE('test', () => {
+      this.CONSUME(tokenVocabulary.Test);
+      this.OR([
+        { ALT: () => this.CONSUME(tokenVocabulary.GameVerb) },
+        { ALT: () => this.CONSUME(tokenVocabulary.Verb) },
+        { ALT: () => this.CONSUME(tokenVocabulary.Noun) },
       ]);
     });
 
     // our fallback is a simple two word parser
-    $.RULE('verbNoun', () => {
-      $.CONSUME(tokenVocabulary.Verb);
-      $.CONSUME(tokenVocabulary.Noun);
+    this.RULE('verbNoun', () => {
+      this.CONSUME(tokenVocabulary.Verb);
+      this.CONSUME(tokenVocabulary.Noun);
     });
 
-    $.performSelfAnalysis(); // 1
+    this.performSelfAnalysis(); // 1
   }
 }
 
@@ -114,7 +113,7 @@ class PlayerInputVisitor extends parserInstance.getBaseCstVisitorConstructor() {
   }
 
   test(ctx) {
-    let noun = false;
+    let noun = {};
 
     if (ctx.GameVerb) {
       noun = {

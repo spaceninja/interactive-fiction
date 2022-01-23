@@ -6,7 +6,7 @@
   <button type="button" @click="testParser">Test Parser</button>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {
   magicFlag,
   theVerb,

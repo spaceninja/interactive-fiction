@@ -10,13 +10,13 @@
   </ul>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { watch, nextTick } from 'vue';
 import { theOutput } from '../composables/game/useGame';
 
 const scrollToBottom = () => {
   const lastOutputEl = document.querySelector('.app-output :last-child');
-  lastOutputEl.scrollIntoView({ behavior: 'smooth' });
+  lastOutputEl?.scrollIntoView({ behavior: 'smooth' });
 };
 
 watch(

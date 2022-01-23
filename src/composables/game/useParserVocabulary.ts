@@ -25,7 +25,7 @@ const Verb = createToken({ name: 'Verb', pattern: Lexer.NA });
 const Noun = createToken({ name: 'Noun', pattern: Lexer.NA });
 
 // Generate Tokens for Each Game Verb
-let gameVerbTokens = [];
+const gameVerbTokens = [];
 Object.entries(gameVerbs).forEach(([name, item]) => {
   const i = item.value;
   gameVerbTokens.push(
@@ -39,7 +39,7 @@ Object.entries(gameVerbs).forEach(([name, item]) => {
 });
 
 // Generate Tokens for Each Verb
-let verbTokens = [];
+const verbTokens = [];
 Object.entries(verbs).forEach(([name, item]) => {
   const i = item.value;
   verbTokens.push(
@@ -53,7 +53,7 @@ Object.entries(verbs).forEach(([name, item]) => {
 });
 
 // Generate Tokens for Each Item
-let itemTokens = [];
+const itemTokens = [];
 Object.entries(items).forEach(([name, item]) => {
   const i = item.value;
   itemTokens.push(

@@ -3,12 +3,13 @@ import { pickOne } from '../../helpers/pickOne';
 import { uuid } from '../../helpers/uuid';
 import * as items from '../useItem';
 import * as verbs from '../useVerb';
+import * as rooms from '../useRoom';
 import * as gameVerbs from './useGameVerb';
 import { parser } from './useParser';
 
-export const here = ref('');
+export const here = ref(rooms.Kitchen.value);
 export const theScore = ref(0);
-export const theScoreMax = ref(null);
+export const theScoreMax = ref<number | null>(null);
 export const theMoves = ref(0);
 export const showHelp = ref(false);
 
@@ -16,7 +17,7 @@ export const playerInput = ref('');
 export const theVerb = ref('');
 export const theDirect = ref('');
 export const theIndirect = ref('');
-export const theOutput = ref([]);
+export const theOutput = ref<Record<string, unknown>[]>([]);
 export const it = ref('');
 
 export const magicFlag = ref(false);
@@ -38,10 +39,10 @@ export const evaluate = () => {
  *
  * Adds text to the on-screen output.
  *
- * @param {string} message - the text to display.
- * @param {string} className - a CSS class to add to the text.
+ * @param message - the text to display.
+ * @param className - a CSS class to add to the text.
  */
-export const tell = (message, className) => {
+export const tell = (message: string, className?: string) => {
   theOutput.value.push({ message, className, key: uuid() });
 };
 
@@ -62,7 +63,7 @@ export const tell = (message, className) => {
  * @param {string} i - the Indirect Noun receives the direct item.
  * @returns boolean
  */
-export const perform = (v = false, d = false, i = false) => {
+export const perform = (v = '', d = '', i = '') => {
   console.log('PERFORM', v, d, i);
 
   // Save the tokens to their global variables
@@ -143,7 +144,12 @@ export const handlePlayerInput = (command = playerInput.value) => {
  * @param {string} openMessage - the message to show when opening.
  * @param {string} closeMessage - the messgage to show when closing.
  */
-export const openClose = (item, verb, openMessage, closeMessage) => {
+export const openClose = (
+  item,
+  verb: string,
+  openMessage: string,
+  closeMessage: string
+) => {
   if (verb === 'open') {
     if (item.value.flags.isOpen) {
       tell(pickOne(dummyMessages));

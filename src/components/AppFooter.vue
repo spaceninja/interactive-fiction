@@ -4,6 +4,6 @@
   </footer>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import AppDebug from './AppDebug.vue';
 </script>
