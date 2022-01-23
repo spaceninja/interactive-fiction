@@ -175,3 +175,13 @@ export const openClose = (
     tell(closeMessage);
   }
 };
+
+/**
+ * Initialize the Game
+ * Used to set or reset the initial state of the game, print the version
+ * info, and perform a `LOOK` command for the player.
+ */
+export const init = () => {
+  here.value = rooms.Kitchen.value;
+  perform('Look');
+};
