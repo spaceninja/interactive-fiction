@@ -25,6 +25,7 @@ const Verb = createToken({ name: 'Verb', pattern: Lexer.NA });
 const Noun = createToken({ name: 'Noun', pattern: Lexer.NA });
 
 // Generate Tokens for Each Game Verb
+// @ts-ignore
 const gameVerbTokens = [];
 Object.entries(gameVerbs).forEach(([name, item]) => {
   const i = item.value;
@@ -39,6 +40,7 @@ Object.entries(gameVerbs).forEach(([name, item]) => {
 });
 
 // Generate Tokens for Each Verb
+// @ts-ignore
 const verbTokens = [];
 Object.entries(verbs).forEach(([name, item]) => {
   const i = item.value;
@@ -53,6 +55,7 @@ Object.entries(verbs).forEach(([name, item]) => {
 });
 
 // Generate Tokens for Each Item
+// @ts-ignore
 const itemTokens = [];
 Object.entries(items).forEach(([name, item]) => {
   const i = item.value;
@@ -93,8 +96,11 @@ export const allTokens = [
   // WhiteSpace comes first as it is very common thus it will speed up the lexer.
   WhiteSpace,
   // "keywords" appear before the StringLiteral
+  // @ts-ignore
   ...gameVerbTokens,
+  // @ts-ignore
   ...verbTokens,
+  // @ts-ignore
   ...itemTokens,
   GameVerb,
   Verb,
@@ -109,5 +115,6 @@ export const allTokens = [
 // the vocabulary will be exported and used in the Parser definition.
 export const tokenVocabulary = {};
 allTokens.forEach((tokenType) => {
+  // @ts-ignore
   tokenVocabulary[tokenType.name] = tokenType;
 });

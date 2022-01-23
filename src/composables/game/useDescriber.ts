@@ -33,6 +33,7 @@ export const getContents = (containerId: string) => {
  * @param {object} item - The object to describe.
  * @param {number} level - How many levels of nesting containers this object is in.
  */
+// @ts-ignore
 export const describeObject = (item, level = 0) => {
   console.group(`DESCRIBE OBJECT: ${item.value.id}, level ${level}`);
   if (level < 1) {
@@ -76,6 +77,7 @@ export const describeObject = (item, level = 0) => {
  * @param {number} level - How many levels of nesting containers this object is in.
  * @returns boolean
  */
+// @ts-ignore
 const describeContents = (container, level = 0) => {
   console.group(`PRINT CONTENTS: ${container}, level ${level}`);
   // get all items with this container set as their locations
@@ -140,6 +142,7 @@ const describeContents = (container, level = 0) => {
  * @param {object} container - the container to introduce
  * @param {number} level - How many levels of nesting containers this container is in.
  */
+// @ts-ignore
 const containerListIntro = (container, level = 0) => {
   console.group(`CONTAINER LIST INTRO, ${container.value.id}, level ${level}`);
   // if (container.value.id === Winner.value.id) {
@@ -196,6 +199,6 @@ export const describeHere = () => {
     return true;
   }
 
-  here.value.action('look');
+  here.value.action();
   return true;
 };

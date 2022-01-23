@@ -36,6 +36,7 @@ export const Examine = ref(
     name: 'Examine',
     synonym: ['examine', 'describe', 'what', 'whats', 'look at'],
     action: () => {
+      // @ts-ignore
       const item = items[theDirect.value].value;
       if (item.text) {
         tell(item.text);

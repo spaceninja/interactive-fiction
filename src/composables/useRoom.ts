@@ -15,8 +15,9 @@ export const Kitchen = ref(
     value: 10,
     global: ['stairs'],
     action: () => {
+      console.log('KITCHEN HANDLER');
       switch (theVerb.value) {
-        case 'look': {
+        case 'Look': {
           tell(
             `You are in the kitchen of the white house.
              A table seems to have been used recently for the preparation of food.
@@ -65,8 +66,9 @@ export const LivingRoom = ref(
     // TODO: handle pseudos
     pseudo: [{ name: 'nails' }, { name: 'nail' }],
     action: () => {
+      console.log('LIVING ROOM HANDLER');
       switch (theVerb.value) {
-        case 'look': {
+        case 'Look': {
           let message =
             'You are in the living room. There is a doorway to the east';
           message += magicFlag.value
@@ -108,7 +110,7 @@ export const Cellar = ref(
     global: ['TrapDoor', 'stairs'],
     action: () => {
       switch (theVerb.value) {
-        case 'look':
+        case 'Look':
           tell(
             `You are in a dark and damp cellar with a narrow passageway leading north.`
           );

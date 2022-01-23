@@ -19,6 +19,7 @@ module.exports = {
       'always',
       { exceptAfterSingleLine: true },
     ],
+    '@typescript-eslint/ban-ts-comment': 'off',
   },
   overrides: [
     {

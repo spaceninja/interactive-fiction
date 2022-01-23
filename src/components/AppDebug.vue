@@ -8,40 +8,40 @@
 
 <script setup lang="ts">
 import {
+  here,
   magicFlag,
   theVerb,
   theDirect,
   theIndirect,
 } from '../composables/game/useGame';
-import * as items from '../composables/useItem';
 import * as rooms from '../composables/useRoom';
 import { tokenVocabulary } from '../composables/game/useParserVocabulary';
 import { handlePlayerInput } from '../composables/game/useGame';
 
 const testRoom = () => {
-  rooms.LivingRoom.value.action('look');
+  here.value = rooms.LivingRoom.value;
+  handlePlayerInput('look');
 
-  items.Rug.value.action('take');
-  items.Rug.value.action('climb on');
-  items.Rug.value.action('raise');
-  items.Rug.value.action('look under');
-  items.Rug.value.action('move');
+  handlePlayerInput('take rug');
+  handlePlayerInput('climb on rug');
+  handlePlayerInput('raise rug');
+  handlePlayerInput('look under rug');
+  handlePlayerInput('move rug');
 
-  rooms.LivingRoom.value.action('look');
+  handlePlayerInput('look');
 
-  items.Rug.value.action('climb on');
-  items.Rug.value.action('raise');
-  items.Rug.value.action('look under');
-  items.Rug.value.action('move');
+  handlePlayerInput('climb on rug');
+  handlePlayerInput('raise rug');
+  handlePlayerInput('look under rug');
+  handlePlayerInput('move rug');
 
-  items.TrapDoor.value.action('look under');
-  items.TrapDoor.value.action('raise');
-  items.TrapDoor.value.action('look under');
-  items.TrapDoor.value.action('close');
+  handlePlayerInput('look under trap door');
+  handlePlayerInput('raise trap door');
+  handlePlayerInput('look under trap door');
+  handlePlayerInput('close trap door');
 
   magicFlag.value = true;
-
-  rooms.LivingRoom.value.action('look');
+  handlePlayerInput('look');
 };
 
 const testParser = () => {
