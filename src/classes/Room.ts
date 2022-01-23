@@ -8,7 +8,6 @@ export default class Room extends Item {
   declare value?: number;
   declare flags: Record<string, unknown>;
   exits: Record<string, unknown>;
-  pseudo?: Array<object>;
   global?: Array<string>;
 
   /**
@@ -32,7 +31,6 @@ export default class Room extends Item {
    * @param props.exits.down
    * @param props.exits.inward
    * @param props.exits.out Only meaningful for rooms with one exit.
-   * @param props.pseudo List of pseudo items in the room.
    * @param props.global List of local-global items in the room.
    */
   constructor({
@@ -43,7 +41,6 @@ export default class Room extends Item {
     value,
     flags,
     exits,
-    pseudo,
     global,
   }: {
     name: string;
@@ -53,7 +50,6 @@ export default class Room extends Item {
     value?: number;
     flags: Record<string, unknown>;
     exits: Record<string, unknown>;
-    pseudo?: Array<object>;
     global?: Array<string>;
   }) {
     super({
@@ -67,7 +63,6 @@ export default class Room extends Item {
       flags,
     });
     this.exits = exits;
-    this.pseudo = pseudo;
     this.global = global;
   }
 }

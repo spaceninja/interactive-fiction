@@ -52,8 +52,8 @@ This project is an attempt to create an Infocom-style text adventure game engine
 - [x] Add LOOK (L) command
   - [x] Describe the room
   - [x] Describe items in the room
-- [ ] Add real objects for pseudo-objects
-  - [ ] Remove pseudo property
+- [x] Add real objects for pseudo-objects
+  - [x] Remove pseudo property
 - [ ] Add GO routine from 1dungeon
   - [ ] Set intitial game state for critical variables
 - [ ] Translate useful VERB entries from Zork

@@ -7,7 +7,7 @@ import * as rooms from '../useRoom';
 import * as gameVerbs from './useGameVerb';
 import { parser } from './useParser';
 
-export const here = ref(rooms.Kitchen.value);
+export const here = ref(rooms.LivingRoom.value);
 export const theScore = ref(0);
 export const theScoreMax = ref<number | null>(null);
 export const theMoves = ref(0);

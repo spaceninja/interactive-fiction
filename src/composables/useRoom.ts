@@ -58,8 +58,6 @@ export const LivingRoom = ref(
     },
     flags: { isOn: true },
     global: ['stairs'],
-    // TODO: handle pseudos
-    pseudo: [{ name: 'nails' }, { name: 'nail' }],
     action: () => {
       console.log('LIVING ROOM HANDLER');
       switch (theVerb.value) {

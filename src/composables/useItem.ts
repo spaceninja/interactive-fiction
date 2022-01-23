@@ -192,6 +192,25 @@ export const Map = ref(
   })
 );
 
+export const Nails = ref(
+  new Item({
+    name: 'nails',
+    id: 'Nails',
+    location: 'LivingRoom',
+    synonym: ['nails', 'nail'],
+    flags: { doNotDescribe: true },
+    action: () => {
+      switch (theVerb.value) {
+        case 'Take':
+          tell('The nails, deeply embedded in the door, cannot be removed.');
+          return true;
+        default:
+          return false;
+      }
+    },
+  })
+);
+
 export const Lamp = ref(
   new Item({
     name: 'brass lantern',
