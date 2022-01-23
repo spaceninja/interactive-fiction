@@ -1,6 +1,6 @@
 <template>
   <header class="app-header">
-    <span class="app-header__location">{{ here.value.name }}</span>
+    <span class="app-header__location">{{ here.name }}</span>
     <span class="app-header__score"
       >Score: {{ theScore }}
       <span v-if="theScoreMax" class="app-header__score-max"
