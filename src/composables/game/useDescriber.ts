@@ -15,13 +15,6 @@ export const getContents = (containerId: string) => {
     .sort((a, b) => {
       if (!a.value.priority) a.value.priority = 0;
       if (!b.value.priority) b.value.priority = 0;
-      console.log(
-        'SORT',
-        a.value.id,
-        a.value.priority,
-        b.value.id,
-        b.value.priority
-      );
       return b.value.priority - a.value.priority;
     });
 };

@@ -2,6 +2,16 @@ import { createToken, Lexer } from 'chevrotain';
 import * as gameVerbs from './useGameVerb';
 import * as verbs from '../useVerb';
 import * as items from '../useItem';
+console.log('VERBS', verbs);
+
+const sortedVerbs = Object.values(verbs)
+  .sort((a, b) => {
+    if (!a.value.priority) a.value.priority = 0;
+    if (!b.value.priority) b.value.priority = 0;
+    return b.value.priority - a.value.priority;
+  })
+  .reduce((acc, cur) => ({ ...acc, [cur.value.name]: cur }), {});
+console.log('SORTED VERBS', sortedVerbs);
 
 /**
  * Create Vocabulary Tokens
@@ -24,6 +34,23 @@ const GameVerb = createToken({ name: 'GameVerb', pattern: Lexer.NA });
 const Verb = createToken({ name: 'Verb', pattern: Lexer.NA });
 const Noun = createToken({ name: 'Noun', pattern: Lexer.NA });
 
+// Generate Tokens for Each Verb
+// @ts-ignore
+const verbTokens = [];
+Object.entries(sortedVerbs).forEach(([name, item]) => {
+  // @ts-ignore
+  const i = item.value;
+  verbTokens.push(
+    createToken({
+      name: name,
+      pattern: new RegExp(`${i.synonym.join('|')}`, 'i'),
+      longer_alt: StringLiteral,
+      categories: [Verb],
+    })
+  );
+});
+console.log('VERB TOKENS', verbTokens);
+
 // Generate Tokens for Each Game Verb
 // @ts-ignore
 const gameVerbTokens = [];
@@ -35,21 +62,6 @@ Object.entries(gameVerbs).forEach(([name, item]) => {
       pattern: new RegExp(`${i.synonym.join('|')}`, 'i'),
       longer_alt: StringLiteral,
       categories: [GameVerb],
-    })
-  );
-});
-
-// Generate Tokens for Each Verb
-// @ts-ignore
-const verbTokens = [];
-Object.entries(verbs).forEach(([name, item]) => {
-  const i = item.value;
-  verbTokens.push(
-    createToken({
-      name: name,
-      pattern: new RegExp(`${i.synonym.join('|')}`, 'i'),
-      longer_alt: StringLiteral,
-      categories: [Verb],
     })
   );
 });
@@ -76,7 +88,7 @@ Object.entries(items).forEach(([name, item]) => {
 const Integer = createToken({ name: 'Integer', pattern: /0|[1-9]\d*/ });
 const Buzzword = createToken({
   name: 'Buzzword',
-  pattern: /an|at|a|the|is|of/i,
+  pattern: /an|at|a|the|is|of|to/i,
   longer_alt: StringLiteral,
   group: Lexer.SKIPPED,
 });
@@ -97,9 +109,9 @@ export const allTokens = [
   WhiteSpace,
   // "keywords" appear before the StringLiteral
   // @ts-ignore
-  ...gameVerbTokens,
-  // @ts-ignore
   ...verbTokens,
+  // @ts-ignore
+  ...gameVerbTokens,
   // @ts-ignore
   ...itemTokens,
   GameVerb,

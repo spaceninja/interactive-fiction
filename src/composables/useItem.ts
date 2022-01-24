@@ -8,6 +8,7 @@ import {
   tell,
   dummyMessages,
   theDirect,
+  perform,
 } from './game/useGame';
 
 /*
@@ -565,13 +566,17 @@ export const TrapDoor = ref(
     action: () => {
       console.log('Trap Door Handler', theVerb.value);
       switch (theVerb.value) {
-        case 'raise':
-        case 'unlock':
-          // TODO: replace with PERFORM
-          // TrapDoor.value.action('open');
-          return false;
-        case 'open':
-        case 'close':
+        case 'Raise':
+        case 'Unlock':
+        case 'Push':
+        case 'Move':
+          perform(
+            TrapDoor.value.flags.isOpen ? 'Close' : 'Open',
+            TrapDoor.value.id
+          );
+          return true;
+        case 'Open':
+        case 'Close':
           console.log('OPEN OR CLOSE TRAP DOOR');
           if (here.value.id === 'LivingRoom') {
             openClose(
@@ -582,7 +587,7 @@ export const TrapDoor = ref(
             );
           } else if (here.value.id === 'Cellar') {
             if (!TrapDoor.value.flags.isOpen) {
-              if (theVerb.value === 'open') {
+              if (theVerb.value === 'Open') {
                 tell('The door is locked from above.');
               } else {
                 TrapDoor.value.flags.isTouched = false;
@@ -592,7 +597,7 @@ export const TrapDoor = ref(
               tell(pickOne(dummyMessages));
             }
           }
-          return false;
+          return true;
         case 'LookUnder':
         case 'LookInside':
           console.log('LOOK UNDER TRAP DOOR', here.value.name);
@@ -620,7 +625,7 @@ export const Rug = ref(
     flags: { doNotDescribe: true, tryTakeBit: true, isMoved: false },
     action: () => {
       switch (theVerb.value) {
-        case 'raise':
+        case 'Raise':
           console.log('RAISE RUG');
           tell(
             `The rug is too heavy to lift${
@@ -630,8 +635,8 @@ export const Rug = ref(
             }`
           );
           return false;
-        case 'move':
-        case 'push':
+        case 'Move':
+        case 'Push':
           console.log('MOVE OR PUSH RUG');
           if (Rug.value.flags.isMoved) {
             tell(
@@ -645,12 +650,12 @@ export const Rug = ref(
             TrapDoor.value.flags.isInvisible = false;
             // this-is-it trap-door
           }
-          return false;
-        case 'take':
+          return true;
+        case 'Take':
           console.log('TAKE RUG');
           tell('The rug is extremely heavy and cannot be carried.');
-          return false;
-        case 'look under':
+          return true;
+        case 'LookUnder':
           console.log('LOOK UNDER RUG');
           if (!Rug.value.flags.isMoved && !TrapDoor.value.flags.isOpen) {
             tell(
@@ -661,8 +666,8 @@ export const Rug = ref(
               'Having moved the rug previously, there is nothing to see under it.'
             );
           }
-          return false;
-        case 'climb on':
+          return true;
+        case 'ClimbOn':
           console.log('CLIMB ON RUG');
           if (!Rug.value.flags.isMoved && !TrapDoor.value.flags.isOpen) {
             tell(
@@ -671,7 +676,7 @@ export const Rug = ref(
           } else {
             tell("I suppose you think it's a magic carpet?");
           }
-          return false;
+          return true;
         default:
           return false;
       }

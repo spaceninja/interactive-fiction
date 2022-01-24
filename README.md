@@ -56,13 +56,12 @@ This project is an attempt to create an Infocom-style text adventure game engine
   - [x] Remove pseudo property
 - [x] Add GO routine from 1dungeon
   - [x] Set intitial game state for critical variables
-- [ ] Translate useful VERB entries from Zork
-  - [ ] Add LOOK-BEHIND/LOOK-INSIDE/LOOK-ON/LOOK-UNDER commands
-  - [ ] Add MOVE command
-  - [ ] Add READ command
-  - [ ] Add SMELL command
-  - [ ] Add ATTACK command
-  - [ ] Add BLOW UP command
+- [x] Translate useful VERB entries from Zork
+  - [x] Add LOOK-BEHIND/LOOK-ON/LOOK-UNDER commands
+  - [x] Add MOVE command
+  - [x] Add READ command
+  - [x] Add SMELL command
+  - [x] Add ATTACK command
 - [ ] Translate useful GLOBAL entries from Zork
   - [ ] Add STAIRS object?
   - [ ] Add GROUND object?
@@ -86,6 +85,7 @@ This project is an attempt to create an Infocom-style text adventure game engine
 - [ ] Handle containers
   - [ ] Open/Close container
   - [ ] Surfaces
+  - [ ] Add LOOK-INSIDE command
 - [ ] Handle doors
   - [ ] Handle locked/unlocked
   - [ ] Handle open/closed

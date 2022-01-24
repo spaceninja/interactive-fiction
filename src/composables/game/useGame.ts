@@ -157,7 +157,7 @@ export const openClose = (
   openMessage: string,
   closeMessage: string
 ) => {
-  if (verb === 'open') {
+  if (verb === 'Open') {
     if (item.value.flags.isOpen) {
       tell(pickOne(dummyMessages));
       return;
@@ -182,6 +182,7 @@ export const openClose = (
  * info, and perform a `LOOK` command for the player.
  */
 export const init = () => {
-  here.value = rooms.Kitchen.value;
+  here.value = rooms.LivingRoom.value;
+  here.value.flags.isOn = true;
   perform('Look');
 };

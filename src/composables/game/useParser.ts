@@ -55,12 +55,14 @@ class playerInputParser extends CstParser {
       ]);
     });
 
-    // our fallback is a simple two word parser
+    // our fallback is a simple two-three word parser
     this.RULE('verbNoun', () => {
       // @ts-ignore
       this.CONSUME(tokenVocabulary.Verb);
-      // @ts-ignore
-      this.CONSUME(tokenVocabulary.Noun);
+      this.AT_LEAST_ONE(() => {
+        // @ts-ignore
+        this.CONSUME(tokenVocabulary.Noun);
+      });
     });
 
     this.performSelfAnalysis(); // 1
@@ -172,6 +174,10 @@ class PlayerInputVisitor extends parserInstance.getBaseCstVisitorConstructor() {
       noun: {
         input: ctx.Noun[0].image,
         name: ctx.Noun[0].tokenType.name,
+      },
+      indirect: {
+        input: ctx.Noun[1]?.image,
+        name: ctx.Noun[1]?.tokenType.name,
       },
     };
   }
