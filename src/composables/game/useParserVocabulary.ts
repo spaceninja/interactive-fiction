@@ -89,7 +89,7 @@ Object.entries(items).forEach(([name, item]) => {
 const Integer = createToken({ name: 'Integer', pattern: /0|[1-9]\d*/ });
 const Buzzword = createToken({
   name: 'Buzzword',
-  pattern: /an|at|a|the|is|of|to/i,
+  pattern: /an|at|a|the|is|of|to|with/i,
   longer_alt: StringLiteral,
   group: Lexer.SKIPPED,
 });
@@ -110,11 +110,11 @@ export const allTokens = [
   WhiteSpace,
   // "keywords" appear before the StringLiteral
   // @ts-ignore
+  ...itemTokens,
+  // @ts-ignore
   ...verbTokens,
   // @ts-ignore
   ...gameVerbTokens,
-  // @ts-ignore
-  ...itemTokens,
   GameVerb,
   Verb,
   Noun,

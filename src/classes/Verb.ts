@@ -2,7 +2,7 @@ export default class Verb {
   name: string;
   synonym: Array<string>;
   action: () => boolean;
-  test?: () => void;
+  test?: () => boolean;
   priority?: number;
 
   /**
@@ -23,7 +23,7 @@ export default class Verb {
     name: string;
     synonym: Array<string>;
     action: () => boolean;
-    test?: () => void;
+    test?: () => boolean;
     priority?: number;
   }) {
     this.name = name;

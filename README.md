@@ -103,6 +103,7 @@ This project is an attempt to create an Infocom-style text adventure game engine
 - [ ] Add Brief/Verbose modes
   - [ ] Handle BRIEF, SUPERBRIEF, VERBOSE commands
 - [ ] Advanced parser
+  - [ ] Bug: "move rug to table" syntax does not trigger pushto because rug:move
   - [ ] Syntax tokens:
     - HAVE, TAKE, MANY, EVERYWHERE, ADJACENT, HELD, CARRIED, ON-GROUND, IN-ROOM
   - [ ] Switch syntaxes

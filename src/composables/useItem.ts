@@ -9,7 +9,9 @@ import {
   dummyMessages,
   theDirect,
   perform,
+  handlePlayerInput,
 } from './game/useGame';
+import * as rooms from './useRoom';
 
 /*
 export const Something = ref(
@@ -267,6 +269,15 @@ export const Lamp = ref(
           return false;
       }
     },
+    test: () => {
+      handlePlayerInput('examine brass lantern');
+      handlePlayerInput('turn on brass lantern');
+      handlePlayerInput('examine brass lantern');
+      handlePlayerInput('turn off brass lantern');
+      handlePlayerInput('throw brass lantern');
+      handlePlayerInput('examine brass lantern');
+      return true;
+    },
   })
 );
 
@@ -313,6 +324,13 @@ export const WoodenDoor = ref(
         default:
           return false;
       }
+    },
+    test: () => {
+      handlePlayerInput('open strange door');
+      handlePlayerInput('burn strange door');
+      handlePlayerInput('destroy strange door');
+      handlePlayerInput('look behind strange door');
+      return true;
     },
   })
 );
@@ -612,6 +630,14 @@ export const TrapDoor = ref(
           return false;
       }
     },
+    test: () => {
+      here.value = rooms.LivingRoom.value;
+      handlePlayerInput('look under trap door');
+      handlePlayerInput('move trap door');
+      handlePlayerInput('look under trap door');
+      handlePlayerInput('push trap door');
+      return true;
+    },
   })
 );
 
@@ -624,6 +650,7 @@ export const Rug = ref(
     adjective: ['large', 'oriental'],
     flags: { doNotDescribe: true, tryTakeBit: true, isMoved: false },
     action: () => {
+      console.log('Rug Handler', theVerb.value);
       switch (theVerb.value) {
         case 'Raise':
           console.log('RAISE RUG');
@@ -680,6 +707,18 @@ export const Rug = ref(
         default:
           return false;
       }
+    },
+    test: () => {
+      handlePlayerInput('take rug');
+      handlePlayerInput('climb on rug');
+      handlePlayerInput('raise rug');
+      handlePlayerInput('look under rug');
+      handlePlayerInput('move rug');
+      handlePlayerInput('climb on rug');
+      handlePlayerInput('raise rug');
+      handlePlayerInput('look under rug');
+      handlePlayerInput('move rug');
+      return true;
     },
   })
 );

@@ -1,6 +1,13 @@
 import { ref } from 'vue';
 import Verb from '../classes/Verb';
-import { here, perform, tell, theDirect, theIndirect } from './game/useGame';
+import {
+  here,
+  perform,
+  tell,
+  theDirect,
+  theIndirect,
+  handlePlayerInput,
+} from './game/useGame';
 import * as items from './useItem';
 
 export const Attack = ref(
@@ -39,6 +46,13 @@ export const Attack = ref(
         // TODO: add attack method here
         tell("You can't.");
       }
+      return true;
+    },
+    test: () => {
+      handlePlayerInput('attack the rug');
+      handlePlayerInput('attack troll');
+      handlePlayerInput('attack troll with garlic');
+      handlePlayerInput('attack troll with sword');
       return true;
     },
   })
@@ -167,10 +181,6 @@ export const Yell = ref(
       tell('Aaaarrrrgggghhhh!');
       return true;
     },
-    test: () => {
-      tell('🎉🎉🎉');
-      return true;
-    },
   })
 );
 
@@ -197,6 +207,7 @@ export const LookOn = ref(
       console.log('LookOn: default handler');
       // @ts-ignore
       if (items[theDirect.value].value.flags.isContainer) {
+        console.log('LOOK ON THE CONTAINER');
         perform('LookInside', theDirect.value);
         return true;
       }
@@ -235,6 +246,19 @@ export const Examine = ref(
         return true;
       }
       tell(`There's nothing special about the ${item.name}.`);
+      return true;
+    },
+    test: () => {
+      // test an item with text
+      handlePlayerInput('look at map');
+      // test a closed container
+      handlePlayerInput('examine smelly sack');
+      // test a transparent container
+      handlePlayerInput('describe bottle');
+      // test a door
+      handlePlayerInput('look at trap door');
+      // test a regular item
+      handlePlayerInput('look at sword');
       return true;
     },
   })

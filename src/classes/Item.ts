@@ -6,7 +6,7 @@ export default class Item {
   flags: Record<string, unknown>;
   adjective?: Array<string>;
   action: () => boolean;
-  test?: () => void;
+  test?: () => boolean;
   descriptionFunction?: () => boolean;
   description?: string;
   initialDescription?: string;
@@ -60,7 +60,7 @@ export default class Item {
     flags: Record<string, unknown>;
     action: () => boolean;
     adjective?: Array<string>;
-    test?: () => void;
+    test?: () => boolean;
     descriptionFunction?: () => boolean;
     description?: string;
     initialDescription?: string;
