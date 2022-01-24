@@ -17,7 +17,8 @@
     "lint:css": "stylelint --fix '**/*.{css,scss,vue}'",
     "lint:css:check": "stylelint '**/*.{css,scss,vue}'",
     "lint:prettier": "prettier . --write",
-    "lint:prettier:check": "prettier . --check"
+    "lint:prettier:check": "prettier . --check",
+    "validate": "run-s lint:check build"
   },
   "dependencies": {
     "chevrotain": "^10.0.0",
