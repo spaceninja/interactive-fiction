@@ -33,6 +33,7 @@ const StringLiteral = createToken({
 const GameVerb = createToken({ name: 'GameVerb', pattern: Lexer.NA });
 const Verb = createToken({ name: 'Verb', pattern: Lexer.NA });
 const Noun = createToken({ name: 'Noun', pattern: Lexer.NA });
+const Direction = createToken({ name: 'Direction', pattern: Lexer.NA });
 
 // Generate Tokens for Each Verb
 // @ts-ignore
@@ -85,6 +86,33 @@ Object.entries(items).forEach(([name, item]) => {
   );
 });
 
+// Generate Tokens for Each Direction
+// @ts-ignore
+const directionTokens = [];
+[
+  ['northeast', 'ne'],
+  ['southeast', 'se'],
+  ['southwest', 'sw'],
+  ['northwest', 'nw'],
+  ['north', 'n'],
+  ['east', 'e'],
+  ['south', 's'],
+  ['west', 'w'],
+  ['up'],
+  ['down'],
+  ['in'],
+  ['out'],
+].forEach((direction) => {
+  directionTokens.push(
+    createToken({
+      name: direction[0],
+      pattern: new RegExp(`${direction.join('|')}`, 'i'),
+      longer_alt: StringLiteral,
+      categories: [Direction],
+    })
+  );
+});
+
 // Others
 const Integer = createToken({ name: 'Integer', pattern: /0|[1-9]\d*/ });
 const Buzzword = createToken({
@@ -115,9 +143,12 @@ export const allTokens = [
   ...verbTokens,
   // @ts-ignore
   ...gameVerbTokens,
+  // @ts-ignore
+  ...directionTokens,
   GameVerb,
   Verb,
   Noun,
+  Direction,
   Integer,
   Buzzword,
   Punctuation,

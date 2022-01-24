@@ -443,7 +443,7 @@ export const Water = ref(
     name: 'quantity of water',
     id: 'Water',
     location: 'Bottle',
-    synonym: ['water', 'quantity', 'liquid', 'h20'],
+    synonym: ['water', 'quantity', 'liquid', 'h2o'],
     flags: { tryTakeBit: true, takeBit: true, drinkBit: true },
     size: 4,
     action: () => {

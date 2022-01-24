@@ -28,6 +28,8 @@ class playerInputParser extends CstParser {
         // @ts-ignore
         { ALT: () => this.SUBRULE(this.test) },
         // @ts-ignore
+        { ALT: () => this.SUBRULE(this.walk) },
+        // @ts-ignore
         { ALT: () => this.SUBRULE(this.verbNoun) },
       ]);
     });
@@ -53,6 +55,15 @@ class playerInputParser extends CstParser {
         // @ts-ignore
         { ALT: () => this.CONSUME(tokenVocabulary.Noun) },
       ]);
+    });
+
+    this.RULE('walk', () => {
+      this.OPTION(() => {
+        // @ts-ignore
+        this.CONSUME(tokenVocabulary.Walk);
+      });
+      // @ts-ignore
+      this.CONSUME(tokenVocabulary.Direction);
     });
 
     // our fallback is a simple two-three word parser
@@ -92,12 +103,14 @@ class PlayerInputVisitor extends parserInstance.getBaseCstVisitorConstructor() {
     const scoreAst = this.visit(ctx.score);
     const lookAst = this.visit(ctx.look);
     const testAst = this.visit(ctx.test);
+    const walkAst = this.visit(ctx.walk);
     const verbNounAst = this.visit(ctx.verbNoun);
 
     return {
       ...scoreAst,
       ...lookAst,
       ...testAst,
+      ...walkAst,
       ...verbNounAst,
     };
   }
@@ -161,6 +174,19 @@ class PlayerInputVisitor extends parserInstance.getBaseCstVisitorConstructor() {
         name: ctx.Test[0].tokenType.name,
       },
       noun,
+    };
+  }
+
+  // @ts-ignore
+  walk(ctx) {
+    return {
+      verb: {
+        name: 'Walk',
+      },
+      noun: {
+        input: ctx.Direction[0].image,
+        name: ctx.Direction[0].tokenType.name,
+      },
     };
   }
 

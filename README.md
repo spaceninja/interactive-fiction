@@ -63,6 +63,8 @@ This project is an attempt to create an Infocom-style text adventure game engine
   - [x] Add SMELL command
   - [x] Add ATTACK command
 - [ ] Handle moving between rooms
+  - [x] Add WALK verb
+  - [x] Add Walk vocabulary
   - [ ] Add GOTO and DO-WALK
   - [ ] Check if there is an exit in this direction
   - [ ] Set HERE to new room

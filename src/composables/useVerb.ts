@@ -62,7 +62,7 @@ export const Attack = ref(
 export const Walk = ref(
   new Verb({
     name: 'Walk',
-    synonym: ['walk'],
+    synonym: ['walk', 'go', 'run', 'proceed', 'step'],
     action: () => {
       console.log('Walk: default handler');
       if (!theDirect.value) {
