@@ -9,6 +9,7 @@ import {
   handlePlayerInput,
 } from './game/useGame';
 import * as items from './useItem';
+import * as rooms from './useRoom';
 
 export const Attack = ref(
   new Verb({
@@ -53,6 +54,28 @@ export const Attack = ref(
       handlePlayerInput('attack troll');
       handlePlayerInput('attack troll with garlic');
       handlePlayerInput('attack troll with sword');
+      return true;
+    },
+  })
+);
+
+export const Walk = ref(
+  new Verb({
+    name: 'Walk',
+    synonym: ['walk'],
+    action: () => {
+      console.log('Walk: default handler');
+      if (!theDirect.value) {
+        console.log('Missing destination!');
+        tell('WALK WHERE?');
+        return true;
+      }
+      // @ts-ignore
+      here.value = rooms[theDirect.value].value;
+      // TODO handle lighting
+      // TODO handle NPCs
+      // TODO handle scoring
+      perform('Look');
       return true;
     },
   })
