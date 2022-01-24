@@ -62,11 +62,6 @@ This project is an attempt to create an Infocom-style text adventure game engine
   - [x] Add READ command
   - [x] Add SMELL command
   - [x] Add ATTACK command
-- [ ] Translate useful GLOBAL entries from Zork
-  - [ ] Add STAIRS object?
-  - [ ] Add GROUND object?
-  - [ ] Add ME object?
-  - [ ] Add ADVENTURER object
 - [ ] Handle moving between rooms
   - [ ] Add GOTO and DO-WALK
   - [ ] Check if there is an exit in this direction
@@ -75,6 +70,8 @@ This project is an attempt to create an Infocom-style text adventure game engine
   - [ ] Call Room description
   - [ ] Add to score?
 - [ ] Handle taking items
+  - [ ] Add ME object?
+  - [ ] Add ADVENTURER object
   - [ ] Add ACCESSIBLE? check from gparser
   - [ ] Add SEE-INSIDE? check from gverbs
   - [ ] Add OPENABLE? check from gmacros

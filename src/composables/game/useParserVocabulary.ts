@@ -49,6 +49,7 @@ Object.entries(sortedVerbs).forEach(([name, item]) => {
     })
   );
 });
+// @ts-ignore
 console.log('VERB TOKENS', verbTokens);
 
 // Generate Tokens for Each Game Verb
