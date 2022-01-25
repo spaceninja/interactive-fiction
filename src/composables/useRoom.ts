@@ -3,6 +3,14 @@ import Room from '../classes/Room';
 import { magicFlag, tell, theVerb } from './game/useGame';
 import * as items from './useItem';
 
+/**
+ * Rooms
+ * All the locations in the game that the player can visit.
+ *
+ * Nothing should live in this file except Vue refs containing a Room,
+ * because the contents of this file build the list of room for the game.
+ */
+
 export const Kitchen = ref(
   new Room({
     name: 'Kitchen',

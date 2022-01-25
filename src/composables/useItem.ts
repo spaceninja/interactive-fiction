@@ -13,6 +13,14 @@ import {
 } from './game/useGame';
 import * as rooms from './useRoom';
 
+/**
+ * Items
+ * All the items that live in the game that the player can interact with.
+ *
+ * Nothing should live in this file except Vue refs containing an Item,
+ * because the contents of this file build the list of items for the game.
+ */
+
 /*
 export const Something = ref(
   new Item({

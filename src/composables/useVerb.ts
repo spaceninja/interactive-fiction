@@ -11,6 +11,17 @@ import {
 import * as items from './useItem';
 import * as rooms from './useRoom';
 
+/**
+ * Verbs
+ * All the commands the player can issue to the game.
+ * (For special game-related verbs like "inventory" see _useGameVerb.ts).
+ *
+ * Keep alphabetized! Add the `priority` flag if you need the verbs sorted.
+ *
+ * Nothing should live in this file except Vue refs containing a Verb,
+ * because the contents of this file build the list of verbs for the game.
+ */
+
 export const Attack = ref(
   new Verb({
     name: 'Attack',
@@ -59,90 +70,35 @@ export const Attack = ref(
   })
 );
 
-export const Walk = ref(
+export const Examine = ref(
   new Verb({
-    name: 'Walk',
-    synonym: ['walk', 'go', 'run', 'proceed', 'step'],
+    name: 'Examine',
+    synonym: ['examine', 'describe', 'what', 'whats', 'look at'],
     action: () => {
-      console.log('Walk: default handler');
-      if (!theDirect.value) {
-        console.log('Missing destination!');
-        tell('WALK WHERE?');
-        return true;
-      }
-      // @ts-ignore
-      here.value = rooms[theDirect.value].value;
-      // TODO handle lighting
-      // TODO handle NPCs
-      // TODO handle scoring
-      perform('Look');
-      return true;
-    },
-  })
-);
-
-export const PushTo = ref(
-  new Verb({
-    name: 'PushTo',
-    synonym: ['push to'],
-    priority: 1,
-    action: () => {
-      console.log('PushTo: default handler');
-      tell("You can't push things to that.");
-      return true;
-    },
-  })
-);
-
-export const Push = ref(
-  new Verb({
-    name: 'Push',
-    synonym: ['push on', 'push', 'press on', 'press'],
-    action: () => {
-      console.log('Push: default handler');
-      if (theIndirect.value) {
-        perform('PushTo', theDirect.value, theIndirect.value);
-        return true;
-      }
-      tell(
-        // @ts-ignore
-        `Pushing the ${items[theDirect.value].value.name} doesn't seem to work.`
-      );
-      return true;
-    },
-  })
-);
-
-export const Move = ref(
-  new Verb({
-    name: 'Move',
-    synonym: [
-      'move',
-      'roll up',
-      'roll',
-      'pull up',
-      'pull on',
-      'pull',
-      'tug on',
-      'tug up',
-      'tug',
-      'yank on',
-      'yank up',
-      'yank',
-    ],
-    action: () => {
-      console.log('Move: default handler');
-      if (theIndirect.value) {
-        perform('PushTo', theDirect.value, theIndirect.value);
-        return true;
-      }
       // @ts-ignore
       const item = items[theDirect.value].value;
-      if (item.flags.takeBit) {
-        tell(`Moving the ${item.name} reveals nothing.`);
+      if (item.text) {
+        tell(item.text);
         return true;
       }
-      tell(`You can't move the ${item.name}.`);
+      if (item.flags?.isContainer || item.flags?.isDoor) {
+        perform('LookInside', theDirect.value);
+        return true;
+      }
+      tell(`There's nothing special about the ${item.name}.`);
+      return true;
+    },
+    test: () => {
+      // test an item with text
+      handlePlayerInput('look at map');
+      // test a closed container
+      handlePlayerInput('examine smelly sack');
+      // test a transparent container
+      handlePlayerInput('describe bottle');
+      // test a door
+      handlePlayerInput('look at trap door');
+      // test a regular item
+      handlePlayerInput('look at sword');
       return true;
     },
   })
@@ -160,52 +116,7 @@ export const Kiss = ref(
   })
 );
 
-export const Smell = ref(
-  new Verb({
-    name: 'Smell',
-    synonym: ['smell', 'sniff'],
-    action: () => {
-      console.log('Smell: default handler');
-      // @ts-ignore
-      tell(`It smells like a ${items[theDirect.value].value.name}.`);
-      return true;
-    },
-  })
-);
-
-export const Read = ref(
-  new Verb({
-    name: 'Read',
-    synonym: ['read', 'skim'],
-    action: () => {
-      // @ts-ignore
-      const item = items[theDirect.value].value;
-      // TODO: use LIT?
-      if (!here.value.flags.isOn) {
-        tell('It is impossible to read in the dark.');
-        return true;
-      }
-      if (item.text) {
-        tell(item.text);
-        return true;
-      }
-      tell(`How does one read a ${item.name}?`);
-      return true;
-    },
-  })
-);
-
-export const Yell = ref(
-  new Verb({
-    name: 'Yell',
-    synonym: ['yell', 'shout', 'holler', 'berate'],
-    action: () => {
-      console.log('Yell: default handler');
-      tell('Aaaarrrrgggghhhh!');
-      return true;
-    },
-  })
-);
+// "Look" is in _useGameVerb.ts
 
 export const LookBehind = ref(
   new Verb({
@@ -253,35 +164,138 @@ export const LookUnder = ref(
     },
   })
 );
-export const Examine = ref(
+
+export const Move = ref(
   new Verb({
-    name: 'Examine',
-    synonym: ['examine', 'describe', 'what', 'whats', 'look at'],
+    name: 'Move',
+    synonym: [
+      'move',
+      'roll up',
+      'roll',
+      'pull up',
+      'pull on',
+      'pull',
+      'tug on',
+      'tug up',
+      'tug',
+      'yank on',
+      'yank up',
+      'yank',
+    ],
+    action: () => {
+      console.log('Move: default handler');
+      if (theIndirect.value) {
+        perform('PushTo', theDirect.value, theIndirect.value);
+        return true;
+      }
+      // @ts-ignore
+      const item = items[theDirect.value].value;
+      if (item.flags.takeBit) {
+        tell(`Moving the ${item.name} reveals nothing.`);
+        return true;
+      }
+      tell(`You can't move the ${item.name}.`);
+      return true;
+    },
+  })
+);
+
+export const Push = ref(
+  new Verb({
+    name: 'Push',
+    synonym: ['push on', 'push', 'press on', 'press'],
+    action: () => {
+      console.log('Push: default handler');
+      if (theIndirect.value) {
+        perform('PushTo', theDirect.value, theIndirect.value);
+        return true;
+      }
+      tell(
+        // @ts-ignore
+        `Pushing the ${items[theDirect.value].value.name} doesn't seem to work.`
+      );
+      return true;
+    },
+  })
+);
+
+export const PushTo = ref(
+  new Verb({
+    name: 'PushTo',
+    synonym: ['push to'],
+    priority: 1,
+    action: () => {
+      console.log('PushTo: default handler');
+      tell("You can't push things to that.");
+      return true;
+    },
+  })
+);
+
+export const Read = ref(
+  new Verb({
+    name: 'Read',
+    synonym: ['read', 'skim'],
     action: () => {
       // @ts-ignore
       const item = items[theDirect.value].value;
+      // TODO: use LIT?
+      if (!here.value.flags.isOn) {
+        tell('It is impossible to read in the dark.');
+        return true;
+      }
       if (item.text) {
         tell(item.text);
         return true;
       }
-      if (item.flags?.isContainer || item.flags?.isDoor) {
-        perform('LookInside', theDirect.value);
-        return true;
-      }
-      tell(`There's nothing special about the ${item.name}.`);
+      tell(`How does one read a ${item.name}?`);
       return true;
     },
-    test: () => {
-      // test an item with text
-      handlePlayerInput('look at map');
-      // test a closed container
-      handlePlayerInput('examine smelly sack');
-      // test a transparent container
-      handlePlayerInput('describe bottle');
-      // test a door
-      handlePlayerInput('look at trap door');
-      // test a regular item
-      handlePlayerInput('look at sword');
+  })
+);
+
+export const Smell = ref(
+  new Verb({
+    name: 'Smell',
+    synonym: ['smell', 'sniff'],
+    action: () => {
+      console.log('Smell: default handler');
+      // @ts-ignore
+      tell(`It smells like a ${items[theDirect.value].value.name}.`);
+      return true;
+    },
+  })
+);
+
+export const Walk = ref(
+  new Verb({
+    name: 'Walk',
+    synonym: ['walk', 'go', 'run', 'proceed', 'step'],
+    action: () => {
+      console.log('Walk: default handler');
+      if (!theDirect.value) {
+        console.log('Missing destination!');
+        tell('WALK WHERE?');
+        return true;
+      }
+      // @ts-ignore
+      here.value = rooms[theDirect.value].value;
+      // TODO handle lighting
+      // TODO handle NPCs
+      // TODO handle scoring
+      perform('Look');
+      return true;
+    },
+  })
+);
+
+export const Yell = ref(
+  new Verb({
+    name: 'Yell',
+    synonym: ['yell', 'shout', 'holler', 'berate'],
+    action: () => {
+      console.log('Yell: default handler');
+      tell('Aaaarrrrgggghhhh!');
       return true;
     },
   })

@@ -17,6 +17,17 @@ import * as verbs from '../useVerb';
 import * as gameVerbs from './useGameVerb';
 
 /**
+ * Game Verbs
+ * Special commands like "look" and "inventory."
+ * Typically, game verbs should be used as a single word.
+ *
+ * Keep alphabetized! Add the `priority` flag if you need the verbs sorted.
+ *
+ * Nothing should live in this file except Vue refs containing a Verb,
+ * because the contents of this file build the list of game-verbs for the game.
+ */
+
+/**
  * Look
  * Describe the current room and its contents.
  */
@@ -41,42 +52,6 @@ export const Look = ref(
       handlePlayerInput('look');
       here.value = rooms.Kitchen.value;
       handlePlayerInput('look');
-      return true;
-    },
-  })
-);
-
-/**
- * Test
- * Helper verb to run an object's `test` method.
- */
-export const Test = ref(
-  new Verb({
-    name: 'Test',
-    synonym: ['test'],
-    action: () => {
-      // Try the direct item's handler
-      // @ts-ignore
-      const itemTest = items[theDirect.value]?.value.test;
-      const itemHandled = itemTest ? itemTest() : false;
-      console.log('TEST as item', theDirect.value, itemHandled);
-      if (itemHandled) return true;
-
-      // Nothing else handled it, so pass to the verb
-      // @ts-ignore
-      const verbTest = verbs[theDirect.value]?.value.test;
-      const verbHandled = verbTest ? verbTest() : false;
-      console.log('TEST as verb', theDirect.value, verbHandled);
-      if (verbHandled) return true;
-
-      // If it's not a verb, it might be a game verb
-      // @ts-ignore
-      const gameVerbTest = gameVerbs[theDirect.value]?.value.test;
-      const gameVerbHandled = gameVerbTest ? gameVerbTest() : false;
-      console.log('TEST as game verb', theDirect.value, gameVerbHandled);
-      if (gameVerbHandled) return true;
-
-      tell("That item doesn't have a test routine.");
       return true;
     },
   })
@@ -136,6 +111,42 @@ export const Score = ref(
       Score.value.action();
       theScore.value = 105;
       Score.value.action();
+      return true;
+    },
+  })
+);
+
+/**
+ * Test
+ * Helper verb to run an object's `test` method.
+ */
+export const Test = ref(
+  new Verb({
+    name: 'Test',
+    synonym: ['test'],
+    action: () => {
+      // Try the direct item's handler
+      // @ts-ignore
+      const itemTest = items[theDirect.value]?.value.test;
+      const itemHandled = itemTest ? itemTest() : false;
+      console.log('TEST as item', theDirect.value, itemHandled);
+      if (itemHandled) return true;
+
+      // Nothing else handled it, so pass to the verb
+      // @ts-ignore
+      const verbTest = verbs[theDirect.value]?.value.test;
+      const verbHandled = verbTest ? verbTest() : false;
+      console.log('TEST as verb', theDirect.value, verbHandled);
+      if (verbHandled) return true;
+
+      // If it's not a verb, it might be a game verb
+      // @ts-ignore
+      const gameVerbTest = gameVerbs[theDirect.value]?.value.test;
+      const gameVerbHandled = gameVerbTest ? gameVerbTest() : false;
+      console.log('TEST as game verb', theDirect.value, gameVerbHandled);
+      if (gameVerbHandled) return true;
+
+      tell("That item doesn't have a test routine.");
       return true;
     },
   })
