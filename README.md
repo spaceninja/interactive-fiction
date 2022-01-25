@@ -65,8 +65,9 @@ This project is an attempt to create an Infocom-style text adventure game engine
 - [ ] Handle moving between rooms
   - [x] Add WALK verb
   - [x] Add Walk vocabulary
-  - [ ] Add GOTO and DO-WALK
-  - [ ] Check if there is an exit in this direction
+  - [x] Add GOTO method
+  - [x] Check if there is an exit in this direction
+  - [ ] Handle conditional room exits
   - [ ] Set HERE to new room
   - [ ] Set TOUCHED bit in new room
   - [ ] Call Room description

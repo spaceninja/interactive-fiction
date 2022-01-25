@@ -7,9 +7,9 @@ import {
   theDirect,
   theIndirect,
   handlePlayerInput,
+  goTo,
 } from './game/useGame';
 import * as items from './useItem';
-import * as rooms from './useRoom';
 
 /**
  * Verbs
@@ -272,18 +272,16 @@ export const Walk = ref(
     name: 'Walk',
     synonym: ['walk', 'go', 'run', 'proceed', 'step'],
     action: () => {
-      console.log('Walk: default handler');
-      if (!theDirect.value) {
-        console.log('Missing destination!');
-        tell('WALK WHERE?');
+      const direction = theDirect.value;
+      console.log('Walk: default handler', direction);
+      const destination = here.value.exits[direction];
+      console.log('DESTINATION', destination);
+      if (!destination) {
+        tell("You can't go that way.");
         return true;
       }
       // @ts-ignore
-      here.value = rooms[theDirect.value].value;
-      // TODO handle lighting
-      // TODO handle NPCs
-      // TODO handle scoring
-      perform('Look');
+      goTo(destination);
       return true;
     },
   })

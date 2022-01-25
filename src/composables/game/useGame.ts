@@ -30,22 +30,102 @@ export const dummyMessages = [
   'Have your eyes checked.',
 ];
 
-export const evaluate = () => {
-  // @ts-ignore
-  items[theDirect.value].value.action(theVerb.value);
+/**
+ * Go To
+ *
+ * @param roomId - ID of the room to go to
+ */
+export const goTo = (roomId: string) => {
+  tell(`GOTO: ${roomId}`);
 };
 
 /**
- * Tell
+ * Handle Player Input
  *
- * Adds text to the on-screen output.
+ * When the player enters a command, this routine attempts to process it
+ * by passing the text to the parser, which attempts to understand the
+ * structure of the command and returns recognized tokens. If it can't
+ * parse the command, then it returns an error, and we handle that here.
+ * If it succeeds, the the parsed command is passed to `perform`.
  *
- * @param message - the text to display.
- * @param className - a CSS class to add to the text.
+ * @param {string} command - the command we need to deal with
+ * @returns boolean
  */
-export const tell = (message: string, className?: string) => {
+export const handlePlayerInput = (command = playerInput.value) => {
+  console.log('HANDLE PLAYER INPUT', command);
+
+  // Echo the command to the screen
+  tell(`> ${command}`, 'command');
+
+  // Parse the player's command
+  const parsedPlayerInput = parser(command);
+
+  // Handle any parser errors
+  if (parsedPlayerInput.error) {
+    console.error(parsedPlayerInput.error);
+    tell(
+      `You used the word “${parsedPlayerInput.error.token}” in a way that I don't understand.`,
+      'error'
+    );
+    playerInput.value = ''; // clear the input bar
+    return false;
+  }
+
+  // Pass the parsed command to `perform`
+  console.log('PARSED PLAYER INPUT', parsedPlayerInput);
+  perform(
+    parsedPlayerInput.verb?.name,
+    parsedPlayerInput.noun?.name,
+    parsedPlayerInput.indirect?.name
+  );
+  playerInput.value = ''; // clear the input bar
+  theMoves.value++; // TODO this should live in CLOCKER
+  return true;
+};
+
+/**
+ * Initialize the Game
+ * Used to set or reset the initial state of the game, print the version
+ * info, and perform a `LOOK` command for the player.
+ */
+export const init = () => {
+  here.value = rooms.LivingRoom.value;
+  here.value.flags.isOn = true;
+  perform('Look');
+};
+
+/**
+ * Open/Close
+ *
+ * @param {object} item - the item to open or close.
+ * @param {string} verb - whether to open or close the item.
+ * @param {string} openMessage - the message to show when opening.
+ * @param {string} closeMessage - the messgage to show when closing.
+ */
+export const openClose = (
   // @ts-ignore
-  theOutput.value.push({ message, className, key: uuid() });
+  item,
+  verb: string,
+  openMessage: string,
+  closeMessage: string
+) => {
+  if (verb === 'Open') {
+    if (item.value.flags.isOpen) {
+      tell(pickOne(dummyMessages));
+      return;
+    }
+    // eslint-disable-next-line no-param-reassign
+    item.value.flags.isOpen = true;
+    tell(openMessage);
+  } else {
+    if (!item.value.flags.isOpen) {
+      tell(pickOne(dummyMessages));
+      return;
+    }
+    // eslint-disable-next-line no-param-reassign
+    item.value.flags.isOpen = false;
+    tell(closeMessage);
+  }
 };
 
 /**
@@ -99,90 +179,14 @@ export const perform = (v = '', d = '', i = '') => {
 };
 
 /**
- * Handle Player Input
+ * Tell
  *
- * When the player enters a command, this routine attempts to process it
- * by passing the text to the parser, which attempts to understand the
- * structure of the command and returns recognized tokens. If it can't
- * parse the command, then it returns an error, and we handle that here.
- * If it succeeds, the the parsed command is passed to `perform`.
+ * Adds text to the on-screen output.
  *
- * @param {string} command - the command we need to deal with
- * @returns boolean
+ * @param message - the text to display.
+ * @param className - a CSS class to add to the text.
  */
-export const handlePlayerInput = (command = playerInput.value) => {
-  console.log('HANDLE PLAYER INPUT', command);
-
-  // Echo the command to the screen
-  tell(`> ${command}`, 'command');
-
-  // Parse the player's command
-  const parsedPlayerInput = parser(command);
-
-  // Handle any parser errors
-  if (parsedPlayerInput.error) {
-    console.error(parsedPlayerInput.error);
-    tell(
-      `You used the word “${parsedPlayerInput.error.token}” in a way that I don't understand.`,
-      'error'
-    );
-    playerInput.value = ''; // clear the input bar
-    return false;
-  }
-
-  // Pass the parsed command to `perform`
-  console.log('PARSED PLAYER INPUT', parsedPlayerInput);
-  perform(
-    parsedPlayerInput.verb?.name,
-    parsedPlayerInput.noun?.name,
-    parsedPlayerInput.indirect?.name
-  );
-  playerInput.value = ''; // clear the input bar
-  theMoves.value++; // TODO this should live in CLOCKER
-  return true;
-};
-
-/**
- * Open/Close
- *
- * @param {object} item - the item to open or close.
- * @param {string} verb - whether to open or close the item.
- * @param {string} openMessage - the message to show when opening.
- * @param {string} closeMessage - the messgage to show when closing.
- */
-export const openClose = (
+export const tell = (message: string, className?: string) => {
   // @ts-ignore
-  item,
-  verb: string,
-  openMessage: string,
-  closeMessage: string
-) => {
-  if (verb === 'Open') {
-    if (item.value.flags.isOpen) {
-      tell(pickOne(dummyMessages));
-      return;
-    }
-    // eslint-disable-next-line no-param-reassign
-    item.value.flags.isOpen = true;
-    tell(openMessage);
-  } else {
-    if (!item.value.flags.isOpen) {
-      tell(pickOne(dummyMessages));
-      return;
-    }
-    // eslint-disable-next-line no-param-reassign
-    item.value.flags.isOpen = false;
-    tell(closeMessage);
-  }
-};
-
-/**
- * Initialize the Game
- * Used to set or reset the initial state of the game, print the version
- * info, and perform a `LOOK` command for the player.
- */
-export const init = () => {
-  here.value = rooms.LivingRoom.value;
-  here.value.flags.isOn = true;
-  perform('Look');
+  theOutput.value.push({ message, className, key: uuid() });
 };
