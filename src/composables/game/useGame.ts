@@ -7,12 +7,13 @@ import * as rooms from '../useRoom';
 import * as gameVerbs from './useGameVerb';
 import { parser } from './useParser';
 
-export const here = ref(rooms.LivingRoom.value);
+// game meta variables
 export const theScore = ref(0);
 export const theScoreMax = ref<number | null>(null);
 export const theMoves = ref(0);
 export const showHelp = ref(false);
 
+// parser variables
 export const playerInput = ref('');
 export const theVerb = ref('');
 export const theDirect = ref('');
@@ -20,10 +21,15 @@ export const theIndirect = ref('');
 export const theOutput = ref([]);
 export const it = ref('');
 
+// game state variables
+export const here = ref(rooms.LivingRoom.value);
+export const player = ref(items.Adventurer.value); // the player
+export const winner = ref(player.value); // the current actor, not always the player
+
+// global flags (TODO get rid of these in favor of item/room flags)
 export const magicFlag = ref(false);
 
-export const trapDoorExit = () => true;
-
+// TODO see if we need this, relocate if so
 export const dummyMessages = [
   'Look around.',
   'Too late for that.',
@@ -36,8 +42,15 @@ export const dummyMessages = [
  * info, and perform a `LOOK` command for the player.
  */
 export const init = () => {
+  // set starting location
   here.value = rooms.LivingRoom.value;
+  // reset winner to the player
+  winner.value = player.value;
+  // move the winner to the starting location
+  winner.value.location = here.value.id;
+  // turn on the lights (TODO: debug only)
   here.value.flags.isOn = true;
+  // Look around you!
   perform('Look');
 };
 

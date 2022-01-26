@@ -10,6 +10,7 @@ import {
   theDirect,
   perform,
   handlePlayerInput,
+  theIndirect,
 } from './game/useGame';
 import * as rooms from './useRoom';
 
@@ -507,6 +508,7 @@ export const Bottle = ref(
         default:
           return false;
       }
+      // TODO: unreachable!
       if (empty === true && Water.value.location === 'Bottle') {
         Water.value.location = null;
         tell('The water spills to the floor and evaporates.');
@@ -733,5 +735,69 @@ export const Rug = ref(
       handlePlayerInput('move rug');
       return true;
     },
+  })
+);
+
+export const Me = ref(
+  new Item({
+    name: 'you',
+    id: 'Me',
+    location: null,
+    synonym: ['me', 'myself', 'self', 'cretin'],
+    flags: { isActor: true },
+    action: () => {
+      console.log('Me Handler', theVerb.value);
+      switch (theVerb.value) {
+        case 'Talk':
+          tell(
+            'Talking to yourself is said to be a sign of impending mental collapse.'
+          );
+          return true;
+        case 'Give':
+          if (theIndirect.value === Me.value.id) {
+            perform('Take', theDirect.value);
+            return true;
+          }
+          return false;
+        case 'Make':
+          tell('Only you can do that.');
+          return true;
+        case 'Disembark':
+          tell("You'll have to do that on your own.");
+          return true;
+        case 'Eat':
+          tell('Auto-cannibalism is not the answer.');
+          return true;
+        case 'Attack':
+        case 'Destroy':
+          tell('Suicide is not the answer.');
+          return true;
+        case 'Throw':
+          if (theDirect.value === Me.value.id) {
+            tell("Why don't you just walk like normal people?");
+            return true;
+          }
+          return false;
+        case 'Take':
+          tell('How romantic!');
+          return true;
+        case 'Examine':
+          tell("That's difficult unless your eyes are prehensile.");
+          return true;
+        default:
+          return false;
+      }
+    },
+  })
+);
+
+export const Adventurer = ref(
+  new Item({
+    name: 'cretin',
+    id: 'Adventurer',
+    location: null,
+    synonym: ['adventurer'],
+    flags: { doNotDescribe: true, isInvisible: true, isActor: true },
+    action: () => false,
   })
 );

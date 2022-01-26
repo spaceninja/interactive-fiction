@@ -72,8 +72,8 @@ This project is an attempt to create an Infocom-style text adventure game engine
   - [x] Set TOUCHED bit in new room
   - [x] Call Room description
 - [ ] Handle taking items
-  - [ ] Add ME object?
-  - [ ] Add ADVENTURER object
+  - [x] Add ME object
+  - [x] Add ADVENTURER object
   - [ ] Add ACCESSIBLE? check from gparser
   - [ ] Add SEE-INSIDE? check from gverbs
   - [ ] Add OPENABLE? check from gmacros
@@ -105,6 +105,7 @@ This project is an attempt to create an Infocom-style text adventure game engine
 - [ ] Add Brief/Verbose modes
   - [ ] Handle BRIEF, SUPERBRIEF, VERBOSE commands
 - [ ] Advanced parser
+  - [ ] Implicit "me" in some verbs (How does this work?)
   - [ ] Bug: "move rug to table" syntax does not trigger pushto because rug:move
   - [ ] Syntax tokens:
     - HAVE, TAKE, MANY, EVERYWHERE, ADJACENT, HELD, CARRIED, ON-GROUND, IN-ROOM
