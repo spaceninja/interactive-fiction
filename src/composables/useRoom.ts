@@ -16,8 +16,8 @@ export const Kitchen = ref(
     name: 'Kitchen',
     id: 'Kitchen',
     exits: {
-      west: 'LivingRoom',
-      up: 'Attic',
+      west: { room: 'LivingRoom' },
+      up: { room: 'Attic' },
     },
     flags: { isOn: true },
     value: 10,
@@ -45,9 +45,9 @@ export const Attic = ref(
     name: 'Attic',
     id: 'Attic',
     exits: {
-      down: 'Kitchen',
+      down: { room: 'Kitchen' },
     },
-    flags: { isOn: true },
+    flags: { isOn: false },
     global: ['stairs'],
     description: 'This is the attic. The only exit is a stairway leading down.',
     action: () => false,
@@ -59,10 +59,23 @@ export const LivingRoom = ref(
     name: 'Living Room',
     id: 'LivingRoom',
     exits: {
-      east: 'Kitchen',
-      // TODO: handle special exits
-      // west: magicFlag.value ? 'strangePassage' : 'The door is nailed shut.',
-      // down: trapDoorExit(),
+      east: { room: 'Kitchen' },
+      west: {
+        room: 'StrangePassage',
+        condition: () => magicFlag.value,
+        fail: 'The door is nailed shut.',
+      },
+      down: {
+        method: () => {
+          if (items.Rug.value.flags.isMoved) {
+            if (items.TrapDoor.value.flags.isOpen) {
+              return { room: 'Cellar' };
+            }
+            return { fail: 'The trap door is closed.' };
+          }
+          return { fail: "You can't go that way." };
+        },
+      },
     },
     flags: { isOn: true },
     global: ['stairs'],
@@ -99,8 +112,11 @@ export const Cellar = ref(
     name: 'Cellar',
     id: 'Cellar',
     exits: {
-      north: 'TrollRoom',
-      // up: trapdooropen ? 'LivingRoom' : null
+      north: { room: 'TrollRoom' },
+      up: {
+        room: 'LivingRoom',
+        door: 'TrapDoor',
+      },
     },
     flags: { isOn: false },
     value: 25,
@@ -124,7 +140,7 @@ export const TrollRoom = ref(
     name: 'The Troll Room',
     id: 'TrollRoom',
     exits: {
-      south: 'Cellar',
+      south: { room: 'Cellar' },
     },
     flags: { isOn: false },
     description: `This is a small room with a forbidding hole leading west.

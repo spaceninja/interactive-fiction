@@ -31,12 +31,29 @@ export const dummyMessages = [
 ];
 
 /**
+ * Initialize the Game
+ * Used to set or reset the initial state of the game, print the version
+ * info, and perform a `LOOK` command for the player.
+ */
+export const init = () => {
+  here.value = rooms.LivingRoom.value;
+  here.value.flags.isOn = true;
+  perform('Look');
+};
+
+/**
  * Go To
+ * Move the player to the room, handle room change things, and LOOK
  *
  * @param roomId - ID of the room to go to
  */
 export const goTo = (roomId: string) => {
-  tell(`GOTO: ${roomId}`);
+  // @ts-ignore
+  here.value = rooms[roomId].value;
+  // TODO: update lighting info
+  // TODO: run room's ENTER action
+  // TODO: handle score
+  perform('Look');
 };
 
 /**
@@ -81,17 +98,6 @@ export const handlePlayerInput = (command = playerInput.value) => {
   playerInput.value = ''; // clear the input bar
   theMoves.value++; // TODO this should live in CLOCKER
   return true;
-};
-
-/**
- * Initialize the Game
- * Used to set or reset the initial state of the game, print the version
- * info, and perform a `LOOK` command for the player.
- */
-export const init = () => {
-  here.value = rooms.LivingRoom.value;
-  here.value.flags.isOn = true;
-  perform('Look');
 };
 
 /**

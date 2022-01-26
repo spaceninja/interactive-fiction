@@ -179,11 +179,13 @@ export const describeHereObjects = () => {
  * @returns boolean
  */
 export const describeHere = () => {
-  if (!here.value.flags?.isOn) {
+  if (!here.value.flags.isOn) {
     tell('It is pitch black. You are likely to be eaten by a grue.');
     return false;
   }
-  // TODO: add touched logic
+  if (!here.value.flags.isTouched) {
+    here.value.flags.isTouched = true;
+  }
   tell(here.value.name, 'room-name');
   // TODO: add vehicle logic
 

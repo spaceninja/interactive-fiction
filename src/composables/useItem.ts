@@ -588,7 +588,12 @@ export const TrapDoor = ref(
     location: 'LivingRoom',
     synonym: ['door', 'trapdoor', 'trap-door', 'cover'],
     adjective: ['trap', 'dusty'],
-    flags: { isDoor: true, doNotDescribe: true, isInvisible: true },
+    flags: {
+      isDoor: true,
+      doNotDescribe: true,
+      isInvisible: true,
+      isOpen: false,
+    },
     action: () => {
       console.log('Trap Door Handler', theVerb.value);
       switch (theVerb.value) {

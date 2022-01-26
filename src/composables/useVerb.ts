@@ -274,14 +274,68 @@ export const Walk = ref(
     action: () => {
       const direction = theDirect.value;
       console.log('Walk: default handler', direction);
-      const destination = here.value.exits[direction];
-      console.log('DESTINATION', destination);
-      if (!destination) {
+      const exit = here.value.exits[direction];
+      if (!exit) {
         tell("You can't go that way.");
         return true;
       }
+      // Door Exit — goTo room if door is open, else tell fail
       // @ts-ignore
-      goTo(destination);
+      if (exit.door) {
+        // @ts-ignore
+        const door = items[exit.door].value;
+        // @ts-ignore
+        const result = door.flags.isOpen;
+        if (result) {
+          // @ts-ignore
+          goTo(exit.room);
+          return true;
+        }
+        // @ts-ignore
+        tell(exit.fail ? exit.fail : `The ${door.name} is closed.`);
+        return true;
+      }
+      // Conditional Exit — goTo room if true, else tell fail
+      // @ts-ignore
+      if (exit.condition) {
+        // @ts-ignore
+        const result = exit.condition();
+        if (result) {
+          // @ts-ignore
+          goTo(exit.room);
+          return true;
+        }
+        // @ts-ignore
+        tell(exit.fail ? exit.fail : "You can't go that way.");
+        return true;
+      }
+      // Method Exit - call method, which returns either a room or a fail string
+      // @ts-ignore
+      if (exit.method) {
+        // @ts-ignore
+        const result = exit.method();
+        if (result) {
+          if (result.room) {
+            goTo(result.room);
+            return true;
+          }
+          tell(result.fail ? result.fail : "You can't go that way.");
+          return true;
+        }
+        console.error("Whoops, our exit method didn't return any result!");
+        tell("You can't go that way.");
+        return true;
+      }
+      // Unconditional Exit - goTo room
+      // @ts-ignore
+      if (exit.room) {
+        // @ts-ignore
+        goTo(exit.room);
+        return true;
+      }
+      // Unconditional Non-Exit - tell fail or generic error
+      // @ts-ignore
+      tell(exit.fail ? exit.fail : "You can't go that way.");
       return true;
     },
   })

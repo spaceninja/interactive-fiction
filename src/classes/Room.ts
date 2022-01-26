@@ -1,14 +1,45 @@
 import Item from './Item';
 
+interface UnConditionalExit {
+  room: string;
+}
+
+interface NonExit {
+  fail: string;
+}
+
+interface ConditionalExit {
+  room: string;
+  fail?: string;
+  condition: () => boolean;
+}
+
+interface DoorExit {
+  room: string;
+  fail?: string;
+  door: string;
+}
+
+interface MethodExit {
+  method: () => UnConditionalExit | NonExit;
+}
+
+type Exit =
+  | NonExit
+  | UnConditionalExit
+  | ConditionalExit
+  | DoorExit
+  | MethodExit;
+
 export default class Room extends Item {
   declare name: string;
   declare id: string;
   declare action: () => boolean;
   declare description?: string;
   declare value?: number;
-  declare flags: Record<string, unknown>;
-  exits: Record<string, unknown>;
+  declare flags: Record<string, boolean>;
   global?: Array<string>;
+  exits: Record<string, Exit>;
 
   /**
    * @param props
@@ -48,8 +79,8 @@ export default class Room extends Item {
     action: () => boolean;
     description?: string;
     value?: number;
-    flags: Record<string, unknown>;
-    exits: Record<string, unknown>;
+    flags: Record<string, boolean>;
+    exits: Record<string, Exit>;
     global?: Array<string>;
   }) {
     super({

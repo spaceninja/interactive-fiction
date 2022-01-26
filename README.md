@@ -62,16 +62,15 @@ This project is an attempt to create an Infocom-style text adventure game engine
   - [x] Add READ command
   - [x] Add SMELL command
   - [x] Add ATTACK command
-- [ ] Handle moving between rooms
+- [x] Handle moving between rooms
   - [x] Add WALK verb
   - [x] Add Walk vocabulary
   - [x] Add GOTO method
   - [x] Check if there is an exit in this direction
-  - [ ] Handle conditional room exits
-  - [ ] Set HERE to new room
-  - [ ] Set TOUCHED bit in new room
-  - [ ] Call Room description
-  - [ ] Add to score?
+  - [x] Handle conditional room exits
+  - [x] Set HERE to new room
+  - [x] Set TOUCHED bit in new room
+  - [x] Call Room description
 - [ ] Handle taking items
   - [ ] Add ME object?
   - [ ] Add ADVENTURER object
@@ -128,6 +127,10 @@ This project is an attempt to create an Infocom-style text adventure game engine
   - [ ] Add Interrupt routines
   - [ ] Add Queing
   - [ ] Add WAIT command
+  - [ ] Some game verbs should not increase move counter
+- [ ] Add Scoring
+  - [ ] give points for first interaction with object
+  - [ ] give points for first interaction with room
 - [ ] Add Actors
   - [ ] Handle speaking to actors V-SAY
   - [ ] Handle giving directions to actors

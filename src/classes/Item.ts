@@ -3,7 +3,7 @@ export default class Item {
   id: string;
   location: string | null;
   synonym: Array<string>;
-  flags: Record<string, unknown>;
+  flags: Record<string, boolean>;
   adjective?: Array<string>;
   action: () => boolean;
   test?: () => boolean;
@@ -57,7 +57,7 @@ export default class Item {
     id: string;
     location: string | null;
     synonym: Array<string>;
-    flags: Record<string, unknown>;
+    flags: Record<string, boolean>;
     action: () => boolean;
     adjective?: Array<string>;
     test?: () => boolean;
