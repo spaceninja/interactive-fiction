@@ -1,4 +1,4 @@
-import { createToken, Lexer } from 'chevrotain';
+import { createToken, Lexer, TokenType } from 'chevrotain';
 import * as gameVerbs from './useGameVerb';
 import * as verbs from '../useVerb';
 import * as items from '../useItem';
@@ -36,8 +36,7 @@ const Noun = createToken({ name: 'Noun', pattern: Lexer.NA });
 const Direction = createToken({ name: 'Direction', pattern: Lexer.NA });
 
 // Generate Tokens for Each Verb
-// @ts-ignore
-const verbTokens = [];
+const verbTokens: TokenType[] = [];
 Object.entries(sortedVerbs).forEach(([name, item]) => {
   // @ts-ignore
   const i = item.value;
@@ -50,12 +49,10 @@ Object.entries(sortedVerbs).forEach(([name, item]) => {
     })
   );
 });
-// @ts-ignore
 console.log('VERB TOKENS', verbTokens);
 
 // Generate Tokens for Each Game Verb
-// @ts-ignore
-const gameVerbTokens = [];
+const gameVerbTokens: TokenType[] = [];
 Object.entries(gameVerbs).forEach(([name, item]) => {
   const i = item.value;
   gameVerbTokens.push(
@@ -69,8 +66,7 @@ Object.entries(gameVerbs).forEach(([name, item]) => {
 });
 
 // Generate Tokens for Each Item
-// @ts-ignore
-const itemTokens = [];
+const itemTokens: TokenType[] = [];
 Object.entries(items).forEach(([name, item]) => {
   const i = item.value;
   itemTokens.push(
@@ -87,8 +83,7 @@ Object.entries(items).forEach(([name, item]) => {
 });
 
 // Generate Tokens for Each Direction
-// @ts-ignore
-const directionTokens = [];
+const directionTokens: TokenType[] = [];
 [
   ['northeast', 'ne'],
   ['southeast', 'se'],
@@ -137,13 +132,9 @@ export const allTokens = [
   // WhiteSpace comes first as it is very common thus it will speed up the lexer.
   WhiteSpace,
   // "keywords" appear before the StringLiteral
-  // @ts-ignore
   ...itemTokens,
-  // @ts-ignore
   ...verbTokens,
-  // @ts-ignore
   ...gameVerbTokens,
-  // @ts-ignore
   ...directionTokens,
   GameVerb,
   Verb,

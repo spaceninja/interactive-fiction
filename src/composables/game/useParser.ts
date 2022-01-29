@@ -4,6 +4,10 @@ import { allTokens, tokenVocabulary } from './useParserVocabulary';
 // Create a Player Input Lexer using our game's tokens.
 const playerInputLexer = new Lexer(allTokens);
 
+// TODO: we can get rid of all these typescript ignores by running the dts generator:
+// @see https://chevrotain.io/docs/guide/concrete_syntax_tree.html##cst-typescript-signatures
+// @see https://github.com/Chevrotain/chevrotain/tree/master/examples/implementation_languages/typescript
+
 /**
  * Parser
  *
@@ -221,11 +225,11 @@ const visitorInstance = new PlayerInputVisitor();
  *
  * 1. `.input` is a setter which will reset the parser's internal's state.
  *
- * @param {string} playerInput
+ * @param playerInput
  * @returns object
  */
 // @ts-ignore
-export const parser = (playerInput) => {
+export const parser = (playerInput: string) => {
   // Lex
   const lexResult = playerInputLexer.tokenize(playerInput);
   if (lexResult.errors.length > 0) {

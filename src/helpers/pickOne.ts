@@ -1,6 +1,6 @@
 /**
  * Pick One Item from an Array
- * @param {array} array
+ * @param array
  * @returns any
  */
 export const pickOne = (array: string[]) =>

@@ -1,4 +1,6 @@
+import { Ref } from 'vue';
 import { tell, here } from './useGame';
+import Item from '../../classes/Item';
 import * as rooms from '../useRoom';
 import * as items from '../useItem';
 
@@ -6,7 +8,7 @@ import * as items from '../useItem';
  * Get Contents
  * Returns an array containing all the items this container holds.
  *
- * @param {string} containerId - ID of the container to search
+ * @param containerId - ID of the container to search
  * @returns array
  */
 export const getContents = (containerId: string) => {
@@ -23,11 +25,10 @@ export const getContents = (containerId: string) => {
  * Describe Object
  * Determines the best way to describe an object.
  *
- * @param {object} item - The object to describe.
- * @param {number} level - How many levels of nesting containers this object is in.
+ * @param item - The object to describe.
+ * @param level - How many levels of nesting containers this object is in.
  */
-// @ts-ignore
-export const describeObject = (item, level = 0) => {
+export const describeObject = (item: Ref<Item>, level = 0) => {
   console.group(`DESCRIBE OBJECT: ${item.value.id}, level ${level}`);
   if (level < 1) {
     if (item.value.descriptionFunction) {
@@ -66,15 +67,14 @@ export const describeObject = (item, level = 0) => {
  * Describe Contents
  * Determines the best way to describe the items a container holds.
  *
- * @param {object} container - the container to describe the contents of
- * @param {number} level - How many levels of nesting containers this object is in.
+ * @param container - the container to describe the contents of
+ * @param level - How many levels of nesting containers this object is in.
  * @returns boolean
  */
-// @ts-ignore
-const describeContents = (container, level = 0) => {
-  console.group(`PRINT CONTENTS: ${container}, level ${level}`);
+const describeContents = (containerId: string, level = 0) => {
+  console.group(`PRINT CONTENTS: ${containerId}, level ${level}`);
   // get all items with this container set as their locations
-  const containerItems = getContents(container);
+  const containerItems = getContents(containerId);
   console.log(
     'Container items:',
     containerItems.map((i) => i.value.id)
@@ -132,11 +132,10 @@ const describeContents = (container, level = 0) => {
  * Container List Intro
  * Determines the proper way to introduce the list of a container's objects.
  *
- * @param {object} container - the container to introduce
- * @param {number} level - How many levels of nesting containers this container is in.
+ * @param container - the container to introduce
+ * @param level - How many levels of nesting containers this container is in.
  */
-// @ts-ignore
-const containerListIntro = (container, level = 0) => {
+const containerListIntro = (container: Ref<Item>, level = 0) => {
   console.group(`CONTAINER LIST INTRO, ${container.value.id}, level ${level}`);
   // if (container.value.id === Winner.value.id) {
   //   console.log('Container is the player');
