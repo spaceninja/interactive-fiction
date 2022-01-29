@@ -2,7 +2,8 @@ export default class Verb {
   name: string;
   synonym: Array<string>;
   action: () => boolean;
-  test?: () => void;
+  test?: () => boolean;
+  priority?: number;
 
   /**
    * @param props
@@ -10,21 +11,25 @@ export default class Verb {
    * @param props.synonym List of all words which can refer to the verb.
    * @param props.action The function called for this verb.
    * @param props.test The function called to test this verb.
+   * @param props.priority Priority of this item when sorting
    */
   constructor({
     name,
     synonym,
     action,
     test,
+    priority,
   }: {
     name: string;
     synonym: Array<string>;
     action: () => boolean;
-    test?: () => void;
+    test?: () => boolean;
+    priority?: number;
   }) {
     this.name = name;
     this.synonym = synonym;
     this.action = action;
     this.test = test;
+    this.priority = priority;
   }
 }

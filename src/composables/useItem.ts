@@ -8,7 +8,19 @@ import {
   tell,
   dummyMessages,
   theDirect,
+  perform,
+  handlePlayerInput,
+  theIndirect,
 } from './game/useGame';
+import * as rooms from './useRoom';
+
+/**
+ * Items
+ * All the items that live in the game that the player can interact with.
+ *
+ * Nothing should live in this file except Vue refs containing an Item,
+ * because the contents of this file build the list of items for the game.
+ */
 
 /*
 export const Something = ref(
@@ -192,6 +204,25 @@ export const Map = ref(
   })
 );
 
+export const Nails = ref(
+  new Item({
+    name: 'nails',
+    id: 'Nails',
+    location: 'LivingRoom',
+    synonym: ['nails', 'nail'],
+    flags: { doNotDescribe: true },
+    action: () => {
+      switch (theVerb.value) {
+        case 'Take':
+          tell('The nails, deeply embedded in the door, cannot be removed.');
+          return true;
+        default:
+          return false;
+      }
+    },
+  })
+);
+
 export const Lamp = ref(
   new Item({
     name: 'brass lantern',
@@ -221,6 +252,7 @@ export const Lamp = ref(
             tell("A burned-out lamp won't light");
             return true;
           }
+          // TODO: V-LAMP-ON
           // TODO: handle queued event
           // queue('iLantern');
           return false;
@@ -229,6 +261,7 @@ export const Lamp = ref(
             tell('The lamp has already burned out.');
             return true;
           }
+          // TODO: V-LAMP-OFF
           // TODO: handle removing queued event
           // dequeue('iLantern');
           return false;
@@ -244,6 +277,15 @@ export const Lamp = ref(
         default:
           return false;
       }
+    },
+    test: () => {
+      handlePlayerInput('examine brass lantern');
+      handlePlayerInput('turn on brass lantern');
+      handlePlayerInput('examine brass lantern');
+      handlePlayerInput('turn off brass lantern');
+      handlePlayerInput('throw brass lantern');
+      handlePlayerInput('examine brass lantern');
+      return true;
     },
   })
 );
@@ -291,6 +333,13 @@ export const WoodenDoor = ref(
         default:
           return false;
       }
+    },
+    test: () => {
+      handlePlayerInput('open strange door');
+      handlePlayerInput('burn strange door');
+      handlePlayerInput('destroy strange door');
+      handlePlayerInput('look behind strange door');
+      return true;
     },
   })
 );
@@ -403,7 +452,7 @@ export const Water = ref(
     name: 'quantity of water',
     id: 'Water',
     location: 'Bottle',
-    synonym: ['water', 'quantity', 'liquid', 'h20'],
+    synonym: ['water', 'quantity', 'liquid', 'h2o'],
     flags: { tryTakeBit: true, takeBit: true, drinkBit: true },
     size: 4,
     action: () => {
@@ -459,6 +508,7 @@ export const Bottle = ref(
         default:
           return false;
       }
+      // TODO: unreachable!
       if (empty === true && Water.value.location === 'Bottle') {
         Water.value.location = null;
         tell('The water spills to the floor and evaporates.');
@@ -525,7 +575,10 @@ export const OwnersManual = ref(
     description: "ZORK owner's manual",
     flags: { readBit: true, takeBit: true },
     initialDescription: 'Loosely attached to a wall is a small piece of paper.',
-    text: 'Congratulations! You are the privileged owner of ZORK I: The Great Underground Empire, a self-contained and self-maintaining universe. If used and maintained in accordance with normal operating practices for small universes, ZORK will provide many months of trouble-free operation.',
+    text: `Congratulations! You are the privileged owner of ZORK I:
+      The Great Underground Empire, a self-contained and self-maintaining universe.
+      If used and maintained in accordance with normal operating practices for
+      small universes, ZORK will provide many months of trouble-free operation.`,
     action: () => false,
   })
 );
@@ -537,17 +590,26 @@ export const TrapDoor = ref(
     location: 'LivingRoom',
     synonym: ['door', 'trapdoor', 'trap-door', 'cover'],
     adjective: ['trap', 'dusty'],
-    flags: { isDoor: true, doNotDescribe: true, isInvisible: true },
+    flags: {
+      isDoor: true,
+      doNotDescribe: true,
+      isInvisible: true,
+      isOpen: false,
+    },
     action: () => {
       console.log('Trap Door Handler', theVerb.value);
       switch (theVerb.value) {
-        case 'raise':
-        case 'unlock':
-          // TODO: replace with PERFORM
-          // TrapDoor.value.action('open');
-          return false;
-        case 'open':
-        case 'close':
+        case 'Raise':
+        case 'Unlock':
+        case 'Push':
+        case 'Move':
+          perform(
+            TrapDoor.value.flags.isOpen ? 'Close' : 'Open',
+            TrapDoor.value.id
+          );
+          return true;
+        case 'Open':
+        case 'Close':
           console.log('OPEN OR CLOSE TRAP DOOR');
           if (here.value.id === 'LivingRoom') {
             openClose(
@@ -558,7 +620,7 @@ export const TrapDoor = ref(
             );
           } else if (here.value.id === 'Cellar') {
             if (!TrapDoor.value.flags.isOpen) {
-              if (theVerb.value === 'open') {
+              if (theVerb.value === 'Open') {
                 tell('The door is locked from above.');
               } else {
                 TrapDoor.value.flags.isTouched = false;
@@ -568,7 +630,7 @@ export const TrapDoor = ref(
               tell(pickOne(dummyMessages));
             }
           }
-          return false;
+          return true;
         case 'LookUnder':
         case 'LookInside':
           console.log('LOOK UNDER TRAP DOOR', here.value.name);
@@ -583,6 +645,14 @@ export const TrapDoor = ref(
           return false;
       }
     },
+    test: () => {
+      here.value = rooms.LivingRoom.value;
+      handlePlayerInput('look under trap door');
+      handlePlayerInput('move trap door');
+      handlePlayerInput('look under trap door');
+      handlePlayerInput('push trap door');
+      return true;
+    },
   })
 );
 
@@ -595,8 +665,9 @@ export const Rug = ref(
     adjective: ['large', 'oriental'],
     flags: { doNotDescribe: true, tryTakeBit: true, isMoved: false },
     action: () => {
+      console.log('Rug Handler', theVerb.value);
       switch (theVerb.value) {
-        case 'raise':
+        case 'Raise':
           console.log('RAISE RUG');
           tell(
             `The rug is too heavy to lift${
@@ -606,8 +677,8 @@ export const Rug = ref(
             }`
           );
           return false;
-        case 'move':
-        case 'push':
+        case 'Move':
+        case 'Push':
           console.log('MOVE OR PUSH RUG');
           if (Rug.value.flags.isMoved) {
             tell(
@@ -621,12 +692,12 @@ export const Rug = ref(
             TrapDoor.value.flags.isInvisible = false;
             // this-is-it trap-door
           }
-          return false;
-        case 'take':
+          return true;
+        case 'Take':
           console.log('TAKE RUG');
           tell('The rug is extremely heavy and cannot be carried.');
-          return false;
-        case 'look under':
+          return true;
+        case 'LookUnder':
           console.log('LOOK UNDER RUG');
           if (!Rug.value.flags.isMoved && !TrapDoor.value.flags.isOpen) {
             tell(
@@ -637,8 +708,8 @@ export const Rug = ref(
               'Having moved the rug previously, there is nothing to see under it.'
             );
           }
-          return false;
-        case 'climb on':
+          return true;
+        case 'ClimbOn':
           console.log('CLIMB ON RUG');
           if (!Rug.value.flags.isMoved && !TrapDoor.value.flags.isOpen) {
             tell(
@@ -647,12 +718,86 @@ export const Rug = ref(
           } else {
             tell("I suppose you think it's a magic carpet?");
           }
-          return false;
+          return true;
         default:
-          // TODO: My sneaking suspicion is we'll need to return a single value
-          // from the action function, and return false in the default state.
           return false;
       }
     },
+    test: () => {
+      handlePlayerInput('take rug');
+      handlePlayerInput('climb on rug');
+      handlePlayerInput('raise rug');
+      handlePlayerInput('look under rug');
+      handlePlayerInput('move rug');
+      handlePlayerInput('climb on rug');
+      handlePlayerInput('raise rug');
+      handlePlayerInput('look under rug');
+      handlePlayerInput('move rug');
+      return true;
+    },
+  })
+);
+
+export const Me = ref(
+  new Item({
+    name: 'you',
+    id: 'Me',
+    location: null,
+    synonym: ['me', 'myself', 'self', 'cretin'],
+    flags: { isActor: true },
+    action: () => {
+      console.log('Me Handler', theVerb.value);
+      switch (theVerb.value) {
+        case 'Talk':
+          tell(
+            'Talking to yourself is said to be a sign of impending mental collapse.'
+          );
+          return true;
+        case 'Give':
+          if (theIndirect.value === Me.value.id) {
+            perform('Take', theDirect.value);
+            return true;
+          }
+          return false;
+        case 'Make':
+          tell('Only you can do that.');
+          return true;
+        case 'Disembark':
+          tell("You'll have to do that on your own.");
+          return true;
+        case 'Eat':
+          tell('Auto-cannibalism is not the answer.');
+          return true;
+        case 'Attack':
+        case 'Destroy':
+          tell('Suicide is not the answer.');
+          return true;
+        case 'Throw':
+          if (theDirect.value === Me.value.id) {
+            tell("Why don't you just walk like normal people?");
+            return true;
+          }
+          return false;
+        case 'Take':
+          tell('How romantic!');
+          return true;
+        case 'Examine':
+          tell("That's difficult unless your eyes are prehensile.");
+          return true;
+        default:
+          return false;
+      }
+    },
+  })
+);
+
+export const Adventurer = ref(
+  new Item({
+    name: 'cretin',
+    id: 'Adventurer',
+    location: null,
+    synonym: ['adventurer'],
+    flags: { doNotDescribe: true, isInvisible: true, isActor: true },
+    action: () => false,
   })
 );

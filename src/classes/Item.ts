@@ -3,10 +3,10 @@ export default class Item {
   id: string;
   location: string | null;
   synonym: Array<string>;
-  flags: Record<string, unknown>;
+  flags: Record<string, boolean>;
   adjective?: Array<string>;
   action: () => boolean;
-  test?: () => void;
+  test?: () => boolean;
   descriptionFunction?: () => boolean;
   description?: string;
   initialDescription?: string;
@@ -57,10 +57,10 @@ export default class Item {
     id: string;
     location: string | null;
     synonym: Array<string>;
-    flags: Record<string, unknown>;
+    flags: Record<string, boolean>;
     action: () => boolean;
     adjective?: Array<string>;
-    test?: () => void;
+    test?: () => boolean;
     descriptionFunction?: () => boolean;
     description?: string;
     initialDescription?: string;

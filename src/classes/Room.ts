@@ -1,15 +1,45 @@
 import Item from './Item';
 
+interface UnConditionalExit {
+  room: string;
+}
+
+interface NonExit {
+  fail: string;
+}
+
+interface ConditionalExit {
+  room: string;
+  fail?: string;
+  condition: () => boolean;
+}
+
+interface DoorExit {
+  room: string;
+  fail?: string;
+  door: string;
+}
+
+interface MethodExit {
+  method: () => UnConditionalExit | NonExit;
+}
+
+type Exit =
+  | NonExit
+  | UnConditionalExit
+  | ConditionalExit
+  | DoorExit
+  | MethodExit;
+
 export default class Room extends Item {
   declare name: string;
   declare id: string;
   declare action: () => boolean;
   declare description?: string;
   declare value?: number;
-  declare flags: Record<string, unknown>;
-  exits: Record<string, unknown>;
-  pseudo?: Array<object>;
+  declare flags: Record<string, boolean>;
   global?: Array<string>;
+  exits: Record<string, Exit>;
 
   /**
    * @param props
@@ -32,7 +62,6 @@ export default class Room extends Item {
    * @param props.exits.down
    * @param props.exits.inward
    * @param props.exits.out Only meaningful for rooms with one exit.
-   * @param props.pseudo List of pseudo items in the room.
    * @param props.global List of local-global items in the room.
    */
   constructor({
@@ -43,7 +72,6 @@ export default class Room extends Item {
     value,
     flags,
     exits,
-    pseudo,
     global,
   }: {
     name: string;
@@ -51,9 +79,8 @@ export default class Room extends Item {
     action: () => boolean;
     description?: string;
     value?: number;
-    flags: Record<string, unknown>;
-    exits: Record<string, unknown>;
-    pseudo?: Array<object>;
+    flags: Record<string, boolean>;
+    exits: Record<string, Exit>;
     global?: Array<string>;
   }) {
     super({
@@ -67,7 +94,6 @@ export default class Room extends Item {
       flags,
     });
     this.exits = exits;
-    this.pseudo = pseudo;
     this.global = global;
   }
 }

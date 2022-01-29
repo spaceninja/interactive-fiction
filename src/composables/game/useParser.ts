@@ -4,6 +4,10 @@ import { allTokens, tokenVocabulary } from './useParserVocabulary';
 // Create a Player Input Lexer using our game's tokens.
 const playerInputLexer = new Lexer(allTokens);
 
+// TODO: we can get rid of all these typescript ignores by running the dts generator:
+// @see https://chevrotain.io/docs/guide/concrete_syntax_tree.html##cst-typescript-signatures
+// @see https://github.com/Chevrotain/chevrotain/tree/master/examples/implementation_languages/typescript
+
 /**
  * Parser
  *
@@ -24,6 +28,7 @@ class playerInputParser extends CstParser {
         { ALT: () => this.SUBRULE(this.score) },
         { ALT: () => this.SUBRULE(this.look) },
         { ALT: () => this.SUBRULE(this.test) },
+        { ALT: () => this.SUBRULE(this.walk) },
         { ALT: () => this.SUBRULE(this.verbNoun) },
       ]);
     });
@@ -45,10 +50,19 @@ class playerInputParser extends CstParser {
       ]);
     });
 
-    // our fallback is a simple two word parser
+    this.RULE('walk', () => {
+      this.OPTION(() => {
+        this.CONSUME(tokenVocabulary.Walk);
+      });
+      this.CONSUME(tokenVocabulary.Direction);
+    });
+
+    // our fallback is a simple two-three word parser
     this.RULE('verbNoun', () => {
       this.CONSUME(tokenVocabulary.Verb);
-      this.CONSUME(tokenVocabulary.Noun);
+      this.AT_LEAST_ONE(() => {
+        this.CONSUME(tokenVocabulary.Noun);
+      });
     });
 
     this.performSelfAnalysis(); // 1
@@ -77,12 +91,14 @@ class PlayerInputVisitor extends parserInstance.getBaseCstVisitorConstructor() {
     const scoreAst = this.visit(ctx.score);
     const lookAst = this.visit(ctx.look);
     const testAst = this.visit(ctx.test);
+    const walkAst = this.visit(ctx.walk);
     const verbNounAst = this.visit(ctx.verbNoun);
 
     return {
       ...scoreAst,
       ...lookAst,
       ...testAst,
+      ...walkAst,
       ...verbNounAst,
     };
   }
@@ -146,6 +162,18 @@ class PlayerInputVisitor extends parserInstance.getBaseCstVisitorConstructor() {
     };
   }
 
+  walk(ctx) {
+    return {
+      verb: {
+        name: 'Walk',
+      },
+      noun: {
+        input: ctx.Direction[0].image,
+        name: ctx.Direction[0].tokenType.name,
+      },
+    };
+  }
+
   verbNoun(ctx) {
     return {
       verb: {
@@ -155,6 +183,10 @@ class PlayerInputVisitor extends parserInstance.getBaseCstVisitorConstructor() {
       noun: {
         input: ctx.Noun[0].image,
         name: ctx.Noun[0].tokenType.name,
+      },
+      indirect: {
+        input: ctx.Noun[1]?.image,
+        name: ctx.Noun[1]?.tokenType.name,
       },
     };
   }
@@ -172,10 +204,10 @@ const visitorInstance = new PlayerInputVisitor();
  *
  * 1. `.input` is a setter which will reset the parser's internal's state.
  *
- * @param {string} playerInput
+ * @param playerInput
  * @returns object
  */
-export const parser = (playerInput) => {
+export const parser = (playerInput: string) => {
   // Lex
   const lexResult = playerInputLexer.tokenize(playerInput);
   if (lexResult.errors.length > 0) {

@@ -1,7 +1,19 @@
-import { createToken, Lexer } from 'chevrotain';
+import { Ref } from 'vue';
+import { createToken, Lexer, TokenType } from 'chevrotain';
+import VerbType from '../../classes/Verb';
 import * as gameVerbs from './useGameVerb';
 import * as verbs from '../useVerb';
 import * as items from '../useItem';
+console.log('VERBS', verbs);
+
+const sortedVerbs: { [key: string]: Ref<VerbType> } = Object.values(verbs)
+  .sort((a, b) => {
+    if (!a.value.priority) a.value.priority = 0;
+    if (!b.value.priority) b.value.priority = 0;
+    return b.value.priority - a.value.priority;
+  })
+  .reduce((acc, cur) => ({ ...acc, [cur.value.name]: cur }), {});
+console.log('SORTED VERBS', sortedVerbs);
 
 /**
  * Create Vocabulary Tokens
@@ -23,9 +35,25 @@ const StringLiteral = createToken({
 const GameVerb = createToken({ name: 'GameVerb', pattern: Lexer.NA });
 const Verb = createToken({ name: 'Verb', pattern: Lexer.NA });
 const Noun = createToken({ name: 'Noun', pattern: Lexer.NA });
+const Direction = createToken({ name: 'Direction', pattern: Lexer.NA });
+
+// Generate Tokens for Each Verb
+const verbTokens: TokenType[] = [];
+Object.entries(sortedVerbs).forEach(([name, item]) => {
+  const i = item.value;
+  verbTokens.push(
+    createToken({
+      name: name,
+      pattern: new RegExp(`${i.synonym.join('|')}`, 'i'),
+      longer_alt: StringLiteral,
+      categories: [Verb],
+    })
+  );
+});
+console.log('VERB TOKENS', verbTokens);
 
 // Generate Tokens for Each Game Verb
-const gameVerbTokens = [];
+const gameVerbTokens: TokenType[] = [];
 Object.entries(gameVerbs).forEach(([name, item]) => {
   const i = item.value;
   gameVerbTokens.push(
@@ -38,22 +66,8 @@ Object.entries(gameVerbs).forEach(([name, item]) => {
   );
 });
 
-// Generate Tokens for Each Verb
-const verbTokens = [];
-Object.entries(verbs).forEach(([name, item]) => {
-  const i = item.value;
-  verbTokens.push(
-    createToken({
-      name: name,
-      pattern: new RegExp(`${i.synonym.join('|')}`, 'i'),
-      longer_alt: StringLiteral,
-      categories: [Verb],
-    })
-  );
-});
-
 // Generate Tokens for Each Item
-const itemTokens = [];
+const itemTokens: TokenType[] = [];
 Object.entries(items).forEach(([name, item]) => {
   const i = item.value;
   itemTokens.push(
@@ -69,11 +83,37 @@ Object.entries(items).forEach(([name, item]) => {
   );
 });
 
+// Generate Tokens for Each Direction
+const directionTokens: TokenType[] = [];
+[
+  ['northeast', 'ne'],
+  ['southeast', 'se'],
+  ['southwest', 'sw'],
+  ['northwest', 'nw'],
+  ['north', 'n'],
+  ['east', 'e'],
+  ['south', 's'],
+  ['west', 'w'],
+  ['up'],
+  ['down'],
+  ['in'],
+  ['out'],
+].forEach((direction) => {
+  directionTokens.push(
+    createToken({
+      name: direction[0],
+      pattern: new RegExp(`${direction.join('|')}`, 'i'),
+      longer_alt: StringLiteral,
+      categories: [Direction],
+    })
+  );
+});
+
 // Others
 const Integer = createToken({ name: 'Integer', pattern: /0|[1-9]\d*/ });
 const Buzzword = createToken({
   name: 'Buzzword',
-  pattern: /an|at|a|the|is|of/i,
+  pattern: /an|at|a|the|is|of|to|with/i,
   longer_alt: StringLiteral,
   group: Lexer.SKIPPED,
 });
@@ -93,12 +133,14 @@ export const allTokens = [
   // WhiteSpace comes first as it is very common thus it will speed up the lexer.
   WhiteSpace,
   // "keywords" appear before the StringLiteral
-  ...gameVerbTokens,
-  ...verbTokens,
   ...itemTokens,
+  ...verbTokens,
+  ...gameVerbTokens,
+  ...directionTokens,
   GameVerb,
   Verb,
   Noun,
+  Direction,
   Integer,
   Buzzword,
   Punctuation,
@@ -107,7 +149,7 @@ export const allTokens = [
 ];
 
 // the vocabulary will be exported and used in the Parser definition.
-export const tokenVocabulary = {};
+export const tokenVocabulary: { [key: string]: TokenType } = {};
 allTokens.forEach((tokenType) => {
   tokenVocabulary[tokenType.name] = tokenType;
 });
