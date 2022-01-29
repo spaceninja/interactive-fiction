@@ -1,10 +1,12 @@
+import { Ref } from 'vue';
 import { createToken, Lexer, TokenType } from 'chevrotain';
+import VerbType from '../../classes/Verb';
 import * as gameVerbs from './useGameVerb';
 import * as verbs from '../useVerb';
 import * as items from '../useItem';
 console.log('VERBS', verbs);
 
-const sortedVerbs = Object.values(verbs)
+const sortedVerbs: { [key: string]: Ref<VerbType> } = Object.values(verbs)
   .sort((a, b) => {
     if (!a.value.priority) a.value.priority = 0;
     if (!b.value.priority) b.value.priority = 0;
@@ -38,7 +40,6 @@ const Direction = createToken({ name: 'Direction', pattern: Lexer.NA });
 // Generate Tokens for Each Verb
 const verbTokens: TokenType[] = [];
 Object.entries(sortedVerbs).forEach(([name, item]) => {
-  // @ts-ignore
   const i = item.value;
   verbTokens.push(
     createToken({
@@ -148,8 +149,7 @@ export const allTokens = [
 ];
 
 // the vocabulary will be exported and used in the Parser definition.
-export const tokenVocabulary = {};
+export const tokenVocabulary: { [key: string]: TokenType } = {};
 allTokens.forEach((tokenType) => {
-  // @ts-ignore
   tokenVocabulary[tokenType.name] = tokenType;
 });

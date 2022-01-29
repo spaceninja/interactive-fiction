@@ -1,12 +1,20 @@
 import { ref, Ref } from 'vue';
 import { pickOne } from '../../helpers/pickOne';
 import { uuid } from '../../helpers/uuid';
-import Item from '../../classes/Item';
-import * as items from '../useItem';
-import * as verbs from '../useVerb';
-import * as rooms from '../useRoom';
-import * as gameVerbs from './useGameVerb';
 import { parser } from './useParser';
+import Item from '../../classes/Item';
+import Room from '../../classes/Room';
+import Verb from '../../classes/Verb';
+import * as rawItems from '../useItem';
+import * as rawRooms from '../useRoom';
+import * as rawVerbs from '../useVerb';
+import * as rawGameVerbs from './useGameVerb';
+
+// Have to redeclare these with types, which is dumb
+const items = rawItems as { [key: string]: Ref<Item> };
+const rooms = rawRooms as { [key: string]: Ref<Room> };
+const verbs = rawVerbs as { [key: string]: Ref<Verb> };
+const gameVerbs = rawGameVerbs as { [key: string]: Ref<Verb> };
 
 interface Output {
   message: string;
@@ -68,7 +76,6 @@ export const init = () => {
  * @param roomId - ID of the room to go to
  */
 export const goTo = (roomId: string) => {
-  // @ts-ignore
   here.value = rooms[roomId].value;
   // TODO: update lighting info
   // TODO: run room's ENTER action
@@ -179,22 +186,18 @@ export const perform = (v = '', d = '', i = '') => {
   theIndirect.value = i;
 
   // Try the indirect item's handler
-  // @ts-ignore
   const indirectHandled = i ? items[i]?.value.action() : false;
   if (indirectHandled) return true;
 
   // Try the direct item's handler
-  // @ts-ignore
   const directHandled = d ? items[d]?.value.action() : false;
   if (directHandled) return true;
 
   // Nothing else handled it, so pass to the verb
-  // @ts-ignore
   const verbHandled = v ? verbs[v]?.value.action() : false;
   if (verbHandled) return true;
 
   // If it's not a verb, it might be a game verb
-  // @ts-ignore
   const gameVerbHandled = v ? gameVerbs[v]?.value.action() : false;
   if (gameVerbHandled) return true;
 

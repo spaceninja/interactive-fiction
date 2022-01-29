@@ -1,5 +1,4 @@
-import { ref } from 'vue';
-import Verb from '../classes/Verb';
+import { ref, Ref } from 'vue';
 import {
   here,
   perform,
@@ -9,7 +8,11 @@ import {
   handlePlayerInput,
   goTo,
 } from './game/useGame';
-import * as items from './useItem';
+import Item from '../classes/Item';
+import Verb from '../classes/Verb';
+import * as rawItems from './useItem';
+// Have to redeclare these with types, which is dumb
+const items = rawItems as { [key: string]: Ref<Item> };
 
 /**
  * Verbs
@@ -37,9 +40,7 @@ export const Attack = ref(
     ],
     action: () => {
       console.log('Attack: default handler');
-      // @ts-ignore
       const direct = items[theDirect.value].value;
-      // @ts-ignore
       const indirect = items[theIndirect.value]?.value;
       if (!direct.flags.isActor) {
         tell(`I've known some strange people, but fighting a ${direct.name}?`);
@@ -75,7 +76,6 @@ export const Examine = ref(
     name: 'Examine',
     synonym: ['examine', 'describe', 'what', 'whats', 'look at'],
     action: () => {
-      // @ts-ignore
       const item = items[theDirect.value].value;
       if (item.text) {
         tell(item.text);
@@ -125,7 +125,6 @@ export const LookBehind = ref(
     priority: 1,
     action: () => {
       console.log('LookBehind: default handler');
-      // @ts-ignore
       tell(`There is nothing behind the ${items[theDirect.value].value.name}.`);
       return true;
     },
@@ -139,13 +138,11 @@ export const LookOn = ref(
     priority: 1,
     action: () => {
       console.log('LookOn: default handler');
-      // @ts-ignore
       if (items[theDirect.value].value.flags.isContainer) {
         console.log('LOOK ON THE CONTAINER');
         perform('LookInside', theDirect.value);
         return true;
       }
-      // @ts-ignore
       tell(`Look on a  ${items[theDirect.value].value.name}???`);
       return true;
     },
@@ -188,7 +185,6 @@ export const Move = ref(
         perform('PushTo', theDirect.value, theIndirect.value);
         return true;
       }
-      // @ts-ignore
       const item = items[theDirect.value].value;
       if (item.flags.takeBit) {
         tell(`Moving the ${item.name} reveals nothing.`);
@@ -211,7 +207,6 @@ export const Push = ref(
         return true;
       }
       tell(
-        // @ts-ignore
         `Pushing the ${items[theDirect.value].value.name} doesn't seem to work.`
       );
       return true;
@@ -237,7 +232,6 @@ export const Read = ref(
     name: 'Read',
     synonym: ['read', 'skim'],
     action: () => {
-      // @ts-ignore
       const item = items[theDirect.value].value;
       // TODO: use LIT?
       if (!here.value.flags.isOn) {
@@ -260,7 +254,6 @@ export const Smell = ref(
     synonym: ['smell', 'sniff'],
     action: () => {
       console.log('Smell: default handler');
-      // @ts-ignore
       tell(`It smells like a ${items[theDirect.value].value.name}.`);
       return true;
     },

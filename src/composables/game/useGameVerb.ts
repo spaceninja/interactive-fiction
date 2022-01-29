@@ -1,5 +1,7 @@
-import { ref } from 'vue';
+import { ref, Ref } from 'vue';
 import Verb from '../../classes/Verb';
+import Item from '../../classes/Item';
+import Room from '../../classes/Room';
 import {
   tell,
   here,
@@ -10,11 +12,17 @@ import {
   handlePlayerInput,
 } from './useGame';
 import { describeHere, describeHereObjects } from './useDescriber';
-import * as rooms from '../useRoom';
-import * as items from '../useItem';
-import * as verbs from '../useVerb';
+import * as rawRooms from '../useRoom';
+import * as rawItems from '../useItem';
+import * as rawVerbs from '../useVerb';
 // this is dumb, but I need to refer to an unknown gameVerb in test
-import * as gameVerbs from './useGameVerb';
+import * as rawGameVerbs from './useGameVerb';
+
+// Have to redeclare these with types, which is dumb
+const rooms = rawRooms as { [key: string]: Ref<Room> };
+const items = rawItems as { [key: string]: Ref<Item> };
+const verbs = rawVerbs as { [key: string]: Ref<Verb> };
+const gameVerbs = rawGameVerbs as { [key: string]: Ref<Verb> };
 
 /**
  * Game Verbs
@@ -126,21 +134,18 @@ export const Test = ref(
     synonym: ['test'],
     action: () => {
       // Try the direct item's handler
-      // @ts-ignore
       const itemTest = items[theDirect.value]?.value.test;
       const itemHandled = itemTest ? itemTest() : false;
       console.log('TEST as item', theDirect.value, itemHandled);
       if (itemHandled) return true;
 
       // Nothing else handled it, so pass to the verb
-      // @ts-ignore
       const verbTest = verbs[theDirect.value]?.value.test;
       const verbHandled = verbTest ? verbTest() : false;
       console.log('TEST as verb', theDirect.value, verbHandled);
       if (verbHandled) return true;
 
       // If it's not a verb, it might be a game verb
-      // @ts-ignore
       const gameVerbTest = gameVerbs[theDirect.value]?.value.test;
       const gameVerbHandled = gameVerbTest ? gameVerbTest() : false;
       console.log('TEST as game verb', theDirect.value, gameVerbHandled);
