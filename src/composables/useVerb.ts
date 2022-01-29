@@ -273,42 +273,31 @@ export const Walk = ref(
         return true;
       }
       // Door Exit — goTo room if door is open, else tell fail
-      // @ts-ignore
-      if (exit.door) {
-        // @ts-ignore
+      if ('door' in exit) {
         const door = items[exit.door].value;
-        // @ts-ignore
         const result = door.flags.isOpen;
         if (result) {
-          // @ts-ignore
           goTo(exit.room);
           return true;
         }
-        // @ts-ignore
         tell(exit.fail ? exit.fail : `The ${door.name} is closed.`);
         return true;
       }
       // Conditional Exit — goTo room if true, else tell fail
-      // @ts-ignore
-      if (exit.condition) {
-        // @ts-ignore
+      if ('condition' in exit) {
         const result = exit.condition();
         if (result) {
-          // @ts-ignore
           goTo(exit.room);
           return true;
         }
-        // @ts-ignore
         tell(exit.fail ? exit.fail : "You can't go that way.");
         return true;
       }
       // Method Exit - call method, which returns either a room or a fail string
-      // @ts-ignore
-      if (exit.method) {
-        // @ts-ignore
+      if ('method' in exit) {
         const result = exit.method();
         if (result) {
-          if (result.room) {
+          if ('room' in result) {
             goTo(result.room);
             return true;
           }
@@ -320,16 +309,16 @@ export const Walk = ref(
         return true;
       }
       // Unconditional Exit - goTo room
-      // @ts-ignore
-      if (exit.room) {
-        // @ts-ignore
+      if ('room' in exit) {
         goTo(exit.room);
         return true;
       }
       // Unconditional Non-Exit - tell fail or generic error
-      // @ts-ignore
-      tell(exit.fail ? exit.fail : "You can't go that way.");
-      return true;
+      if ('fail' in exit) {
+        tell(exit.fail ? exit.fail : "You can't go that way.");
+        return true;
+      }
+      return false;
     },
   })
 );
