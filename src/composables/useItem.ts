@@ -801,3 +801,46 @@ export const Adventurer = ref(
     action: () => false,
   })
 );
+
+export const Stairs = ref(
+  new Item({
+    name: 'stairs',
+    id: 'Stairs',
+    location: 'LocalGlobals',
+    synonym: ['stairs', 'steps', 'staircase', 'stairway'],
+    adjective: ['stone', 'dark', 'marble', 'forbidding', 'steep'],
+    flags: { doNotDescribe: true, climbBit: true },
+    action: () => {
+      console.log('Stairs Handler', theVerb.value);
+      switch (theVerb.value) {
+        case 'Through':
+          tell('You should say whether you want to go up or down.');
+          return true;
+        default:
+          return false;
+      }
+    },
+  })
+);
+
+export const GlobalObjects = ref(
+  new Item({
+    name: 'global objects',
+    id: 'GlobalObjects',
+    location: null,
+    synonym: ['globalobjects'],
+    flags: { isInvisible: true },
+    action: () => false,
+  })
+);
+
+export const LocalGlobals = ref(
+  new Item({
+    name: 'local globals',
+    id: 'LocalGlobals',
+    location: 'GlobalObjects',
+    synonym: ['localglobals'],
+    flags: { isInvisible: true },
+    action: () => false,
+  })
+);

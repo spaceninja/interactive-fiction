@@ -8,11 +8,11 @@ This project is an attempt to create an Infocom-style text adventure game engine
 
 - [ ] Print game title/copyright/version/etc
 - [ ] Initialize game with GO
-  - [ ] Set special global variables (WINNER, PLAYER, HERE, LIT, SCORE, SCORE-MAX, MOVES, PRSA, PRSO, PRSI)
+  - [x] Set special global variables (WINNER, PLAYER, HERE, LIT, SCORE, SCORE-MAX, MOVES, PRSA, PRSO, PRSI)
   - [ ] Queue interrupts based on start of game
   - [ ] Display opening text/title screen
-  - [ ] Call V-LOOK to describe current location
-  - [ ] Call the MAIN-LOOP
+  - [x] Call V-LOOK to describe current location
+  - [x] Call the MAIN-LOOP
 - [x] Heartbeat of game with MAIN-LOOP
 - [x] Understand the user with PARSER
 - [x] Call the action with PERFORM
@@ -74,9 +74,9 @@ This project is an attempt to create an Infocom-style text adventure game engine
 - [ ] Handle taking items
   - [x] Add ME object
   - [x] Add ADVENTURER object
-  - [ ] Add ACCESSIBLE? check from gparser
-  - [ ] Add SEE-INSIDE? check from gverbs
-  - [ ] Add OPENABLE? check from gmacros
+  - [x] Add ACCESSIBLE? check from gparser
+  - [x] Add SEE-INSIDE? check from gverbs
+  - [x] Add OPENABLE? check from gmacros
   - [ ] Add INVENTORY (I) command
   - [ ] Add GET/TAKE/DROP/PUT/PUT-ON/PUT-UNDER/PUT-BEHIND commands
   - [ ] "The object that you mentioned isn't here" response
@@ -97,6 +97,7 @@ This project is an attempt to create an Infocom-style text adventure game engine
   - [ ] Add candles?
   - [ ] Add Lantern queue item
   - [ ] Add LIT? check from gparser
+  - [ ] Add NOW-DARK? and NOW-LIT? routines
   - [ ] Add REMOVE-CAREFULLY method (handles lighting changes)
   - [ ] Items that emit light
   - [ ] Rooms that are lit
@@ -143,6 +144,8 @@ This project is an attempt to create an Infocom-style text adventure game engine
 - [ ] Add Vehicles
   - [ ] Updates to describe routines
   - [ ] Add BOARD/CLIMB-ON/DISEMBARK/EXIT commands
+  - [ ] Add UNTOUCHABLE routine
+- [ ] Add HELP command
 - [ ] Add SAVE/RESTORE
   - [ ] Add AUTOSAVE
   - [ ] Add UNDO

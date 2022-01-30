@@ -39,7 +39,7 @@ export const it = ref('');
 // game state variables
 export const here = ref(rooms.LivingRoom.value);
 export const player = ref(items.Adventurer.value); // the player
-export const winner = ref(player.value); // the current actor, not always the player
+export const winner = ref(player.value); // the current actor (player or NPC)
 
 // global flags (TODO get rid of these in favor of item/room flags)
 export const magicFlag = ref(false);
@@ -71,7 +71,13 @@ export const init = () => {
 
 /**
  * Go To
- * Move the player to the room, handle room change things, and LOOK
+ *
+ * This routine takes one argument, which should be a room. It sends the player
+ * to that room, and does all the appropriate things, such as call the room's
+ * action routine with M-ENTER, and call the describers. Walk, the routine
+ * which normally handles all movement, calls this routine; however, there are
+ * many instances when you will want to call it yourself, such as when the
+ * player pushes the button in the teleportation booth.
  *
  * @param roomId - ID of the room to go to
  */
@@ -85,6 +91,7 @@ export const goTo = (roomId: string) => {
 
 /**
  * Handle Player Input
+ * This is the equivalent of the main loop in Zork.
  *
  * When the player enters a command, this routine attempts to process it
  * by passing the text to the parser, which attempts to understand the
@@ -108,7 +115,8 @@ export const handlePlayerInput = (command = playerInput.value) => {
   if (parsedPlayerInput.error) {
     console.error(parsedPlayerInput.error);
     tell(
-      `You used the word “${parsedPlayerInput.error.token}” in a way that I don't understand.`,
+      `You used the word “${parsedPlayerInput.error.token}”
+       in a way that I don't understand.`,
       'error'
     );
     playerInput.value = ''; // clear the input bar
@@ -216,4 +224,180 @@ export const perform = (v = '', d = '', i = '') => {
  */
 export const tell = (message: string, className?: string) => {
   theOutput.value.push({ message, className, key: uuid() });
+};
+
+/**
+ * Openable?
+ *
+ * This routine takes an object and checks whether it's openable.
+ * (i.e. is a door or a container)
+ *
+ * @param item - The item to evaluate
+ * @returns
+ */
+export const openable = (item: Ref<Item>) => {
+  return item.value.flags.isDoor || item.value.flags.isContainer;
+};
+
+/**
+ * See Inside?
+ *
+ * A small routine which takes an object—a container—and returns true
+ * if the player can see the contents of the container.
+ * (i.e. is it open or transparent)
+ *
+ * @param item - The container to evaluate
+ * @returns boolean
+ */
+export const seeInside = (item: Ref<Item>) => {
+  return (
+    !item.value.flags.isInvisible &&
+    (item.value.flags.isTransparent || item.value.flags.isOpen)
+  );
+};
+
+/**
+ * Global In?
+ *
+ * This routine takes two arguments, an object and a room, and returns true
+ * if the object is a local-global in that room.
+ *
+ * @param item
+ * @returns boolean
+ */
+export const globalIn = (item: Ref<Item>, room: Ref<Room>) => {
+  return room.value.global?.includes(item.value.id);
+};
+
+/**
+ * In?
+ *
+ * Takes an argument, an object, as well as an optional argument, which can be
+ * either a room or an object. If no optional argument is supplied, it assumes
+ * that the second argument is the PLAYER object. Takes the first object and
+ * determines if it is directly within the second object, without recursion.
+ *
+ * @param item - The item to look for
+ * @param container - The container to check for the item (defaults to the player)
+ * @returns boolean
+ */
+export const inside = (
+  item: Ref<Item>,
+  container: Ref<Item | Room> = winner
+) => {
+  return item.value.location === container.value.id;
+};
+
+/**
+ * Held?
+ *
+ * Takes an argument, an object, as well as an optional argument, which can be
+ * either a room or an object. If no optional argument is supplied, it assumes
+ * that the second argument is the PLAYER object. Takes the first object and
+ * recurses to determine if it is ultimately within the second object.
+ *
+ * @param item - The item to look for
+ * @param container - The container to check for the item (defaults to the player)
+ * @returns boolean
+ */
+export const held = (
+  item: Ref<Item | Room>,
+  container: Ref<Item | Room> = winner
+): boolean => {
+  const location = item.value.location;
+  // if no location, or item in rooms, return false
+  if (!location || location === 'rooms') return false;
+  // if item in container, return true
+  if (inside(item, container)) return true;
+  // else, recurse a level deeper
+  if (location in rooms) return held(rooms[location], container);
+  return held(items[location], container);
+};
+
+/**
+ * Meta Location
+ *
+ * This routine take the supplied object and recurses until it determines what
+ * room the object is currently in, then returns that room. It will return false
+ * if the ultimate location of the supplied object is not a room: for example,
+ * if the object has been removed (its location is falsy), or if the object is
+ * inside an object which has been removed, etc.
+ *
+ * @param item
+ * @returns (Room | boolean)
+ */
+export const metaLocation = (item: Ref<Item | Room>): Ref<Room> | false => {
+  const location = item.value.location;
+  // if no location, return false
+  if (!location) return false;
+  // TODO: if the item is in global objects, return global objects
+  // if the item is in rooms, return the object
+  if (location === 'rooms') return item as Ref<Room>;
+  // else, recurse a level deeper
+  if (location in rooms) return metaLocation(rooms[location]);
+  return metaLocation(items[location]);
+};
+
+/**
+ * Visible?
+ *
+ * This routine returns true if the supplied object is visible to the player;
+ * that is, if it can be currently referred to.
+ *
+ * @param item - The item to evaluate
+ * @returns boolean
+ */
+export const visible = (item: Ref<Item>) => {
+  return !item.value.flags.isInvisible;
+};
+
+/**
+ * Accessible?
+ *
+ * This routine returns true if the supplied object is visible to the player and
+ * can be gotten. For example, an object inside a closed, transparent container
+ * would be visible but not accessible.
+ *
+ * @param item - The item to evaluate
+ * @returns boolean
+ */
+export const accessible = (item: Ref<Item>) => {
+  const itemLocation = item.value.location;
+  const metaLoc = metaLocation(item);
+  const itemMetaLocation = metaLoc ? metaLoc.value.id : metaLoc;
+  // if item is invisible, return false
+  if (item.value.flags.isInvisible) return false;
+  // if item has no location, return false
+  if (!itemLocation) return false;
+  // TODO: if item is a global object, return true
+  // if item is a local global here, return true
+  if (globalIn(item, here)) return true;
+  // if the item is neither here nor where the player is, return false
+  if (
+    itemMetaLocation &&
+    !(
+      itemMetaLocation === here.value.id ||
+      itemMetaLocation === winner.value.location
+    )
+  ) {
+    return false;
+  }
+  // if the item is here, carried by the player, or where the player is, return true
+  if (
+    itemLocation === winner.value.id ||
+    itemLocation === here.value.id ||
+    itemLocation === winner.value.location
+  ) {
+    return true;
+  }
+  // if the item's location is open and accessible, return true
+  if (
+    itemLocation in items &&
+    items[itemLocation].value.flags.isOpen &&
+    accessible(items[itemLocation])
+  ) {
+    return true;
+  }
+  // else return false;
+  return false;
 };

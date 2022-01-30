@@ -21,7 +21,7 @@ export const Kitchen = ref(
     },
     flags: { isOn: true },
     value: 10,
-    global: ['stairs'],
+    global: ['Stairs'],
     action: () => {
       console.log('KITCHEN HANDLER');
       switch (theVerb.value) {
@@ -48,7 +48,7 @@ export const Attic = ref(
       down: { room: 'Kitchen' },
     },
     flags: { isOn: false },
-    global: ['stairs'],
+    global: ['Stairs'],
     description: 'This is the attic. The only exit is a stairway leading down.',
     action: () => false,
   })
@@ -78,7 +78,7 @@ export const LivingRoom = ref(
       },
     },
     flags: { isOn: true },
-    global: ['stairs'],
+    global: ['Stairs'],
     action: () => {
       console.log('LIVING ROOM HANDLER');
       switch (theVerb.value) {
@@ -120,7 +120,7 @@ export const Cellar = ref(
     },
     flags: { isOn: false },
     value: 25,
-    global: ['TrapDoor', 'stairs'],
+    global: ['TrapDoor', 'Stairs'],
     action: () => {
       switch (theVerb.value) {
         case 'Look':
