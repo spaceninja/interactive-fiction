@@ -30,6 +30,8 @@ class playerInputParser extends CstParser {
         // @ts-ignore
         { ALT: () => this.SUBRULE(this.look) },
         // @ts-ignore
+        { ALT: () => this.SUBRULE(this.inventory) },
+        // @ts-ignore
         { ALT: () => this.SUBRULE(this.test) },
         // @ts-ignore
         { ALT: () => this.SUBRULE(this.walk) },
@@ -46,6 +48,11 @@ class playerInputParser extends CstParser {
     this.RULE('look', () => {
       // @ts-ignore
       this.CONSUME(tokenVocabulary.Look);
+    });
+
+    this.RULE('inventory', () => {
+      // @ts-ignore
+      this.CONSUME(tokenVocabulary.Inventory);
     });
 
     this.RULE('test', () => {
@@ -106,6 +113,7 @@ class PlayerInputVisitor extends parserInstance.getBaseCstVisitorConstructor() {
   magic(ctx) {
     const scoreAst = this.visit(ctx.score);
     const lookAst = this.visit(ctx.look);
+    const inventoryAst = this.visit(ctx.inventory);
     const testAst = this.visit(ctx.test);
     const walkAst = this.visit(ctx.walk);
     const verbNounAst = this.visit(ctx.verbNoun);
@@ -113,6 +121,7 @@ class PlayerInputVisitor extends parserInstance.getBaseCstVisitorConstructor() {
     return {
       ...scoreAst,
       ...lookAst,
+      ...inventoryAst,
       ...testAst,
       ...walkAst,
       ...verbNounAst,
@@ -142,6 +151,16 @@ class PlayerInputVisitor extends parserInstance.getBaseCstVisitorConstructor() {
       verb: {
         input: ctx.Look[0].image,
         name: ctx.Look[0].tokenType.name,
+      },
+    };
+  }
+
+  // @ts-ignore
+  inventory(ctx) {
+    return {
+      verb: {
+        input: ctx.Inventory[0].image,
+        name: ctx.Inventory[0].tokenType.name,
       },
     };
   }

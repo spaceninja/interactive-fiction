@@ -49,7 +49,7 @@ This project is an attempt to create an Infocom-style text adventure game engine
   - [x] Default verb functionality
   - [x] Add example of item with examine action
   - [x] Add example of item with text to read
-- [x] Add LOOK (L) command
+- [x] Add LOOK command
   - [x] Describe the room
   - [x] Describe items in the room
 - [x] Add real objects for pseudo-objects
@@ -77,7 +77,7 @@ This project is an attempt to create an Infocom-style text adventure game engine
   - [x] Add ACCESSIBLE? check from gparser
   - [x] Add SEE-INSIDE? check from gverbs
   - [x] Add OPENABLE? check from gmacros
-  - [ ] Add INVENTORY (I) command
+  - [x] Add INVENTORY command
   - [ ] Add GET/TAKE/DROP/PUT/PUT-ON/PUT-UNDER/PUT-BEHIND commands
   - [ ] "The object that you mentioned isn't here" response
   - [ ] "There's nothing here you can take" response
@@ -111,6 +111,7 @@ This project is an attempt to create an Infocom-style text adventure game engine
   - [ ] Syntax tokens:
     - HAVE, TAKE, MANY, EVERYWHERE, ADJACENT, HELD, CARRIED, ON-GROUND, IN-ROOM
   - [ ] Switch syntaxes
+  - [ ] Shorthand commands: L, I,
   - [ ] Add Get-What-I-Mean, Find
   - [ ] Multiple items: separate by AND or comma.
   - [ ] Handle IT in commands

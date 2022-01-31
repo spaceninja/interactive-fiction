@@ -7,6 +7,7 @@ import {
   theIndirect,
   handlePlayerInput,
   goTo,
+  winner,
 } from './game/useGame';
 import Item from '../classes/Item';
 import Verb from '../classes/Verb';
@@ -48,9 +49,8 @@ export const Attack = ref(
         tell(
           `Trying to attack a ${direct.name} with your bare hands is suicidal.`
         );
-        // TODO: get WINNER working
-        // } else if (indirect.location !== winner.value.id) {
-        //   tell(`You aren't even holding the ${indirect.name}?`);
+      } else if (indirect.location !== winner.value.id) {
+        tell(`You aren't even holding the ${indirect.name}?`);
       } else if (!indirect.flags.isWeapon) {
         tell(
           `Trying to attack a ${direct.name} with a ${indirect.name} is suicidal.`

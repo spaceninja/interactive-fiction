@@ -339,6 +339,23 @@ export const metaLocation = (item: Ref<Item | Room>): Ref<Room> | false => {
 };
 
 /**
+ * Get Contents
+ * Returns an array containing all the items this container holds.
+ *
+ * @param containerId - ID of the container to search
+ * @returns array
+ */
+export const getContents = (containerId: string) => {
+  return Object.values(items)
+    .filter((item) => item.value.location === containerId)
+    .sort((a, b) => {
+      if (!a.value.priority) a.value.priority = 0;
+      if (!b.value.priority) b.value.priority = 0;
+      return b.value.priority - a.value.priority;
+    });
+};
+
+/**
  * Visible?
  *
  * This routine returns true if the supplied object is visible to the player;

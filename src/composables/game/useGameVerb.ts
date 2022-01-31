@@ -10,8 +10,14 @@ import {
   theScoreMax,
   theMoves,
   handlePlayerInput,
+  getContents,
+  winner,
 } from './useGame';
-import { describeHere, describeHereObjects } from './useDescriber';
+import {
+  describeHere,
+  describeHereObjects,
+  describeContents,
+} from './useDescriber';
 import * as rawRooms from '../useRoom';
 import * as rawItems from '../useItem';
 import * as rawVerbs from '../useVerb';
@@ -23,6 +29,41 @@ const rooms = rawRooms as { [key: string]: Ref<Room> };
 const items = rawItems as { [key: string]: Ref<Item> };
 const verbs = rawVerbs as { [key: string]: Ref<Verb> };
 const gameVerbs = rawGameVerbs as { [key: string]: Ref<Verb> };
+
+export const Inventory = ref(
+  new Verb({
+    name: 'Inventory',
+    synonym: ['inventory'],
+    action: () => {
+      console.log('INVENTORY!');
+      // get all items with this container set as their locations
+      const winnerItems = getContents(winner.value.id);
+      console.log(
+        'Winner items:',
+        winnerItems.map((i) => i.value.id)
+      );
+
+      // if this container is empty, return early
+      if (winnerItems.length > 0) {
+        describeContents(winner.value.id);
+      } else {
+        tell('You are empty-handed.');
+      }
+      return true;
+    },
+    test: () => {
+      items.Sword.value.location = winner.value.id;
+      items.SandwichBag.value.location = winner.value.id;
+      items.Map.value.location = winner.value.id;
+      items.OwnersManual.value.location = winner.value.id;
+      items.Lamp.value.location = winner.value.id;
+      items.Lamp.value.flags.isOn = true;
+      items.SandwichBag.value.flags.isOpen = true;
+      handlePlayerInput('inventory');
+      return true;
+    },
+  })
+);
 
 /**
  * Game Verbs
