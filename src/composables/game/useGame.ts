@@ -58,7 +58,7 @@ export const dummyMessages = [
  */
 export const init = () => {
   // set starting location
-  here.value = rooms.LivingRoom.value;
+  here.value = rooms.WestOfHouse.value;
   // reset winner to the player
   winner.value = player.value;
   // move the winner to the starting location

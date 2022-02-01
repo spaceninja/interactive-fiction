@@ -11,6 +11,7 @@ import {
   perform,
   handlePlayerInput,
   theIndirect,
+  goTo,
 } from './game/useGame';
 import * as rooms from './useRoom';
 
@@ -215,6 +216,225 @@ export const Nails = ref(
       switch (theVerb.value) {
         case 'Take':
           tell('The nails, deeply embedded in the door, cannot be removed.');
+          return true;
+        default:
+          return false;
+      }
+    },
+  })
+);
+
+export const Board = ref(
+  new Item({
+    name: 'board',
+    id: 'Board',
+    location: 'LocalGlobals',
+    synonym: ['boards', 'board'],
+    flags: { doNotDescribe: true },
+    action: () => {
+      switch (theVerb.value) {
+        case 'Take':
+          tell('The boards are securely fastened.');
+          return true;
+        default:
+          return false;
+      }
+    },
+  })
+);
+
+export const BoardedWindow = ref(
+  new Item({
+    name: 'boarded window',
+    id: 'BoardedWindow',
+    location: 'LocalGlobals',
+    synonym: ['window'],
+    adjective: ['boarded'],
+    flags: { doNotDescribe: true },
+    action: () => {
+      switch (theVerb.value) {
+        case 'Open':
+          tell("The windows are boarded and can't be opened.");
+          return true;
+        case 'Destroy':
+          tell("You can't break the windows open.");
+          return true;
+        default:
+          return false;
+      }
+    },
+  })
+);
+
+export const WhiteHouse = ref(
+  new Item({
+    name: 'white house',
+    id: 'WhiteHouse',
+    location: 'LocalGlobals',
+    synonym: ['house'],
+    adjective: ['white', 'beautiful', 'colonial'],
+    flags: { doNotDescribe: true },
+    action: () => {
+      switch (theVerb.value) {
+        case 'Find':
+          if (
+            [
+              rooms.Kitchen.value.id,
+              rooms.LivingRoom.value.id,
+              rooms.Attic.value.id,
+            ].includes(here.value.id)
+          ) {
+            tell('Why not find your brains?');
+            return true;
+          }
+          if (
+            [
+              rooms.EastOfHouse.value.id,
+              rooms.WestOfHouse.value.id,
+              rooms.NorthOfHouse.value.id,
+              rooms.SouthOfHouse.value.id,
+            ].includes(here.value.id)
+          ) {
+            tell("It's right here! Are you blind or something?");
+            return true;
+          }
+          return false;
+        case 'Examine':
+          tell(`The house is a beautiful colonial house which is painted white.
+            It is clear that the owners must have been extremely wealthy.`);
+          return true;
+        case 'Through':
+        case 'Open':
+          if (here.value.id === rooms.EastOfHouse.value.id) {
+            if (KitchenWindow.value.flags.isOpen) {
+              goTo(rooms.Kitchen.value.id);
+            } else {
+              tell('The window is closed.');
+            }
+          } else {
+            tell("I can't see how to get in from here.");
+          }
+          return true;
+        case 'Burn':
+          tell('You must be joking.');
+          return true;
+        default:
+          return false;
+      }
+    },
+  })
+);
+
+export const FrontDoor = ref(
+  new Item({
+    name: 'door',
+    id: 'FrontDoor',
+    location: 'WestOfHouse',
+    synonym: ['door'],
+    flags: { isDoor: true, doNotDescribe: true },
+    action: () => {
+      switch (theVerb.value) {
+        case 'Open':
+          tell('The door cannot be opened.');
+          return true;
+        case 'Burn':
+          tell('You cannot burn this door.');
+          return true;
+        case 'Destroy':
+          tell("You can't seem to damage the door.");
+          return true;
+        case 'LookBehind':
+          tell("It won't open.");
+          return true;
+        default:
+          return false;
+      }
+    },
+  })
+);
+
+export const Mailbox = ref(
+  new Item({
+    name: 'small mailbox',
+    id: 'Mailbox',
+    location: 'WestOfHouse',
+    synonym: ['mailbox', 'box'],
+    adjective: ['small'],
+    flags: { isContainer: true, tryTakeBit: true },
+    capacity: 10,
+    action: () => {
+      switch (theVerb.value) {
+        case 'Take':
+          if (theDirect.value === Mailbox.value.id) {
+            tell('It is securely anchored.');
+            return true;
+          }
+          return false;
+        default:
+          return false;
+      }
+    },
+  })
+);
+
+export const Advertisement = ref(
+  new Item({
+    name: 'leaflet',
+    id: 'Advertisement',
+    location: 'Mailbox',
+    synonym: ['advertisement', 'leaflet', 'booklet', 'mail'],
+    adjective: ['small'],
+    description: 'A small leaflet is on the ground.',
+    size: 2,
+    flags: { burnBit: true, takeBit: true, readBit: true },
+    capacity: 10,
+    text: `"WELCOME TO ZORK! ZORK is a game of adventure, danger, and low cunning.
+      In it you will explore some of the most amazing territory ever seen by mortals.
+      No computer should be without one!"`,
+    action: () => false,
+  })
+);
+
+export const KitchenWindow = ref(
+  new Item({
+    name: 'kitchen window',
+    id: 'KitchenWindow',
+    location: 'LocalGlobals',
+    synonym: ['window'],
+    adjective: ['kitchen', 'small'],
+    flags: { isDoor: true, doNotDescribe: true, isOpen: false },
+    action: () => {
+      switch (theVerb.value) {
+        case 'Open':
+        case 'Close':
+          openClose(
+            KitchenWindow,
+            theVerb.value,
+            'With great effort, you open the window far enough to allow entry.',
+            'The window closes (more easily than it opened).'
+          );
+          return true;
+        case 'Examine':
+          if (!KitchenWindow.value.flags.isOpen) {
+            tell('The window is slightly ajar, but not enough to allow entry.');
+            return true;
+          }
+          return false;
+        case 'Walk':
+        case 'Board':
+        case 'Through':
+          if (here.value.id === rooms.Kitchen.value.id) {
+            perform('Walk', 'east');
+          } else {
+            perform('Walk', 'west');
+          }
+          return true;
+        case 'LookInside':
+          if (here.value.id === rooms.Kitchen.value.id) {
+            tell('You can see a clear area outside the house.');
+          } else {
+            tell('You can see what appears to be a kitchen.');
+          }
           return true;
         default:
           return false;
