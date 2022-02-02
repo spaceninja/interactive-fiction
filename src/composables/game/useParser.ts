@@ -21,6 +21,8 @@ class playerInputParser extends CstParser {
   constructor() {
     super(tokenVocabulary);
 
+    console.log('TOKEN VOCABULARY', tokenVocabulary);
+
     // TODO: is there a way to move these to a separate file?
 
     this.RULE('magic', () => {

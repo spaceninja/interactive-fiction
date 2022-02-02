@@ -81,7 +81,6 @@ This project is an attempt to create an Infocom-style text adventure game engine
   - [ ] Add GET/TAKE/DROP/PUT/PUT-ON/PUT-UNDER/PUT-BEHIND commands
   - [ ] "The object that you mentioned isn't here" response
   - [ ] "There's nothing here you can take" response
-- [ ] BUGFIX: Examine is broken
 - [ ] Handle globals and local globals
 - [ ] Handle containers
   - [ ] Open/Close container

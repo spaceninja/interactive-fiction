@@ -1,10 +1,12 @@
 import { Ref } from 'vue';
 import { createToken, Lexer, TokenType } from 'chevrotain';
+import ItemType from '../../classes/Item';
 import VerbType from '../../classes/Verb';
 import * as gameVerbs from './useGameVerb';
 import * as verbs from '../useVerb';
 import * as items from '../useItem';
 console.log('VERBS', verbs);
+console.log('ITEMS', items);
 
 const sortedVerbs: { [key: string]: Ref<VerbType> } = Object.values(verbs)
   .sort((a, b) => {
@@ -14,6 +16,15 @@ const sortedVerbs: { [key: string]: Ref<VerbType> } = Object.values(verbs)
   })
   .reduce((acc, cur) => ({ ...acc, [cur.value.name]: cur }), {});
 console.log('SORTED VERBS', sortedVerbs);
+
+const sortedItems: { [key: string]: Ref<ItemType> } = Object.values(items)
+  .sort((a, b) => {
+    if (!a.value.priority) a.value.priority = 0;
+    if (!b.value.priority) b.value.priority = 0;
+    return b.value.priority - a.value.priority;
+  })
+  .reduce((acc, cur) => ({ ...acc, [cur.value.id]: cur }), {});
+console.log('SORTED ITEMS', sortedItems);
 
 /**
  * Create Vocabulary Tokens
@@ -68,7 +79,7 @@ Object.entries(gameVerbs).forEach(([name, item]) => {
 
 // Generate Tokens for Each Item
 const itemTokens: TokenType[] = [];
-Object.entries(items).forEach(([name, item]) => {
+Object.entries(sortedItems).forEach(([name, item]) => {
   const i = item.value;
   itemTokens.push(
     createToken({

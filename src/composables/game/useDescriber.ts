@@ -81,7 +81,7 @@ export const describeContents = (
   verbose = false,
   level = 0
 ) => {
-  console.group(`PRINT CONTENTS: ${containerId}, level ${level}`);
+  console.groupCollapsed(`PRINT CONTENTS: ${containerId}, level ${level}`);
 
   // get the container item itself for reference
   let containerItem: Ref<Room | Item>;

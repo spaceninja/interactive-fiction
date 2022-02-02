@@ -362,6 +362,7 @@ export const Mailbox = ref(
     adjective: ['small'],
     flags: { isContainer: true, tryTakeBit: true },
     capacity: 10,
+    priority: 1,
     action: () => {
       switch (theVerb.value) {
         case 'Take':
@@ -373,6 +374,10 @@ export const Mailbox = ref(
         default:
           return false;
       }
+    },
+    test: () => {
+      tell('You tested the mailbox!');
+      return true;
     },
   })
 );
@@ -392,6 +397,10 @@ export const Advertisement = ref(
       In it you will explore some of the most amazing territory ever seen by mortals.
       No computer should be without one!"`,
     action: () => false,
+    test: () => {
+      tell('You tested the leaflet!');
+      return true;
+    },
   })
 );
 
