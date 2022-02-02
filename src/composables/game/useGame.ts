@@ -1,6 +1,7 @@
 import { ref, Ref } from 'vue';
 import { pickOne } from '../../helpers/pickOne';
 import { uuid } from '../../helpers/uuid';
+import { sortByPriority } from '../../helpers/sortByPriority';
 import { parser } from './useParser';
 import Item from '../../classes/Item';
 import Room from '../../classes/Room';
@@ -348,11 +349,7 @@ export const metaLocation = (item: Ref<Item | Room>): Ref<Room> | false => {
 export const getContents = (containerId: string) => {
   return Object.values(items)
     .filter((item) => item.value.location === containerId)
-    .sort((a, b) => {
-      if (!a.value.priority) a.value.priority = 0;
-      if (!b.value.priority) b.value.priority = 0;
-      return b.value.priority - a.value.priority;
-    });
+    .sort(sortByPriority);
 };
 
 /**

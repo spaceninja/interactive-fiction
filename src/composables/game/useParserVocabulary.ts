@@ -1,5 +1,6 @@
 import { Ref } from 'vue';
 import { createToken, Lexer, TokenType } from 'chevrotain';
+import { sortByPriority } from '../../helpers/sortByPriority';
 import ItemType from '../../classes/Item';
 import VerbType from '../../classes/Verb';
 import * as gameVerbs from './useGameVerb';
@@ -9,20 +10,12 @@ console.log('VERBS', verbs);
 console.log('ITEMS', items);
 
 const sortedVerbs: { [key: string]: Ref<VerbType> } = Object.values(verbs)
-  .sort((a, b) => {
-    if (!a.value.priority) a.value.priority = 0;
-    if (!b.value.priority) b.value.priority = 0;
-    return b.value.priority - a.value.priority;
-  })
+  .sort(sortByPriority)
   .reduce((acc, cur) => ({ ...acc, [cur.value.name]: cur }), {});
 console.log('SORTED VERBS', sortedVerbs);
 
 const sortedItems: { [key: string]: Ref<ItemType> } = Object.values(items)
-  .sort((a, b) => {
-    if (!a.value.priority) a.value.priority = 0;
-    if (!b.value.priority) b.value.priority = 0;
-    return b.value.priority - a.value.priority;
-  })
+  .sort(sortByPriority)
   .reduce((acc, cur) => ({ ...acc, [cur.value.id]: cur }), {});
 console.log('SORTED ITEMS', sortedItems);
 
