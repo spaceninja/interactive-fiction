@@ -71,6 +71,8 @@ This project is an attempt to create an Infocom-style text adventure game engine
   - [x] Set HERE to new room
   - [x] Set TOUCHED bit in new room
   - [x] Call Room description
+- [ ] Advanced PERFORM
+  - [ ] "I don't see what you're referring to" response
 - [ ] Handle taking items
   - [x] Add ME object
   - [x] Add ADVENTURER object
@@ -123,9 +125,8 @@ This project is an attempt to create an Infocom-style text adventure game engine
   - [ ] Pre: Call WINNER action
   - [ ] Pre: Call Room M-BEG action
   - [ ] Pre: Call pre-verb action
-  - [ ] Post: Call Room M-END action
+  - [ ] Post: Call Room M-END actiond
   - [ ] Add HELD? check from gverbs
-  - [ ] "I don't see what you're referring to" response
 - [ ] Add Event System
   - [ ] Add CLOCKER
   - [ ] Add Interrupt routines
