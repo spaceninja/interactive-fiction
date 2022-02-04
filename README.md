@@ -71,8 +71,6 @@ This project is an attempt to create an Infocom-style text adventure game engine
   - [x] Set HERE to new room
   - [x] Set TOUCHED bit in new room
   - [x] Call Room description
-- [ ] Advanced PERFORM
-  - [ ] "I don't see what you're referring to" response
 - [ ] Handle taking items
   - [x] Add ME object
   - [x] Add ADVENTURER object
@@ -80,8 +78,9 @@ This project is an attempt to create an Infocom-style text adventure game engine
   - [x] Add SEE-INSIDE? check from gverbs
   - [x] Add OPENABLE? check from gmacros
   - [x] Add INVENTORY command
+  - [ ] Perform: "You can't see any such thing." (PRSO or PRSI is not here)
+  - [ ] Perform: "Those things aren't here!" (both PRSO & PRSI are not here)
   - [ ] Add GET/TAKE/DROP/PUT/PUT-ON/PUT-UNDER/PUT-BEHIND commands
-  - [ ] "The object that you mentioned isn't here" response
   - [ ] "There's nothing here you can take" response
 - [ ] Handle globals and local globals
 - [ ] Handle containers
@@ -140,6 +139,8 @@ This project is an attempt to create an Infocom-style text adventure game engine
   - [ ] Handle speaking to actors V-SAY
   - [ ] Handle giving directions to actors
   - [ ] Add GIVE command
+  - [ ] "The $winner seems confused. 'I don't see any such thing here!'"
+    - you ask actor to interact with something that's not here (parser, not-here func)
 - [ ] Add Fighting
   - [ ] Add ATTACK/STAB/STRIKE/THROW commands
   - [ ] Add DIAGNOSE verb and command
