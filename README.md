@@ -82,6 +82,7 @@ This project is an attempt to create an Infocom-style text adventure game engine
   - [x] Perform: "Those things aren't here!" (both PRSO & PRSI are not here)
   - [ ] Add GET/TAKE/DROP/PUT/PUT-ON/PUT-UNDER/PUT-BEHIND commands
   - [ ] "There's nothing here you can take" response
+- [ ] BUG: "examine table" in kitchen tries to examine attic table
 - [ ] Handle globals and local globals
   - [ ] examine white house
 - [ ] Handle containers

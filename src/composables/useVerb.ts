@@ -3,6 +3,7 @@ import {
   here,
   perform,
   tell,
+  held,
   theDirect,
   theIndirect,
   handlePlayerInput,
@@ -179,6 +180,13 @@ export const Move = ref(
       'yank up',
       'yank',
     ],
+    preaction: () => {
+      if (theDirect.value in items && held(items[theDirect.value])) {
+        tell("You aren't an accomplished enough juggler.");
+        return true;
+      }
+      return false;
+    },
     action: () => {
       console.log('Move: default handler');
       if (theIndirect.value) {
@@ -231,13 +239,25 @@ export const Read = ref(
   new Verb({
     name: 'Read',
     synonym: ['read', 'skim'],
-    action: () => {
-      const item = items[theDirect.value].value;
+    preaction: () => {
       // TODO: use LIT?
       if (!here.value.flags.isOn) {
         tell('It is impossible to read in the dark.');
         return true;
       }
+      if (
+        theIndirect.value &&
+        !items[theIndirect.value].value.flags.isTransparent
+      ) {
+        tell(
+          `How does one look through a ${items[theIndirect.value].value.name}?`
+        );
+        return true;
+      }
+      return false;
+    },
+    action: () => {
+      const item = items[theDirect.value].value;
       if (item.text) {
         tell(item.text);
         return true;

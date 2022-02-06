@@ -84,6 +84,7 @@ export const init = () => {
  */
 export const goTo = (roomId: string) => {
   here.value = rooms[roomId].value;
+  winner.value.location = here.value.id;
   // TODO: update lighting info
   // TODO: run room's ENTER action
   // TODO: handle score
@@ -198,7 +199,7 @@ export const perform = (v = '', d = '', i = '') => {
   let theIndirectIsHere = false;
 
   // check if the direct item is here
-  if (d) {
+  if (d in items) {
     const dLocation = metaLocation(items[d]);
     if (dLocation) {
       theDirectIsHere = dLocation.value.id === winner.value.location;
@@ -206,7 +207,7 @@ export const perform = (v = '', d = '', i = '') => {
   }
 
   // check if the indirect item is here
-  if (i) {
+  if (i in items) {
     const iLocation = metaLocation(items[i]);
     if (iLocation) {
       theIndirectIsHere = iLocation.value.id === winner.value.location;
@@ -214,21 +215,36 @@ export const perform = (v = '', d = '', i = '') => {
   }
 
   // if both the direct and indirect items are not here
-  if (d && !theDirectIsHere && i && !theIndirectIsHere) {
+  if (d in items && !theDirectIsHere && i in items && !theIndirectIsHere) {
     tell("Those things aren't here!");
     return false;
   }
 
   // if either the direct or indirect items are not here
-  if ((d && !theDirectIsHere) || (i && !theIndirectIsHere)) {
+  if ((d in items && !theDirectIsHere) || (i in items && !theIndirectIsHere)) {
     tell("You can't see any such thing.");
     return false;
   }
 
   // if either the direct or indirect items are inaccessible
-  if ((d && !accessible(items[d])) || (i && !accessible(items[i]))) {
+  if (
+    (d in items && !accessible(items[d])) ||
+    (i in items && !accessible(items[i]))
+  ) {
     tell("I don't see what you are referring to.");
     return false;
+  }
+
+  // TODO: try the winner's action property
+
+  // TODO: try the winner's location's M-BEG action
+
+  // Try the verb's preaction routine
+  console.log('PREACTION?', v);
+  const preaction = verbs[v]?.value.preaction;
+  if (preaction) {
+    const preactionHandled = v ? preaction() : false;
+    if (preactionHandled) return true;
   }
 
   // Try the indirect item's handler
