@@ -59,7 +59,7 @@ export const dummyMessages = [
  */
 export const init = () => {
   // set starting location
-  here.value = rooms.WestOfHouse.value;
+  here.value = rooms.Kitchen.value;
   // reset winner to the player
   winner.value = player.value;
   // move the winner to the starting location
@@ -193,6 +193,43 @@ export const perform = (v = '', d = '', i = '') => {
   theVerb.value = v;
   theDirect.value = d;
   theIndirect.value = i;
+
+  let theDirectIsHere = false;
+  let theIndirectIsHere = false;
+
+  // check if the direct item is here
+  if (d) {
+    const dLocation = metaLocation(items[d]);
+    if (dLocation) {
+      theDirectIsHere = dLocation.value.id === winner.value.location;
+    }
+  }
+
+  // check if the indirect item is here
+  if (i) {
+    const iLocation = metaLocation(items[i]);
+    if (iLocation) {
+      theIndirectIsHere = iLocation.value.id === winner.value.location;
+    }
+  }
+
+  // if both the direct and indirect items are not here
+  if (d && !theDirectIsHere && i && !theIndirectIsHere) {
+    tell("Those things aren't here!");
+    return false;
+  }
+
+  // if either the direct or indirect items are not here
+  if ((d && !theDirectIsHere) || (i && !theIndirectIsHere)) {
+    tell("You can't see any such thing.");
+    return false;
+  }
+
+  // if either the direct or indirect items are inaccessible
+  if ((d && !accessible(items[d])) || (i && !accessible(items[i]))) {
+    tell("I don't see what you are referring to.");
+    return false;
+  }
 
   // Try the indirect item's handler
   const indirectHandled = i ? items[i]?.value.action() : false;

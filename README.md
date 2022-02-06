@@ -78,11 +78,12 @@ This project is an attempt to create an Infocom-style text adventure game engine
   - [x] Add SEE-INSIDE? check from gverbs
   - [x] Add OPENABLE? check from gmacros
   - [x] Add INVENTORY command
-  - [ ] Perform: "You can't see any such thing." (PRSO or PRSI is not here)
-  - [ ] Perform: "Those things aren't here!" (both PRSO & PRSI are not here)
+  - [x] Perform: "You can't see any such thing." (PRSO or PRSI is not here)
+  - [x] Perform: "Those things aren't here!" (both PRSO & PRSI are not here)
   - [ ] Add GET/TAKE/DROP/PUT/PUT-ON/PUT-UNDER/PUT-BEHIND commands
   - [ ] "There's nothing here you can take" response
 - [ ] Handle globals and local globals
+  - [ ] examine white house
 - [ ] Handle containers
   - [ ] Open/Close container
   - [ ] Surfaces
